@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from sqlalchemy import select  # noqa: E402
 
-from app.clients.embed_client import BGEM3Embedder  # noqa: E402
+from app.clients.embed_client import build_embedder  # noqa: E402
 from app.clients.milvus_client import MilvusIndex  # noqa: E402
 from app.core.logging import setup_logging  # noqa: E402
 from app.db.base import SessionLocal  # noqa: E402
@@ -144,7 +144,7 @@ async def main() -> int:
     owner = await ensure_user()
     kb_id = await ensure_kb(owner, args.kb_name)
 
-    embedder = BGEM3Embedder()
+    embedder = build_embedder()
     index = MilvusIndex()
     if args.parser == "mineru":
         from app.ingest.parsers import MinerUParser

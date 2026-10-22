@@ -1,0 +1,18 @@
+{
+  "batch": "batch1",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 1579.9,
+  "items": [
+    {
+      "file": "[心理学论文写作规范].中国心理学会.文字版.pdf",
+      "status": "done",
+      "pages": 82,
+      "children": 323,
+      "vectors": 427,
+      "seconds": 1579.8,
+      "error": ""
+    }
+  ]
+}

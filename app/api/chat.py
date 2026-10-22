@@ -35,7 +35,7 @@ from fastapi import APIRouter, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy import delete, func, select, update
 
-from app.clients.embed_client import BGEM3Embedder
+from app.clients.embed_client import build_embedder
 from app.clients.llm_client import LLMClient
 from app.clients.milvus_client import MilvusIndex
 from app.clients.rerank_client import BGEReranker
@@ -72,7 +72,7 @@ class ChatRuntime:
     """
 
     def __init__(self) -> None:
-        self.embedder = BGEM3Embedder()
+        self.embedder = build_embedder()
         self.index = MilvusIndex()
         self.reranker = BGEReranker()
         self.llm = LLMClient(settings.llm.active())

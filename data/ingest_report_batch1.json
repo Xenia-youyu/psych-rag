@@ -1,0 +1,117 @@
+{
+  "batch": "batch1",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 1388.1,
+  "items": [
+    {
+      "file": "实验心理学（郭秀艳）S.pdf",
+      "status": "done",
+      "pages": 744,
+      "children": 2290,
+      "vectors": 3042,
+      "seconds": 236.7,
+      "error": ""
+    },
+    {
+      "file": "当代教育心理学（第二版）.pdf",
+      "status": "done",
+      "pages": 586,
+      "children": 2763,
+      "vectors": 3672,
+      "seconds": 429.2,
+      "error": ""
+    },
+    {
+      "file": "心理学研究方法(黄希庭 张志杰).pdf",
+      "status": "done",
+      "pages": 426,
+      "children": 1153,
+      "vectors": 1579,
+      "seconds": 102.5,
+      "error": ""
+    },
+    {
+      "file": "人格心理学.pdf",
+      "status": "done",
+      "pages": 1,
+      "children": 7,
+      "vectors": 9,
+      "seconds": 5.5,
+      "error": ""
+    },
+    {
+      "file": "儿童心理学（朱智贤）.pdf",
+      "status": "done",
+      "pages": 182,
+      "children": 636,
+      "vectors": 820,
+      "seconds": 75.5,
+      "error": ""
+    },
+    {
+      "file": "[心理学论文写作规范].中国心理学会.文字版.pdf",
+      "status": "done",
+      "pages": 82,
+      "children": 323,
+      "vectors": 427,
+      "seconds": 40.3,
+      "error": ""
+    },
+    {
+      "file": "[瑞士]皮亚杰《发生认识论原理》.txt",
+      "status": "done",
+      "pages": 1,
+      "children": 370,
+      "vectors": 455,
+      "seconds": 33.8,
+      "error": ""
+    },
+    {
+      "file": "[瑞士]J．皮亚杰《人文科学认识论》.txt",
+      "status": "done",
+      "pages": 1,
+      "children": 658,
+      "vectors": 820,
+      "seconds": 82.8,
+      "error": ""
+    },
+    {
+      "file": "[瑞士]皮亚杰《结构主义》.txt",
+      "status": "done",
+      "pages": 1,
+      "children": 301,
+      "vectors": 375,
+      "seconds": 66.1,
+      "error": ""
+    },
+    {
+      "file": "《人的条件》[美]汉娜·阿伦特.txt",
+      "status": "done",
+      "pages": 1,
+      "children": 731,
+      "vectors": 922,
+      "seconds": 65.9,
+      "error": ""
+    },
+    {
+      "file": "《人类与大地母亲》[英]阿诺德·汤因比.txt",
+      "status": "done",
+      "pages": 1,
+      "children": 1886,
+      "vectors": 2355,
+      "seconds": 208.2,
+      "error": ""
+    },
+    {
+      "file": "《论人的天性》[美]E.O.威尔逊.txt",
+      "status": "done",
+      "pages": 1,
+      "children": 488,
+      "vectors": 606,
+      "seconds": 40.5,
+      "error": ""
+    }
+  ]
+}

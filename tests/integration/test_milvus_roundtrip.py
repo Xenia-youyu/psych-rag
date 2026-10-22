@@ -34,21 +34,48 @@ def unit_vector(seed: int) -> list[float]:
 
 def make_record(chunk_id: str, kb_id: str, *, content: str, vector_seed: int,
                 parent_id: str = "", is_parent: bool = False) -> dict:
+    """造一条待召回的块。
+
+    sparse_vector 只在集合确实有这个字段时才写：
+    API 向量化产出的集合（psych_chunks_v2）是 dense-only，
+    多写一个不存在的字段会被 Milvus 直接拒掉。
+    """
     # is_parent 默认 False：这些用例造的是"待召回的块"，父块会被检索过滤掉
-    return {
+    record = {
         "chunk_id": chunk_id,
         "kb_id": kb_id,
         "doc_id": f"doc_{kb_id}",
         "parent_id": parent_id,
         "content": content,
         "dense_vector": unit_vector(vector_seed),
-        "sparse_vector": {str(101 + vector_seed % 5): 0.8, str(202 + vector_seed % 3): 0.4},
         "page_start": 10 + vector_seed,
         "page_end": 11 + vector_seed,
         "domain": "普通",
         "evidence_grade": "教材共识",
         "is_parent": is_parent,
     }
+    if collection_has_sparse():
+        record["sparse_vector"] = {
+            str(101 + vector_seed % 5): 0.8,
+            str(202 + vector_seed % 3): 0.4,
+        }
+    return record
+
+
+def collection_has_sparse() -> bool:
+    """当前配置指向的集合有没有稀疏向量字段。"""
+    from pymilvus import MilvusClient
+
+    client = MilvusClient(
+        uri=settings.milvus.uri,
+        token=f"{settings.milvus.user}:{settings.milvus.password}",
+    )
+    client.use_database(settings.milvus.database)
+    try:
+        desc = client.describe_collection(settings.milvus.collection)
+    except Exception:
+        return True  # 查不到就按"有"处理，让错误在真正插入时暴露
+    return any(field["name"] == "sparse_vector" for field in desc["fields"])
 
 
 @pytest.fixture
@@ -92,6 +119,11 @@ class TestRoundtrip:
         assert fetched["c1"]["page_start"] == 11
 
     async def test_hybrid_dense_plus_sparse(self, index: MilvusIndex, cleanup_kb) -> None:
+        # 这条用例验证的是 dense + sparse 的混合召回。
+        # provider=dashscope 时向量只有稠密，集合里根本没有 sparse_vector 字段，
+        # 在那种集合上跑它没有意义——不是失败，是不适用。
+        if not collection_has_sparse():
+            pytest.skip("当前集合为 dense-only，跳过混合检索用例")
         kb_id = f"testkb_{uuid.uuid4().hex[:8]}"
         cleanup_kb.append(kb_id)
         await index.upsert([make_record("h1", kb_id, content="混合检索测试", vector_seed=7)])

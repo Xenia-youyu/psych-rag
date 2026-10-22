@@ -199,8 +199,25 @@ class EmbeddingConf(BaseModel):
     # 实测这台机器 torch 默认只开 4 线程（逻辑核 8），手动开满后重排快约 10%。
     num_threads: int = 0
 
+    # local = 本地 bge-m3（稠密+稀疏）；dashscope = 百炼 text-embedding-v4（仅稠密）
+    # 实测本机 4 物理核跑 bge-m3 只有 3.7 秒/向量，4 万页要 257 小时；
+    # API 约 0.5 元/百万 token，全量 15 元、1.5 小时，这笔账没有第二个答案。
+    provider: str = "local"
+    dashscope_base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    dashscope_model: str = "text-embedding-v4"
+    dashscope_dim: int = 1024
+    # 单次请求最多 10 条，这是接口硬限制，不是调优参数
+    dashscope_batch_size: int = 10
+    dashscope_concurrency: int = 8
+    dashscope_api_key_env: str = "DASHSCOPE_API_KEY"
+
     def check_paths(self) -> None:
-        """模型目录必须存在，否则检索链路起不来。"""
+        """本地模型目录必须存在，否则检索链路起不来。
+
+        provider=dashscope 时不校验——向量走 API，本机不需要 bge-m3 权重。
+        """
+        if self.provider == "dashscope":
+            return
         for label, path in (
             ("bge_m3_path", self.bge_m3_path),
             ("bge_reranker_path", self.bge_reranker_path),
@@ -303,7 +320,27 @@ class Settings(BaseModel):
 
 
 # ---------------------------------------------------------------- 组装
+def _inject_ini_secrets() -> None:
+    """把 config.ini 的 [secrets] 段注入环境变量。
+
+    三个消费方（VL / Qwen / Embedding）都按环境变量名取值。开发机上把 key
+    写进 ini 能省掉每开一个终端就 export 一次的麻烦，而 config.ini 已在
+    .gitignore 里，不会跟着代码走。
+
+    用 setdefault 而不是覆盖：环境变量优先，ini 只兜底，
+    这样 CI / 生产照旧可以用注入的环境变量。
+    """
+    if not _parser.has_section("secrets"):
+        return
+    for name, value in _parser.items("secrets"):
+        cleaned = (value or "").strip()
+        if cleaned:
+            os.environ.setdefault(name.upper(), cleaned)
+
+
 def load_settings() -> Settings:
+    _inject_ini_secrets()
+
     # MySQL：环境变量优先，方便在不同同学机器上只改 env
     mysql = MySQLConf(
         host=_env("MYSQL_HOST") or _str("mysql", "host", "127.0.0.1"),
@@ -376,6 +413,12 @@ def load_settings() -> Settings:
         device=_str("embedding", "device", "cuda"),
         batch_size=_int("embedding", "batch_size", 16),
         num_threads=_int("embedding", "num_threads", 0),
+        provider=_str("embedding", "provider", "local"),
+        dashscope_model=_str("embedding", "dashscope_model", "text-embedding-v4"),
+        dashscope_dim=_int("embedding", "dashscope_dim", 1024),
+        dashscope_batch_size=_int("embedding", "dashscope_batch_size", 10),
+        dashscope_concurrency=_int("embedding", "dashscope_concurrency", 8),
+        dashscope_api_key_env=_str("embedding", "dashscope_api_key_env", "DASHSCOPE_API_KEY"),
     )
 
     chunk = ChunkConf(

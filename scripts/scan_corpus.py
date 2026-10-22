@@ -38,30 +38,42 @@ class Item:
     chars_per_page: float = 0.0
     has_text_layer: bool = False
     scanned_hint: bool = False
+    empty_ratio: float = 0.0
     score: float = 0.0
     reasons: list[str] = field(default_factory=list)
 
 
-def probe_pdf(path: str, sample_pages: int = 5) -> tuple[int, float]:
-    """返回 (总页数, 抽样页平均字符数)。"""
+def probe_pdf(path: str, sample_pages: int = 5) -> tuple[int, float, float]:
+    """返回 (总页数, 抽样页平均字符数, 抽样页空页占比)。
+
+    第三项必须有：有一类 PDF 只有封面/版权页有文本层，正文全是扫描图。
+    只看平均字符数会把它判成"文字版"——实测《人格心理学》368 页里
+    只有第 1 页有 2057 字，均值 411 字/页看起来非常健康，
+    实际入库只得到 7 个块。
+    """
     try:
         import pymupdf
     except ImportError:
-        return 0, 0.0
+        return 0, 0.0, 1.0
 
     try:
         doc = pymupdf.open(path)
     except Exception:
-        return 0, 0.0
+        return 0, 0.0, 1.0
 
     try:
         total = doc.page_count
         step = max(1, total // sample_pages)
-        sampled, chars = 0, 0
+        sampled, chars, empties = 0, 0, 0
         for index in range(0, min(total, step * sample_pages), step):
-            chars += len(doc[index].get_text().strip())
+            count = len(doc[index].get_text().strip())
+            chars += count
+            if count < 20:
+                empties += 1
             sampled += 1
-        return total, (chars / sampled if sampled else 0.0)
+        if not sampled:
+            return total, 0.0, 1.0
+        return total, chars / sampled, empties / sampled
     finally:
         doc.close()
 
@@ -86,8 +98,9 @@ def scan(root: str) -> list[Item]:
             item.scanned_hint = any(m in lowered for m in EXPENSIVE_MARKERS)
 
             if ext == ".pdf":
-                item.pages, item.chars_per_page = probe_pdf(full)
-                item.has_text_layer = item.chars_per_page >= 100
+                item.pages, item.chars_per_page, item.empty_ratio = probe_pdf(full)
+                # 平均值高但空页多 = 只有封面/版权页有字，正文仍是扫描件
+                item.has_text_layer = item.chars_per_page >= 100 and item.empty_ratio < 0.6
             elif ext in (".epub", ".mobi", ".azw3"):
                 # 需要先转格式，成本另算
                 item.has_text_layer = True

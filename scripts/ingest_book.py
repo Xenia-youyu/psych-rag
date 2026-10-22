@@ -115,13 +115,13 @@ async def create_document(kb_id: str, path: Path, pages: int | None) -> tuple[st
 
 
 async def ask(kb_id: str, questions: list[str]) -> None:
-    from app.clients.embed_client import BGEM3Embedder
+    from app.clients.embed_client import build_embedder
     from app.clients.milvus_client import MilvusIndex
     from app.clients.rerank_client import BGEReranker
     from app.generate.intent import Intent
     from app.retrieve.service import retrieve
 
-    embedder, index, reranker = BGEM3Embedder(), MilvusIndex(), BGEReranker()
+    embedder, index, reranker = build_embedder(), MilvusIndex(), BGEReranker()
     for question in questions:
         outcome = await retrieve(
             question, kb_ids=[kb_id], embedder=embedder, index=index,

@@ -146,9 +146,9 @@ class IngestPipeline:
 
     def _get_embedder(self):
         if self._embedder is None:
-            from app.clients.embed_client import BGEM3Embedder
+            from app.clients.embed_client import build_embedder
 
-            self._embedder = BGEM3Embedder()
+            self._embedder = build_embedder()
         return self._embedder
 
     # ------------------------------------------------------------ 主流程
@@ -267,22 +267,24 @@ class IngestPipeline:
             vectors = await embedder.encode([item["content"] for item, _, _ in batch])
             records = []
             for (item, parent_id, is_parent), vector in zip(batch, vectors, strict=True):
-                records.append(
-                    {
-                        "chunk_id": item["chunk_id"],
-                        "kb_id": kb_id,
-                        "doc_id": doc_id,
-                        "parent_id": parent_id,
-                        "content": item["content"][:8000],
-                        "dense_vector": vector.dense,
-                        "sparse_vector": {int(k): v for k, v in vector.sparse.items()},
-                        "page_start": item["page_start"],
-                        "page_end": item["page_end"],
-                        "domain": "",
-                        "evidence_grade": "",
-                        "is_parent": is_parent,
-                    }
-                )
+                record = {
+                    "chunk_id": item["chunk_id"],
+                    "kb_id": kb_id,
+                    "doc_id": doc_id,
+                    "parent_id": parent_id,
+                    "content": item["content"][:8000],
+                    "dense_vector": vector.dense,
+                    "page_start": item["page_start"],
+                    "page_end": item["page_end"],
+                    "domain": "",
+                    "evidence_grade": "",
+                    "is_parent": is_parent,
+                }
+                # 向量来自 API 时没有稀疏权重，dense-only 集合里也没有这个字段。
+                # 无条件塞空 dict 会被 Milvus 拒掉（稀疏向量不允许全空）。
+                if vector.sparse:
+                    record["sparse_vector"] = {int(k): v for k, v in vector.sparse.items()}
+                records.append(record)
             # 先清掉旧向量再写，避免重跑留下孤儿数据
             if start == 0:
                 await index.delete_by_doc(doc_id)
