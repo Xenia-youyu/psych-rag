@@ -239,6 +239,12 @@ class ParserConf(BaseModel):
     vl_fallback_limit: float = 0.15
     ebook_convert_bin: str = "ebook-convert"
     libreoffice_bin: str = "libreoffice"
+    # 切块前剔除正文前的非内容页。目录里有全书章节名，向量会贴着任何问题，
+    # 把真正的正文答案挤掉——实测占比 1%，但出现在召回里的概率远高于 1%。
+    drop_toc: bool = True
+    drop_copyright: bool = True
+    # 序言默认保留：作者的研究缘起和全书脉络不是噪音。要删就打开这一项。
+    drop_preface: bool = False
 
 
 class ChunkConf(BaseModel):

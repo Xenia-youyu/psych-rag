@@ -35,8 +35,14 @@ from app.core.logging import get_logger
 from app.db.models import Chunk, Document, KnowledgeBase
 from app.ingest.base import ParsedDoc
 from app.ingest.chunker import split_parent_child
+from app.ingest.cleaner import strip_watermark
+from app.ingest.frontmatter import strip_front_matter
 
 logger = get_logger(__name__)
+
+# 清洗页脚广告后，剩余内容不足这些字数就丢弃该块
+MIN_CHILD_CHARS = 80
+MIN_PARENT_CHARS = 120
 
 EMBED_BATCH = 32
 
@@ -46,6 +52,7 @@ class IngestReport:
     doc_id: str
     status: str
     pages: int = 0
+    dropped_pages: int = 0
     parents: int = 0
     children: int = 0
     vectors: int = 0
@@ -64,6 +71,43 @@ class ChunkPlan:
 
     parents: list[dict[str, Any]] = field(default_factory=list)
     children: list[dict[str, Any]] = field(default_factory=list)
+
+
+def clean_watermarks(plan: ChunkPlan) -> tuple[ChunkPlan, int, int]:
+    """清洗父子块里的页脚广告，返回 (新计划, 修改数, 丢弃数)。
+
+    实测《实验心理学》2290 块里有 763 块带盗版水印（占 33%），
+    每页页脚都是「资料下载：bbs.xxx / 答疑QQ：xxx」。
+    这些块会命中「考研」类查询，引用展开时还会把广告一起展示给用户。
+
+    只删水印行，正文保留；清洗后不足 80 字的块才整体丢弃
+    （那种块基本只剩水印了）。父块同理，但更少删——
+    父块不参与召回，只用于命中后回填全文。
+    """
+    touched = 0
+    dropped = 0
+
+    parents: list[dict[str, Any]] = []
+    for item in plan.parents:
+        text, removed = strip_watermark(item.get("content", ""))
+        if removed:
+            item["content"] = text
+            touched += 1
+        if len(text) >= MIN_PARENT_CHARS:
+            parents.append(item)
+
+    children: list[dict[str, Any]] = []
+    for item in plan.children:
+        text, removed = strip_watermark(item.get("content", ""))
+        if removed:
+            item["content"] = text
+            touched += 1
+        if len(text) >= MIN_CHILD_CHARS:
+            children.append(item)
+        else:
+            dropped += 1
+
+    return ChunkPlan(parents=parents, children=children), touched, dropped
 
 
 def build_chunks(doc_id: str, parsed: ParsedDoc) -> ChunkPlan:
@@ -171,6 +215,19 @@ class IngestPipeline:
             if not parsed.pages:
                 raise RuntimeError("解析结果为空：可能是纯图片页或加密 PDF")
 
+            # 目录和版权页要在切块前剔除：它们含全书章节名，
+            # 向量距离会贴着任何问题，把真正的正文答案挤掉
+            filtered = strip_front_matter(
+                parsed,
+                drop_toc=settings.parser.drop_toc,
+                drop_copyright=settings.parser.drop_copyright,
+                drop_preface=settings.parser.drop_preface,
+            )
+            parsed = filtered.parsed
+            report.dropped_pages = filtered.dropped_count
+            if not parsed.pages:
+                raise RuntimeError("剔除目录/版权页后正文为空")
+
             plan = await self._stage_chunk(doc_id, kb_id, parsed)
             report.parents = len(plan.parents)
             report.children = len(plan.children)
@@ -229,6 +286,12 @@ class IngestPipeline:
     async def _stage_chunk(self, doc_id: str, kb_id: str, parsed: ParsedDoc) -> ChunkPlan:
         await self._update(doc_id, status="chunking", last_stage="chunking")
         plan = build_chunks(doc_id, parsed)
+        plan, touched, dropped = clean_watermarks(plan)
+        if touched:
+            logger.info(
+                "ingest.watermark_cleaned",
+                extra={"extra_fields": {"doc_id": doc_id, "blocks": touched, "dropped": dropped}},
+            )
 
         async with self._get_session_factory()() as session:
             # 幂等：先清掉这个文档的旧块，否则重跑会翻倍
