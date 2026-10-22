@@ -32,7 +32,7 @@ from app.config import settings  # noqa: E402
 from app.core.logging import setup_logging  # noqa: E402
 from app.db.base import SessionLocal  # noqa: E402
 from app.db.models import Chunk, Document, KnowledgeBase  # noqa: E402
-from app.ingest.cleaner import strip_watermark  # noqa: E402
+from app.ingest.cleaner import repair_text  # noqa: E402
 from app.ingest.frontmatter import classify_page  # noqa: E402
 
 
@@ -62,8 +62,8 @@ async def main() -> int:
         if kind in ("toc", "copyright"):
             to_delete.append(chunk_id)
             continue
-        cleaned, removed = strip_watermark(content or "")
-        if removed:
+        cleaned = repair_text(content or "")
+        if cleaned != (content or ""):
             if len(cleaned) < 80:
                 to_drop.append(chunk_id)
             else:
@@ -155,8 +155,8 @@ async def main() -> int:
     )
     fixed = []
     for item in parents:
-        cleaned, removed = strip_watermark(item.get("content", ""))
-        if removed and cleaned:
+        cleaned = repair_text(item.get("content", ""))
+        if cleaned != item.get("content", "") and cleaned:
             item["content"] = cleaned[:8000]
             fixed.append(item)
     for start in range(0, len(fixed), 200):

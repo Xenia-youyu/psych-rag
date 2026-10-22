@@ -56,3 +56,36 @@ def is_watermark_only(text: str) -> bool:
     """整块只剩水印（清洗后几乎没有内容）。"""
     cleaned, _ = strip_watermark(text)
     return len(cleaned) < 80
+
+
+# 中文字符之间夹着空格：「学 习 的 结 果」「产 生 式」
+# 排除英文与数字：只处理中文（含中文标点）紧邻的位置
+_CJK_GAP = re.compile(
+    r"(?<=[\u4e00-\u9fa5，。；：、！？）》」』])\s+(?=[\u4e00-\u9fa5，。；：、（《「『])"
+)
+
+
+def strip_cjk_gaps(text: str) -> tuple[str, int]:
+    """去掉中文字符之间的空格，返回 (清洗后文本, 合并处数)。
+
+    实测《当代教育心理学》2743 块里 2258 块（82%）是这种形态——
+    PyMuPDF 按字符位置抽取时，字间距被当成了空格：
+
+        「，自动 识 别 相关 的线 索，把一些小的步骤 形成大 的产 生式」
+
+    中文本来不用空格分词，这些空格纯属噪音。它们会把「产生式」这种词
+    切成「产 生式」，向量和倒排索引都对不上。
+    """
+    if not text:
+        return text, 0
+    merged = _CJK_GAP.sub("", text)
+    if merged == text:
+        return text, 0
+    return merged, len(_CJK_GAP.findall(text))
+
+
+def repair_text(text: str) -> str:
+    """入库前统一清洗：去水印 → 去中文间距。"""
+    cleaned, _ = strip_watermark(text)
+    cleaned, _ = strip_cjk_gaps(cleaned)
+    return cleaned

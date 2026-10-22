@@ -35,7 +35,7 @@ from app.core.logging import get_logger
 from app.db.models import Chunk, Document, KnowledgeBase
 from app.ingest.base import ParsedDoc
 from app.ingest.chunker import split_parent_child
-from app.ingest.cleaner import strip_watermark
+from app.ingest.cleaner import repair_text
 from app.ingest.frontmatter import strip_front_matter
 
 logger = get_logger(__name__)
@@ -89,8 +89,9 @@ def clean_watermarks(plan: ChunkPlan) -> tuple[ChunkPlan, int, int]:
 
     parents: list[dict[str, Any]] = []
     for item in plan.parents:
-        text, removed = strip_watermark(item.get("content", ""))
-        if removed:
+        original = item.get("content", "")
+        text = repair_text(original)
+        if text != original:
             item["content"] = text
             touched += 1
         if len(text) >= MIN_PARENT_CHARS:
@@ -98,8 +99,9 @@ def clean_watermarks(plan: ChunkPlan) -> tuple[ChunkPlan, int, int]:
 
     children: list[dict[str, Any]] = []
     for item in plan.children:
-        text, removed = strip_watermark(item.get("content", ""))
-        if removed:
+        original = item.get("content", "")
+        text = repair_text(original)
+        if text != original:
             item["content"] = text
             touched += 1
         if len(text) >= MIN_CHILD_CHARS:
