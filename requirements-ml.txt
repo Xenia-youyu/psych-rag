@@ -1,0 +1,17 @@
+# 机器学习栈：严格对齐参考项目 Itcast_qa_system/.venv 的实测可用组合
+# 为什么 pin 得这么死：
+#   FlagEmbedding / transformers / sentence-transformers 三者版本耦合很脆，
+#   装出"能 import 但推理报错"的组合是常事。这组数字是别人真跑通过的，不冒险。
+torch==2.7.0
+transformers==5.10.2
+sentence-transformers==5.5.1
+milvus-model==0.2.12
+pymilvus==3.0.0
+FlagEmbedding==1.4.0
+accelerate==1.13.0
+datasets==5.0.0
+peft==0.19.1
+safetensors==0.7.0
+scipy==1.17.1
+onnxruntime==1.26.0
+huggingface-hub==1.21.0

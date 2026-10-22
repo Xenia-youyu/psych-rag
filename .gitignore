@@ -1,0 +1,43 @@
+# ---- 敏感配置：绝不提交 ----
+config.ini
+.env
+
+# ---- 运行时产物 ----
+logs/
+storage/
+docker-data/
+*.log
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# ---- 本地模型（体积过大，不入库）----
+models/
+
+# ---- 编辑器 / 系统 ----
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# ---- 本地模型目录（4.7GB，注意是大写 MODEL）----
+MODEL/
+
+# ---- 前端 ----
+frontend/node_modules/
+frontend/dist/
+frontend/dev.log
+
+# ---- 配置备份（含明文密码）----
+config.ini.bak-*
+
+# ---- 扫描与临时产物 ----
+corpus_scan.json
+.cov_clean

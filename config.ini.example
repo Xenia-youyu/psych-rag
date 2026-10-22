@@ -1,0 +1,121 @@
+; ============================================================
+; 心理学 RAG 全栈系统 · 配置模板（脱敏版，可提交仓库）
+;
+; 用法：复制为 config.ini 后填入真实账号。
+;      config.ini 已在 .gitignore 中，不会被提交。
+; ============================================================
+
+[app]
+name = 心理学知识问答系统
+env = dev
+host = 0.0.0.0
+port = 8000
+debug = true
+upload_dir = storage/uploads
+image_dir = storage/images
+max_upload_mb = 200
+
+[mysql]
+host = 127.0.0.1
+port = 3306
+user = <你的用户名>
+password = <你的密码>
+database = psych_rag
+charset = utf8mb4
+pool_size = 10
+pool_recycle = 3600
+
+[redis]
+host = 127.0.0.1
+port = 6379
+password = <你的密码>
+db = 3
+enabled = false
+
+[milvus]
+host = 127.0.0.1
+port = 19530
+user =
+password =
+database_name = psych_rag
+collection_name = psych_chunks_v1
+consistency_level = Bounded
+
+[llm]
+provider = deepseek
+model = deepseek-flash
+base_url = https://api.deepseek.com
+api_key_env = DEEPSEEK_API_KEY
+temperature = 0.2
+top_p = 0.9
+max_tokens = 1200
+timeout = 30
+max_retries = 2
+
+[llm_qwen]
+model = qwen-max
+base_url = https://dashscope.aliyuncs.com/compatible-mode/v1
+api_key_env = DASHSCOPE_API_KEY
+
+[vl]
+model = qwen3-max
+base_url = https://dashscope.aliyuncs.com/compatible-mode/v1
+api_key_env = DASHSCOPE_API_KEY
+image_max_side = 2048
+timeout = 60
+
+[embedding]
+bge_m3_path = D:/models/bge-m3
+bge_reranker_path = D:/models/bge-reranker-v2-m3
+device = cuda
+batch_size = 16
+
+[parser]
+text_layer_threshold = 100
+mineru_timeout = 1800
+vl_fallback_limit = 0.15
+ebook_convert_bin = ebook-convert
+libreoffice_bin = libreoffice
+
+[chunk]
+mode = single
+size = 800
+overlap_ratio = 0.10
+min_size = 80
+parent_size = 1200
+parent_min_size = 800
+child_size = 320
+child_min_size = 200
+separators = ["\n\n\n", "\n\n", "\n", "。", "！", "？", "；", "，", "、", " ", ""]
+
+[retrieval]
+dense_topk = 20
+sparse_topk = 20
+fusion = rrf
+rrf_k = 60
+rerank_topk = 6
+rerank_score_threshold = 0.15
+context_max_chars = 6000
+hybrid = true
+
+[generate]
+history_rounds = 5
+answer_max_chars = 2000
+citation_verify = true
+verify_pass_rate_warn = 0.92
+rewrite_ratio_warn = 0.10
+
+[security]
+jwt_expire_hours = 24
+bcrypt_rounds = 12
+captcha_length = 4
+captcha_expire_seconds = 300
+jwt_secret_env = JWT_SECRET
+crisis_keywords = ["自杀", "自残", "不想活", "活着没意思", "结束生命", "割腕", "跳楼"]
+
+[logger]
+level = INFO
+log_dir = logs
+file_name = app.log
+retain_days = 14
+console = true

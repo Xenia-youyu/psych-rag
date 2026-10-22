@@ -1,0 +1,9 @@
+# MinerU 配置（项目内，避开家目录被安全策略保护的 ~/.mineru）
+# 用法：set MINERU_CONFIG=D:\Project\RAG-psy\mineru.yaml
+model:
+  # 模型放 D 盘：家目录下的隐藏配置目录在本机受安全策略保护，
+  # MinerU 每次运行要在家目录建/删文件锁，会被拒绝（WinError 5）。
+  base_dir: D:/mineru-models
+  source: modelscope
+  # CPU 机器固定走 ONNX；torch 后端要求检测到非 CPU 设备。
+  small_backend: onnx

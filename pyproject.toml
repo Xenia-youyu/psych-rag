@@ -1,0 +1,44 @@
+[project]
+name = "rag-psy"
+version = "0.1.0"
+description = "心理学知识问答系统 · 全栈 RAG"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.7",
+    "sqlalchemy[asyncio]>=2.0",
+    "asyncmy>=0.2.9",
+    "pymysql>=1.1",
+    "bcrypt>=4.1",
+    "pyjwt>=2.8",
+    "pillow>=10.3",
+    "python-multipart>=0.0.9",
+    "pymilvus>=2.4.4",
+    "redis>=5.0",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=5.0",
+    "ruff>=0.5",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-ra --strict-markers"
+markers = [
+    "integration: 需要真实 MySQL / Milvus 的测试（默认不跑，用 -m integration 显式执行）",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
