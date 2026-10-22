@@ -1,0 +1,18 @@
+{
+  "batch": "batch2",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 2090.5,
+  "items": [
+    {
+      "file": "心理咨询与心理治疗  重排本.pdf",
+      "status": "done",
+      "pages": 231,
+      "children": 869,
+      "vectors": 1101,
+      "seconds": 2090.0,
+      "error": ""
+    }
+  ]
+}

@@ -16,6 +16,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -27,9 +28,39 @@ logger = get_logger(__name__)
 # 提取 block 正文时依次尝试的字段名
 _TEXT_ATTRS = ("text", "content", "markdown", "latex", "html")
 
+# MinerU 输出的 markdown 会把图片内嵌成 data URI
+_DATA_URI_IMG = re.compile(r"!\[[^\]]*\]\(data:image/[^)]*\)", re.S)
+_BARE_BASE64 = re.compile(r"[A-Za-z0-9+/]{200,}={0,2}")
+
+
+def strip_data_uri(text: str) -> str:
+    """去掉 markdown 内嵌的 base64 图片，只留文字。"""
+    if not text:
+        return text
+    cleaned = _DATA_URI_IMG.sub("", text)
+    cleaned = _BARE_BASE64.sub("", cleaned)
+    return re.sub(r"\n{3,}", "\n\n", cleaned).strip()
+
 
 def _block_text(block: Any) -> str:
-    """从一个 block 里尽力取出正文。取不到就返回空串，绝不抛错。"""
+    """从一个 block 里尽力取出正文。取不到就返回空串，绝不抛错。
+
+    MinerU 4.x 把文字放在 `block.content` 的 span 列表里，每个 span 才有
+    `.content` 字符串；`block.text` 根本不存在。旧代码只认字符串字段，
+    结果每个 block 都取到空，最后退化成把整篇 markdown 当一页正文——
+    而那篇 markdown 里 99% 是 base64 图片。
+    """
+    spans = getattr(block, "content", None)
+    if isinstance(spans, list) and spans:
+        parts = [
+            text.strip()
+            for span in spans
+            for text in [getattr(span, "content", None)]
+            if isinstance(text, str) and text.strip()
+        ]
+        if parts:
+            return "".join(parts)
+
     for attr in _TEXT_ATTRS:
         value = getattr(block, attr, None)
         if isinstance(value, str) and value.strip():
@@ -95,6 +126,9 @@ class MinerUParser:
             page_range=page_range,
         )
         markdown = result.markdown() or ""
+        # markdown 里内嵌的图片是 data URI，动辄几万字，
+        # 进了块就是纯噪音（还会吃掉向量预算），先剥掉再用
+        markdown = strip_data_uri(markdown)
 
         pages: list[ParsedPage] = []
         for index, page in enumerate(getattr(result, "pages", []) or []):
