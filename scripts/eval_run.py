@@ -99,9 +99,14 @@ async def main() -> int:
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--with-answer", action="store_true", help="连生成一起测（花钱）")
     parser.add_argument("--save-baseline", action="store_true")
+    parser.add_argument("--threshold", type=float, default=None,
+                        help="覆盖 rerank_score_threshold，用于 A/B 对比（不改配置文件）")
     args = parser.parse_args()
 
     setup_logging()
+    if args.threshold is not None:
+        settings.retrieval.rerank_score_threshold = args.threshold
+        print(f"[A/B] 阈值临时覆盖为 {args.threshold}（仅本次运行）")
     types = {t.strip() for t in args.types.split(",") if t.strip()}
     items = load_questions(types | {"refuse"}, args.limit)
     if not items:

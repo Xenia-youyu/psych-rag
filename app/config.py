@@ -268,7 +268,7 @@ class RetrievalConf(BaseModel):
     fusion: str = "rrf"
     rrf_k: int = 60
     rerank_topk: int = 5
-    rerank_score_threshold: float = 0.58
+    rerank_score_threshold: float = 0.54
     context_max_chars: int = 6000
     hybrid: bool = True
     # 重排候选上限。去重后可能有 40 个父块，全送去交叉编码在 CPU 上是灾难。
@@ -481,7 +481,7 @@ def load_settings() -> Settings:
             fusion=_str("retrieval", "fusion", "rrf"),
             rrf_k=_int("retrieval", "rrf_k", 60),
             rerank_topk=_int("retrieval", "rerank_topk", 5),
-            rerank_score_threshold=_float("retrieval", "rerank_score_threshold", 0.58),
+            rerank_score_threshold=_float("retrieval", "rerank_score_threshold", 0.54),
             context_max_chars=_int("retrieval", "context_max_chars", 6000),
             hybrid=_bool("retrieval", "hybrid", True),
             rerank_max_candidates=_int("retrieval", "rerank_max_candidates", 6),

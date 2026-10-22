@@ -94,7 +94,10 @@ sparse_topk = 20
 fusion = rrf
 rrf_k = 60
 rerank_topk = 6
-rerank_score_threshold = 0.15
+; 标定依据见 scripts/calibrate_threshold.py（26 概念题 + 15 拒答题）：
+;   0.58 → 金标保留 69% / 拒答误收 27% / 平均喂给模型 2.3 条
+;   0.54 → 金标保留 77% / 拒答误收 33% / 平均喂给模型 3.4 条
+rerank_score_threshold = 0.54
 context_max_chars = 6000
 hybrid = true
 
