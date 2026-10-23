@@ -14,6 +14,7 @@ from __future__ import annotations
 import re
 from enum import StrEnum
 
+from app.config import settings
 from app.core.logging import get_logger
 
 logger = get_logger(__name__)
@@ -82,10 +83,15 @@ async def classify(text: str, *, llm=None, use_rule_first: bool = True) -> Inten
         return Intent.DEFINE
 
     try:
-        # max_tokens 不能压到 64：实测模型在 json mode 下会先吐一点思考内容，
-        # 64 个 token 被吃干，content 直接是空串，chat_json 再重试一次——
-        # 一次分类白跑三次请求，检索平白多两秒。256 是够用又不浪费的值。
-        data = await llm.chat_json(_build_messages(text), temperature=0.0, max_tokens=256)
+        # max_tokens 不能压：deepseek-flash 是推理模型，token 先花在思考上。
+        # 实测 256 → content 空串、tokens_out 恰好等于上限，chat_json 多重试一次，
+        # 一次分类白跑三趟请求，还因为兜底成 DEFINE 而选错检索策略；
+        # 2048 → 用 250 token 就返回 {"intent": "APPLY"}。取值见 config 的
+        # max_tokens_json，别再往这里写死数字。
+        data = await llm.chat_json(
+            _build_messages(text), temperature=0.0,
+            max_tokens=settings.llm.active().max_tokens_json,
+        )
         raw = str(data.get("intent", "")).upper().strip()
         intent = Intent(raw)
         logger.info(

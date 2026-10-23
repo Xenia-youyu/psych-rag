@@ -167,6 +167,10 @@ class LLMProviderConf(BaseModel):
     temperature: float = 0.2
     top_p: float = 0.9
     max_tokens: int = 2400
+    # 只要求模型回一小段 JSON 的场景（意图分类、查询改写）用的上限。
+    # deepseek-flash 是推理模型，token 会先花在思考上：256 时 content 直接是空串，
+    # chat_json 还会因此多重试一次，一次分类白跑三趟请求。2048 实测用 250 token 就够。
+    max_tokens_json: int = 2048
     timeout: int = 30
     max_retries: int = 2
 
