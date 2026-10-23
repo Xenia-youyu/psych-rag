@@ -278,7 +278,7 @@ class RetrievalConf(BaseModel):
     # 重排候选上限。去重后可能有 40 个父块，全送去交叉编码在 CPU 上是灾难。
     # 只取 RRF 前 N 个送去重排——前 8 基本覆盖真实命中，剩下的本来也进不了最终 top5。
     # 实测 int8 量化后约 470 ms/对，8 条 ≈ 3.8 秒；调到 6 条 ≈ 2.8 秒。
-    rerank_max_candidates: int = 6
+    rerank_max_candidates: int = 20
     # 交叉编码 token 上限。实测 256 token 时，1200 字父块与 300 字子块耗时相同
     # （都被截到 256），所以"重排父块"在质量上更优、成本上不加价。
     # 512 token 会慢一倍，而父块后半段对判别帮助很小。
@@ -488,7 +488,7 @@ def load_settings() -> Settings:
             rerank_score_threshold=_float("retrieval", "rerank_score_threshold", 0.54),
             context_max_chars=_int("retrieval", "context_max_chars", 6000),
             hybrid=_bool("retrieval", "hybrid", True),
-            rerank_max_candidates=_int("retrieval", "rerank_max_candidates", 6),
+            rerank_max_candidates=_int("retrieval", "rerank_max_candidates", 20),
             rerank_max_length=_int("retrieval", "rerank_max_length", 256),
             rerank_quantize=_bool("retrieval", "rerank_quantize", True),
         ),

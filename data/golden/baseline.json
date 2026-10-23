@@ -1,0 +1,27 @@
+{
+  "saved_at": "2026-10-23 19:48:13",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "collection": "psych_chunks_v2",
+  "embedding": "dashscope",
+  "metrics": {
+    "concept": {
+      "n": 26,
+      "recall@10": 0.962,
+      "mrr": 0.745,
+      "hit@5": 0.962
+    },
+    "compare": {
+      "n": 12,
+      "recall@10": 0.792,
+      "mrr": 0.792,
+      "hit@5": 0.833
+    },
+    "multihop": {
+      "n": 13,
+      "recall@10": 0.846,
+      "mrr": 0.923,
+      "hit@5": 1.0
+    }
+  },
+  "misses": 3
+}

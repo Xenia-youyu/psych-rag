@@ -1,120 +1,112 @@
-"""逐段打点：看 gold 块在检索链路的哪一步掉出去。
+"""逐段追踪指定题目的 gold 位次，判断是召回问题还是标注问题。
 
-用法：python -m scripts._debug_retrieve [行号，默认 1]
-读 data/golden/questions.jsonl 的第 N 行（0-based）。
+只调 embedding API + Milvus + 本地重排，不调生成侧 LLM。
+用法：python -m scripts._debug_retrieve <题目在 jsonl 里的行号(1-based)>
 """
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import json
 import sys
 from pathlib import Path
 
-from sqlalchemy import func, select
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.clients.embed_client import build_embedder
-from app.clients.milvus_client import MilvusIndex
-from app.clients.rerank_client import BGEReranker
-from app.config import settings
-from app.db.base import SessionLocal
-from app.db.models import Chunk, KnowledgeBase
-from app.retrieve.fusion import dedupe_by_parent, rrf_fuse
-from app.retrieve.service import _backfill_parents, _recall_one, retrieve
+from sqlalchemy import func, select  # noqa: E402
+
+from app.clients.embed_client import build_embedder  # noqa: E402
+from app.clients.milvus_client import MilvusIndex  # noqa: E402
+from app.clients.rerank_client import BGEReranker  # noqa: E402
+from app.config import settings  # noqa: E402
+from app.core.logging import setup_logging  # noqa: E402
+from app.db.base import SessionLocal  # noqa: E402
+from app.db.models import Chunk, Document, KnowledgeBase  # noqa: E402
+from app.retrieve.fusion import dedupe_by_parent, filter_by_threshold, Hit  # noqa: E402
+from app.retrieve.service import retrieve  # noqa: E402
 
 GOLDEN = Path(__file__).resolve().parent.parent / "data" / "golden" / "questions.jsonl"
 
 
-async def expand_gold(session, ids: list[str]) -> set[str]:
-    rows = (await session.execute(select(Chunk.id, Chunk.parent_id).where(Chunk.id.in_(ids)))).all()
-    out = {cid for cid, _ in rows}
+def load_item(index: int) -> dict:
+    lines = [l for l in GOLDEN.read_text(encoding="utf-8").splitlines() if l.strip()]
+    item = json.loads(lines[index - 1])
+    return item
+
+
+async def expand_gold(session, gold_ids: list[str]) -> set[str]:
+    rows = (
+        await session.execute(select(Chunk.id, Chunk.parent_id).where(Chunk.id.in_(gold_ids)))
+    ).all()
+    expanded = {cid for cid, _ in rows}
     parents = {pid for _, pid in rows if pid}
     if parents:
-        out.update((await session.scalars(select(Chunk.id).where(Chunk.parent_id.in_(parents)))).all())
-    return out
-
-
-def mark(ids: list[str], gold: set[str]) -> str:
-    return f"gold 命中 {sum(1 for i in ids if i in gold)} / 共 {len(ids)} 条"
+        siblings = (
+            await session.scalars(select(Chunk.id).where(Chunk.parent_id.in_(parents)))
+        ).all()
+        expanded.update(siblings)
+    return expanded
 
 
 async def main() -> None:
-    line_no = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-    item = json.loads(GOLDEN.read_text(encoding="utf-8").splitlines()[line_no])
-    print(f"问题：{item['question']}")
-    print(f"原始 gold：{len(item['gold_chunk_ids'])} 块")
+    setup_logging()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("line", type=int, help="题目在 jsonl 里的行号（1 基）")
+    args = parser.parse_args()
 
-    conf = settings.retrieval
-    print(
-        f"配置：dense_topk={conf.dense_topk} sparse_topk={conf.sparse_topk} "
-        f"hybrid={conf.hybrid} rrf_k={conf.rrf_k} "
-        f"rerank_max_candidates={conf.rerank_max_candidates} "
-        f"rerank_topk={conf.rerank_topk} 阈值={conf.rerank_score_threshold}"
-    )
-
+    item = load_item(args.line)
     async with SessionLocal() as s:
-        kb_id = await s.scalar(
+        kb = await s.scalar(
             select(KnowledgeBase.id).order_by(KnowledgeBase.doc_count.desc()).limit(1)
         )
-        gold = await expand_gold(s, item["gold_chunk_ids"])
-        rows = (await s.execute(
-            select(Chunk.id, Chunk.parent_id, Chunk.page_start, Chunk.char_count)
-            .where(Chunk.id.in_(item["gold_chunk_ids"]))
-        )).all()
-        # 有子块指向它 => 它自己是父块，父块不参与召回（Milvus 里被 is_parent 过滤掉）
-        print("\ngold 块属性：")
-        for cid, pid, page, chars in rows:
-            child_count = await s.scalar(
-                select(func.count(Chunk.id)).where(Chunk.parent_id == cid)
+        gold = await expand_gold(s, item.get("gold_chunk_ids") or [])
+        rows = (
+            await s.execute(
+                select(Chunk.id, Chunk.parent_id, Chunk.page_start, Chunk.char_count, Document.filename)
+                .join(Document, Document.id == Chunk.doc_id)
+                .where(Chunk.id.in_(item["gold_chunk_ids"]))
             )
-            kind = f"父块（{child_count} 个子块）" if child_count else "子块"
-            print(f"  {cid[:8]} parent={pid[:8] or '(空)'} {kind} p{page} {chars}字")
-        print(f"扩展后 gold 共 {len(gold)} 块（含同父块兄弟）")
+        ).all()
+        print("问题:", item["question"])
+        print(f"类型 {item['type']} | gold {len(gold)} 块（含同父块兄弟）")
+        for cid, pid, page, chars, fname in rows:
+            print(f"  gold {cid[:8]} p{page} {chars}字 《{fname[:24]}》")
+        if not rows:
+            print("  !! gold_chunk_ids 在库里查不到——可能是上一轮清洗删掉了")
 
     emb, idx, rr = build_embedder(), MilvusIndex(), BGEReranker()
-
-    # ---- 整条链路（与线上一致）----
-    out = await retrieve(item["question"], kb_ids=[kb_id], embedder=emb, index=idx, reranker=rr)
-    print(f"\n[retrieve] queries={out.queries}")
-    print(f"[retrieve] stats={json.dumps({k: v for k, v in out.stats.items() if k != 'latency_ms'}, ensure_ascii=False)}")
-    print(f"[retrieve] 返回 {len(out.hits)} 条，{mark([h.chunk_id for h in out.hits], gold)}")
-
-    # ---- 手工重放，逐段看 gold ----
-    queries = out.queries or [item["question"]]
-    embeddings = await emb.encode(queries)
-    ranked: dict[str, list] = {}
-    for i, embedding in enumerate(embeddings):
-        ranked[f"q{i}"] = await _recall_one(
-            embedding, kb_ids=[kb_id], index=idx,
-            dense_topk=conf.dense_topk, sparse_topk=conf.sparse_topk, hybrid=conf.hybrid,
+    q = item["question"]
+    vec = (await emb.encode([q]))[0]
+    raw_hits = await idx.search(kb_ids=[kb], dense=vec.dense, topk=30)
+    hits = [
+        Hit(
+            chunk_id=h["chunk_id"],
+            score=float(h.get("score", 0)),
+            parent_id=h.get("parent_id"),
+            content=h.get("content", ""),
         )
-        ids = [h.chunk_id for h in ranked[f"q{i}"]]
-        pos = next((n + 1 for n, x in enumerate(ids) if x in gold), None)
-        print(f"\n[召回 q{i}] {len(ids)} 条，{mark(ids, gold)}，gold 最高位次={pos}")
+        for h in raw_hits
+    ]
+    scores = await rr.score(q, [h.content[:1200] for h in hits])
+    for h, s in zip(hits, scores):
+        h.score = float(s)
+    deduped = dedupe_by_parent(hits)
+    print(f"\n召回 {len(hits)} → 去重 {len(deduped)} 条（前 8）：")
+    gold_ids = set(item["gold_chunk_ids"])
+    for i, h in enumerate(deduped[:8], 1):
+        star = "★" if h.chunk_id in gold_ids else " "
+        flag = "保留" if h.score >= settings.retrieval.rerank_score_threshold else "过滤"
+        print(f"  {star}{i}. {h.score:.4f} [{flag}] {h.content[:52].replace(chr(10), ' ')}")
 
-    fused = rrf_fuse(ranked, k=conf.rrf_k)
-    ids = [h.chunk_id for h in fused]
-    pos = next((n + 1 for n, x in enumerate(ids) if x in gold), None)
-    print(f"[融合] {len(ids)} 条，{mark(ids, gold)}，最高位次={pos}")
-
-    deduped = dedupe_by_parent(fused)
-    ids = [h.chunk_id for h in deduped]
-    pos = next((n + 1 for n, x in enumerate(ids) if x in gold), None)
-    print(f"[去重] {len(ids)} 条，{mark(ids, gold)}，最高位次={pos}")
-
-    cut = conf.rerank_max_candidates
-    in_window = ids[:cut] if cut > 0 else ids
-    print(f"[重排窗口前 {cut}] {len(in_window)} 条，{mark(in_window, gold)}"
-          f"  ← gold 是否被截掉：{'是' if any(i in gold for i in ids) and not any(i in gold for i in in_window) else '否'}")
-
-    backfilled = await _backfill_parents(deduped, index=idx)
-    scores = await rr.score(item["question"], [h.content for h in backfilled[:cut]])
-    top = sorted(zip(backfilled[:cut], scores), key=lambda x: -x[1])
-    print(f"\n[重排后前 8]")
-    for h, sc in top[:8]:
-        flag = "★gold" if h.chunk_id in gold else "     "
-        keep = "过" if sc >= conf.rerank_score_threshold else "砍"
-        print(f"  {sc:.4f} [{keep}] {flag} p{h.meta.get('page_start', '?')} {h.content[:40]}")
+    outcome = await retrieve(q, kb_ids=[kb], embedder=emb, index=idx, reranker=rr)
+    kept = filter_by_threshold(deduped, settings.retrieval.rerank_score_threshold)
+    print(f"\nretrieve 返回 {len(outcome.hits)} 条 | after_threshold {len(kept)} | "
+          f"selected {len(outcome.hits)}")
+    print("stats:", {k: v for k, v in outcome.stats.items() if k != "latency_ms"})
+    hit_rank = next((i + 1 for i, h in enumerate(outcome.hits)
+                     if h.chunk_id in gold_ids), 0)
+    print(f"gold 在最终结果里的位次: {hit_rank or '未出现'}")
 
 
 if __name__ == "__main__":
