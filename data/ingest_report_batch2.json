@@ -1,0 +1,72 @@
+{
+  "batch": "batch2",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 14234.0,
+  "items": [
+    {
+      "file": "《发展心理学》林崇德 第三版（高清）.pdf",
+      "status": "failed",
+      "pages": 557,
+      "children": 1971,
+      "vectors": 0,
+      "seconds": 2958.0,
+      "error": "AppError: 向量化失败：ConnectError('All connection attempts failed')"
+    },
+    {
+      "file": "《变态心理学》钱铭怡.pdf",
+      "status": "done",
+      "pages": 516,
+      "children": 2435,
+      "vectors": 3033,
+      "seconds": 4000.7,
+      "error": ""
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 977.5,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 406.1,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "file": "《社会心理学》候玉波 第四版.pdf",
+      "status": "done",
+      "pages": 324,
+      "children": 1419,
+      "vectors": 1774,
+      "seconds": 1831.9,
+      "error": ""
+    },
+    {
+      "file": "《管理心理学》车丽萍 第二版.pdf",
+      "status": "done",
+      "pages": 322,
+      "children": 1012,
+      "vectors": 1324,
+      "seconds": 1506.8,
+      "error": ""
+    },
+    {
+      "file": "人格心理学.pdf",
+      "status": "done",
+      "pages": 368,
+      "children": 2750,
+      "vectors": 3491,
+      "seconds": 2551.4,
+      "error": ""
+    }
+  ]
+}

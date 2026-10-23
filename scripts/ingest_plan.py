@@ -97,6 +97,9 @@ async def main() -> int:
     parser.add_argument("--report", default="")
     parser.add_argument("--start-page", type=int, default=0, help="从第几页开始（1 基，0 = 第 1 页）")
     parser.add_argument("--end-page", type=int, default=0, help="到第几页结束（0 = 最后一页）")
+    parser.add_argument("--chunk-pages", type=int, default=0,
+                        help="每本按 N 页分段落库（0 = 整本）。用于绕开「一个坏 OCR 框杀死整本书」——"
+                             "某段失败只丢那一段，其余段照常入库")
     args = parser.parse_args()
 
     setup_logging()
@@ -104,6 +107,7 @@ async def main() -> int:
     pages = None if args.pages == 0 else args.pages
     start = args.start_page or None
     end = args.end_page or None
+    plan_pages = {item["path"]: item.get("pages", 0) for item in batch.get("items", [])}
 
     if args.match:
         paths = [p for p in paths if args.match in p.name]
@@ -145,31 +149,50 @@ async def main() -> int:
     rows: list[dict] = []
     started = time.perf_counter()
 
+    root = Path(json.loads(Path(args.plan).read_text(encoding="utf-8"))["root"])
+    task_index = 0
     for order, path in enumerate(paths, 1):
-        content_hash = sha256_of(path)
-        doc_id = await create_document(
-            kb_id, path, pages, content_hash, start_page=start, end_page=end
-        )
-        label = path.name if len(path.name) <= 34 else path.name[:31] + "…"
-        print(f"[{order}/{len(paths)}] {label:36}", end="", flush=True)
+        rel = str(path.relative_to(root))
+        total = plan_pages.get(rel, 0)
+        if args.chunk_pages and total and not (start or end):
+            windows = [
+                (ws, min(ws + args.chunk_pages - 1, total))
+                for ws in range(1, total + 1, args.chunk_pages)
+            ]
+        else:
+            windows = [(start, end)]
 
-        report = await pipeline.run(doc_id, max_pages=pages, start_page=start, end_page=end)
-        print(
-            f"\r[{order}/{len(paths)}] {report.status:6} {label:36} "
-            f"页 {report.pages:4d} 块 {report.children:5d} 向量 {report.vectors:5d} "
-            f"{report.elapsed_ms / 1000:7.1f}s"
-        )
-        rows.append(
-            {
-                "file": path.name,
-                "status": report.status,
-                "pages": report.pages,
-                "children": report.children,
-                "vectors": report.vectors,
-                "seconds": round(report.elapsed_ms / 1000, 1),
-                "error": report.error,
-            }
-        )
+        content_hash = sha256_of(path)
+        for ws, we in windows:
+            task_index += 1
+            doc_id = await create_document(
+                kb_id, path, pages, content_hash, start_page=ws, end_page=we
+            )
+            label = path.name if len(path.name) <= 30 else path.name[:27] + "…"
+            if len(windows) > 1:
+                label = f"{label}[{ws}-{we}]"
+            print(f"[{task_index}] {label:36}", end="", flush=True)
+
+            report = await pipeline.run(
+                doc_id, max_pages=pages, start_page=ws, end_page=we
+            )
+            print(
+                f"\r[{task_index}] {report.status:6} {label:36} "
+                f"页 {report.pages:4d} 块 {report.children:5d} 向量 {report.vectors:5d} "
+                f"{report.elapsed_ms / 1000:7.1f}s"
+            )
+            rows.append(
+                {
+                    "file": path.name,
+                    "window": [ws, we],
+                    "status": report.status,
+                    "pages": report.pages,
+                    "children": report.children,
+                    "vectors": report.vectors,
+                    "seconds": round(report.elapsed_ms / 1000, 1),
+                    "error": report.error,
+                }
+            )
 
     total_s = time.perf_counter() - started
     ok = [r for r in rows if r["status"] == "done"]
