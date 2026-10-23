@@ -9,6 +9,7 @@ from __future__ import annotations
 from app.ingest.cleaner import (
     is_watermark_only,
     repair_text,
+    strip_html_tables,
     strip_inline_watermark,
     strip_watermark,
 )
@@ -137,3 +138,46 @@ class TestInlineWatermark:
         assert "禁止倒卖" not in repair_text(text)
         assert "bbs.libidos.cn" not in repair_text(text)
         assert BODY.strip()[:12] in repair_text(text)
+
+
+class TestHtmlTables:
+    """MinerU 把表格输出成 HTML，标签要转成可读文本，不能整段删。"""
+
+    def test_converts_table_to_readable_rows(self) -> None:
+        text = (
+            "详见表1.1。\n<table><tr><td>年度</td><td>1979 1980</td></tr>"
+            "<tr><td>论文篇数</td><td>1 2</td></tr></table>"
+        )
+        cleaned, hits = strip_html_tables(text)
+
+        assert hits >= 1
+        assert "<td>" not in cleaned and "<table>" not in cleaned
+        assert "年度 | 1979 1980" in cleaned
+        assert "论文篇数 | 1 2" in cleaned
+
+    def test_drops_img_tags(self) -> None:
+        cleaned, _ = strip_html_tables("前文<img src='a.jpg' width='10'/>后文")
+        assert "img" not in cleaned
+        assert cleaned == "前文后文"
+
+    def test_leaves_math_lt_untouched(self) -> None:
+        """正文里的 P<Q 是数学符号，不是标签——一个字都不许动。"""
+        text = "当 P<Q 且 Q<R 时，可以推出 P<R。"
+        cleaned, hits = strip_html_tables(text)
+
+        assert hits == 0
+        assert cleaned is text or cleaned == text
+
+    def test_strips_tag_fragment_from_chunk_boundary(self) -> None:
+        """上一块以「<td」结尾，这一块开头就是「td>初步发展阶段」。"""
+        cleaned, hits = strip_html_tables("td>初步发展阶段\n据有关文献记载，1917年…")
+
+        assert hits == 1
+        assert cleaned.startswith("初步发展阶段")
+
+    def test_repair_text_removes_tags(self) -> None:
+        text = "仅供交流学习，禁止倒卖！" + BODY + "\n<table><tr><td>a</td><td>b</td></tr></table>"
+        out = repair_text(text)
+        assert "禁止倒卖" not in out
+        assert "<" not in out
+        assert "a | b" in out

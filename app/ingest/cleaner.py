@@ -90,6 +90,74 @@ def is_watermark_only(text: str) -> bool:
     return len(repair_text(text)) < 80
 
 
+# MinerU 把表格输出成 HTML。心理学教材里的表格本身是有效内容
+# （「年度 / 论文篇数 / 发展阶段」），不能整段删；但标签必须去掉：
+#     <table><tr><td>年度</td><td>1949 1949以前</td></tr>…
+# 实测 746 / 23515 块（3.2%）带这种标签，每块中位 39 个标签。
+# 标签既占长度预算，又把「年度」「论文篇数」这些语义词挤散。
+_TABLE = re.compile(r"<table[^>]*>(.*?)</table>", re.S | re.I)
+_ROW = re.compile(r"<tr[^>]*>(.*?)</tr>", re.S | re.I)
+_CELL = re.compile(r"<t[dh][^>]*>(.*?)</t[dh]>", re.S | re.I)
+_IMG = re.compile(r"<img[^>]*>", re.I)
+# 切块按长度硬切，会把标签切两半：上一块结尾「<td」，这一块开头「td>初步发展阶段」。
+# 这种残片不是合法标签，_OTHER_TAG 匹配不到，但用户会看见一行「td>初步发展阶段」。
+# 只收多字母标签且区分大小写：统计类教材里「P>0.05」常出现在行首，
+# 单字母标签（p/b/i）配 re.I 会把它当残片删掉，只剩「0.05」。
+_STRAY_TAG_TAIL = re.compile(r"(?m)^[ \t]*(?:td|th|tr|table|div|span|br|img)[ \t]*>+[ \t]*")
+_OTHER_TAG = re.compile(
+    r"</?(?:p|br|div|span|strong|em|b|i|u|sub|sup|thead|tbody|caption|"
+    r"table|tr|td|th|col|colgroup|a|font)[^>]*>",
+    re.I,
+)
+
+
+def strip_html_tables(text: str) -> tuple[str, int]:
+    """把 HTML 表格转成「行 | 单元格」的纯文本，并删掉其余标签。
+
+    返回 (清洗后文本, 处理的表格数 + 删除的散标签数)。
+    """
+    if not text:
+        return text, 0
+    # 两种入口：完整的 "<td>…" 或切块留下的残片 "td>初步发展阶段"。
+    # 残片里没有 "<"，只判 "<" 会漏掉它。
+    if "<" not in text and not _STRAY_TAG_TAIL.search(text):
+        return text, 0
+
+    tables = 0
+
+    def _convert(match: re.Match[str]) -> str:
+        nonlocal tables
+        rows: list[str] = []
+        for row in _ROW.findall(match.group(1)):
+            cells = [re.sub(r"\s+", " ", cell).strip() for cell in _CELL.findall(row)]
+            cells = [cell for cell in cells if cell]
+            if cells:
+                rows.append(" | ".join(cells))
+        if not rows:
+            return ""
+        tables += 1
+        # 前后补换行，避免表格和正文粘成一行
+        return "\n" + "\n".join(rows) + "\n"
+
+    out = _TABLE.sub(_convert, text)
+    # 图片标签整个丢掉（内容是文件名或 base64，没有文字价值）
+    has_img = bool(_IMG.search(out))
+    out = _IMG.sub("", out)
+    leftover = len(_OTHER_TAG.findall(out))
+    out = _OTHER_TAG.sub("", out)
+    leftover += len(_STRAY_TAG_TAIL.findall(out))
+    out = _STRAY_TAG_TAIL.sub("", out)
+
+    # 没有表格也没有标签就一个字都别动。
+    # 正文里的「P<Q」「A→B」这类数学符号会让 "<" 判断成立，
+    # 若此时仍走 .strip()，2 万多个块会因为尾部空白「被清洗」而全部重算向量。
+    if tables == 0 and leftover == 0 and not has_img:
+        return text, 0
+
+    out = re.sub(r"\n{3,}", "\n\n", out).strip()
+    return out, tables + leftover
+
+
 # 中文字符之间夹着空格：「学 习 的 结 果」「产 生 式」
 # 排除英文与数字：只处理中文（含中文标点）紧邻的位置
 _CJK_GAP = re.compile(
@@ -117,12 +185,14 @@ def strip_cjk_gaps(text: str) -> tuple[str, int]:
 
 
 def repair_text(text: str) -> str:
-    """入库前统一清洗：短语级水印 → 行级水印 → 中文间距。
+    """入库前统一清洗：短语级水印 → 行级水印 → HTML 标签 → 中文间距。
 
     顺序有讲究：先按短语删（它不看行长，能处理拼进正文的页眉），
-    再按行删（处理独占一行的页脚广告），最后收空格。
+    再按行删（处理独占一行的页脚广告），然后转表格/删标签，
+    最后收空格——标签里可能夹着空格，得放在收空格之前。
     """
     cleaned, _ = strip_inline_watermark(text)
     cleaned, _ = strip_watermark(cleaned)
+    cleaned, _ = strip_html_tables(cleaned)
     cleaned, _ = strip_cjk_gaps(cleaned)
     return cleaned
