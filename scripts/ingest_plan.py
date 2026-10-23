@@ -154,10 +154,14 @@ async def main() -> int:
     for order, path in enumerate(paths, 1):
         rel = str(path.relative_to(root))
         total = plan_pages.get(rel, 0)
-        if args.chunk_pages and total and not (start or end):
+        # 指定区间 + --chunk-pages = 在区间内再切小段（用于二分坏段）。
+        # 只指定区间 = 整段一把跑；两个都不指定 = 整本按 chunk_pages 切。
+        lo = start or 1
+        hi = end or total
+        if args.chunk_pages and total:
             windows = [
-                (ws, min(ws + args.chunk_pages - 1, total))
-                for ws in range(1, total + 1, args.chunk_pages)
+                (ws, min(ws + args.chunk_pages - 1, hi))
+                for ws in range(lo, hi + 1, args.chunk_pages)
             ]
         else:
             windows = [(start, end)]

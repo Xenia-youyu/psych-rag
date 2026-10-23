@@ -1,0 +1,61 @@
+{
+  "batch": "batch2",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 576.7,
+  "items": [
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        65,
+        80
+      ],
+      "status": "done",
+      "pages": 16,
+      "children": 73,
+      "vectors": 94,
+      "seconds": 159.0,
+      "error": ""
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        81,
+        96
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 170.1,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        97,
+        112
+      ],
+      "status": "done",
+      "pages": 16,
+      "children": 68,
+      "vectors": 88,
+      "seconds": 120.9,
+      "error": ""
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        113,
+        128
+      ],
+      "status": "done",
+      "pages": 16,
+      "children": 68,
+      "vectors": 86,
+      "seconds": 126.4,
+      "error": ""
+    }
+  ]
+}

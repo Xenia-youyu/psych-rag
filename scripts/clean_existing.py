@@ -32,7 +32,7 @@ from app.config import settings  # noqa: E402
 from app.core.logging import setup_logging  # noqa: E402
 from app.db.base import SessionLocal  # noqa: E402
 from app.db.models import Chunk, Document, KnowledgeBase  # noqa: E402
-from app.ingest.cleaner import repair_text  # noqa: E402
+from app.ingest.cleaner import is_junk, repair_text  # noqa: E402
 from app.ingest.frontmatter import classify_page  # noqa: E402
 
 
@@ -64,7 +64,7 @@ async def main() -> int:
             continue
         cleaned = repair_text(content or "")
         if cleaned != (content or ""):
-            if len(cleaned) < 80:
+            if is_junk(cleaned):
                 to_drop.append(chunk_id)
             else:
                 to_update.append((chunk_id, doc_id, kb_id, cleaned))

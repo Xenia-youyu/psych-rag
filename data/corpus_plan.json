@@ -94,27 +94,10 @@
       "id": "batch2",
       "name": "扫描版教材（MinerU OCR）",
       "parser": "mineru",
-      "pages": 697,
+      "pages": 0,
       "est_hours": "4-7",
-      "note": "这 8 个学科目前没有任何文字版，只能 OCR；建议夜间跑",
-      "items": [
-        {
-          "subject": "心理测量学",
-          "path": "心理测量学\\《心理与教育测量》戴海琦 第四版.pdf",
-          "pages": 363,
-          "chars_per_page": 18,
-          "size_mb": 203.6,
-          "reason": "戴海琦版覆盖测量理论与常用量表"
-        },
-        {
-          "subject": "心理统计学",
-          "path": "心理统计学\\心理与教育统计学-邵志芳著.pdf",
-          "pages": 334,
-          "chars_per_page": 8,
-          "size_mb": 8.1,
-          "reason": "邵志芳版比行为科学统计精要更贴近国内考纲"
-        }
-      ]
+      "note": "已全部完成，见 batch2_result",
+      "items": []
     }
   ],
   "excluded": [
@@ -230,5 +213,40 @@
       "reason": "OCR 后处理遇到几何退化的文本框，warp_image 抛 min(size)<=0，整本返回 0 页。需分段落库绕过（已支持 --start-page/--end-page），并二分 129-192 定位坏段。",
       "known_bad_window": "129-192"
     }
-  ]
+  ],
+  "batch2_result": {
+    "finished": "2026-10-23 18:52",
+    "books": {
+      "心理与教育测量": {
+        "pages_total": 363,
+        "pages_ingested": 362,
+        "bad_pages": [
+          83
+        ]
+      },
+      "心理与教育统计学": {
+        "pages_total": 334,
+        "pages_ingested": 333,
+        "bad_pages": [
+          54,
+          216
+        ]
+      }
+    },
+    "lost_pages": [
+      [
+        "心理与教育测量",
+        83
+      ],
+      [
+        "心理与教育统计学",
+        54
+      ],
+      [
+        "心理与教育统计学",
+        216
+      ]
+    ],
+    "reason": "这 3 页的 OCR 检测框几何退化，MinerU 的 warp_image 抛 min(size)<=0。已用 64→16→8→4→1 页四级细分定位到单页，其余全部恢复。"
+  }
 }

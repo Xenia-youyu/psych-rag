@@ -196,3 +196,20 @@ def repair_text(text: str) -> str:
     cleaned, _ = strip_html_tables(cleaned)
     cleaned, _ = strip_cjk_gaps(cleaned)
     return cleaned
+
+
+# 汉字计数：判定「这块还有没有中文正文」
+_CJK_CHAR = re.compile(r"[\u4e00-\u9fa5]")
+
+
+def is_junk(text: str) -> bool:
+    """清洗后该不该整块丢掉。
+
+    两个条件都要满足才算垃圾：短（< 80 字）**且**几乎没有汉字（< 20 个）。
+    只按长度判会误杀——实测有 76 字的正常句子（讲测验分数分界点的），
+    也有大量纯数字表格残片（「77722772717275…」，一个汉字都没有）。
+    后者对检索没有价值还会污染向量，前者是真内容。
+    """
+    if len(text) >= 80:
+        return False
+    return len(_CJK_CHAR.findall(text)) < 20

@@ -1,0 +1,113 @@
+{
+  "batch": "batch2",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 108.6,
+  "items": [
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        49,
+        49
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 4,
+      "vectors": 5,
+      "seconds": 31.6,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        50,
+        50
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 3,
+      "vectors": 4,
+      "seconds": 13.4,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        51,
+        51
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 3,
+      "vectors": 4,
+      "seconds": 10.4,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        52,
+        52
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 1,
+      "vectors": 2,
+      "seconds": 7.6,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        53,
+        53
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 3,
+      "vectors": 4,
+      "seconds": 13.4,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        54,
+        54
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 5.6,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        55,
+        55
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 4,
+      "vectors": 5,
+      "seconds": 15.0,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        56,
+        56
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 5,
+      "vectors": 7,
+      "seconds": 11.6,
+      "error": ""
+    }
+  ]
+}

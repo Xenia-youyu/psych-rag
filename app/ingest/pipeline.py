@@ -35,7 +35,7 @@ from app.core.logging import get_logger
 from app.db.models import Chunk, Document, KnowledgeBase
 from app.ingest.base import ParsedDoc
 from app.ingest.chunker import split_parent_child
-from app.ingest.cleaner import repair_text
+from app.ingest.cleaner import is_junk, repair_text
 from app.ingest.frontmatter import strip_front_matter
 
 logger = get_logger(__name__)
@@ -104,7 +104,9 @@ def clean_watermarks(plan: ChunkPlan) -> tuple[ChunkPlan, int, int]:
         if text != original:
             item["content"] = text
             touched += 1
-        if len(text) >= MIN_CHILD_CHARS:
+        # 短且有汉字才留：纯数字表格残片（一个汉字都没有）对检索没有价值，
+        # 76 字的正常句子是真内容。只按长度判会一起误杀，见 cleaner.is_junk。
+        if not is_junk(text):
             children.append(item)
         else:
             dropped += 1

@@ -1,0 +1,113 @@
+{
+  "batch": "batch2",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 133.6,
+  "items": [
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        209,
+        209
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 4,
+      "vectors": 6,
+      "seconds": 29.1,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        210,
+        210
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 3,
+      "vectors": 4,
+      "seconds": 9.0,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        211,
+        211
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 6,
+      "vectors": 8,
+      "seconds": 23.3,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        212,
+        212
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 8,
+      "vectors": 10,
+      "seconds": 21.4,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        213,
+        213
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 4,
+      "vectors": 5,
+      "seconds": 12.6,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        214,
+        214
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 3,
+      "vectors": 4,
+      "seconds": 9.0,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        215,
+        215
+      ],
+      "status": "done",
+      "pages": 1,
+      "children": 7,
+      "vectors": 9,
+      "seconds": 19.4,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        216,
+        216
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 9.8,
+      "error": "ValueError: Unsupported warp settings"
+    }
+  ]
+}

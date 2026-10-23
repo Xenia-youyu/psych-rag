@@ -1,0 +1,61 @@
+{
+  "batch": "batch2",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 845.5,
+  "items": [
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        193,
+        208
+      ],
+      "status": "done",
+      "pages": 16,
+      "children": 91,
+      "vectors": 119,
+      "seconds": 233.2,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        209,
+        224
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 182.1,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        225,
+        240
+      ],
+      "status": "done",
+      "pages": 16,
+      "children": 99,
+      "vectors": 129,
+      "seconds": 215.2,
+      "error": ""
+    },
+    {
+      "file": "心理与教育统计学-邵志芳著.pdf",
+      "window": [
+        241,
+        256
+      ],
+      "status": "done",
+      "pages": 16,
+      "children": 76,
+      "vectors": 101,
+      "seconds": 214.7,
+      "error": ""
+    }
+  ]
+}
