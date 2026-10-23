@@ -94,18 +94,10 @@
       "id": "batch2",
       "name": "扫描版教材（MinerU OCR）",
       "parser": "mineru",
-      "pages": 3401,
+      "pages": 2784,
       "est_hours": "4-7",
       "note": "这 8 个学科目前没有任何文字版，只能 OCR；建议夜间跑",
       "items": [
-        {
-          "subject": "普通心理学",
-          "path": "普通心理学\\心理学导论 梁宁建 上海教育出版社 第2版.pdf",
-          "pages": 617,
-          "chars_per_page": 0,
-          "size_mb": 195.9,
-          "reason": "全库最核心的学科，12 个文件里这版最适合当底本"
-        },
         {
           "subject": "发展心理学",
           "path": "发展心理学\\《发展心理学》林崇德 第三版（高清）.pdf",
@@ -217,6 +209,17 @@
       "reason": "重排本比 S 版页数少且版式规整，OCR 更稳",
       "batch": "batch2",
       "note": "2026-10-22 已入库（231 页 / 869 块 / 1101 向量）"
+    }
+  ],
+  "pending_recovery": [
+    {
+      "subject": "普通心理学",
+      "path": "普通心理学\\心理学导论 梁宁建 上海教育出版社 第2版.pdf",
+      "pages": 617,
+      "chars_per_page": 0,
+      "size_mb": 195.9,
+      "reason": "OCR 后处理遇到几何退化的文本框，warp_image 抛 min(size)<=0，整本返回 0 页。需分段落库绕过（已支持 --start-page/--end-page），并二分 129-192 定位坏段。",
+      "known_bad_window": "129-192"
     }
   ]
 }
