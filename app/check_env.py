@@ -22,20 +22,26 @@ OK = "[OK]  "
 BAD = "[FAIL]"
 WARN = "[WARN]"
 
-EXPECTED_FIELDS = {
+# sparse_vector 只有在本地 BGE-M3（稠密+稀疏）下才存在。
+# 走百炼 text-embedding-v4 时集合是纯稠密的，没有这个字段——
+# 写死期望会让自检把"正常的集合"报成 FAIL。
+BASE_FIELDS = {
     "chunk_id",
     "kb_id",
     "doc_id",
     "parent_id",
     "content",
     "dense_vector",
-    "sparse_vector",
     "page_start",
     "page_end",
     "domain",
     "evidence_grade",
     "is_parent",
 }
+
+REQUIRED_FIELDS = BASE_FIELDS | (
+    {"sparse_vector"} if settings.embedding.provider != "dashscope" else set()
+)
 
 
 # ---------------------------------------------------------------- MySQL
@@ -217,7 +223,7 @@ def check_milvus(create: bool) -> str:
 
         desc = client.describe_collection(conf.collection)
         fields = {f.get("name") for f in desc.get("fields", [])}
-        missing = EXPECTED_FIELDS - fields
+        missing = REQUIRED_FIELDS - fields
         if missing:
             print(f"{BAD} collection {conf.collection} 缺字段 {sorted(missing)}")
             print("      两种可能：")

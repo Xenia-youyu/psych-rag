@@ -325,14 +325,19 @@ class TestBudget:
             assert key in outcome.stats
 
 
-class TestRerankOnParentContent:
-    """质量优先的取舍：重排看父块，不看子块。
+class TestRerankOnChildContent:
+    """重排看子块，父块只在选中之后回填给生成用。
 
-    子块 300 字常是半句假设半句结论，交叉编码拿它打分只能靠猜；
-    父块 1200 字上下文完整，判别质量明显更高。
+    这条顺序是拿数据换的，不是猜的（scripts/_rerank_input_ab.py，26 道概念题）：
+      金标平均分  子块 0.7043 / 父块 0.6472
+      逐题对比    子块更好 15 题，父块更好 11 题
+      灾难案例    c006 #1→#15、c011 #1→#13、c016 #1→#13，全被阈值砍掉
+    父块里只有一小段和问题相关，交叉编码看整段相关性，会被稀释。
+
+    之前这里断言的是相反的行为（"回填必须发生在重排之前"），那版判断已被证伪。
     """
 
-    async def test_rerank_sees_parent_content(self) -> None:
+    async def test_rerank_sees_child_content(self) -> None:
         index = FakeIndex(
             [row("c1", parent="p1", content="子块片段：负强化")],
             parents={"p1": {"content": "父块全文：负强化通过撤销厌恶刺激来增加行为", "page_start": 3}},
@@ -343,19 +348,23 @@ class TestRerankOnParentContent:
                        index=index, reranker=reranker, intent=Intent.DEFINE)
 
         documents = reranker.calls[0][1]
-        assert documents == ["父块全文：负强化通过撤销厌恶刺激来增加行为"]
-        assert "子块片段" not in documents[0]
+        assert documents == ["子块片段：负强化"], "重排应当只看到子块"
+        assert "父块全文" not in documents[0]
 
-    async def test_parent_backfill_happens_before_rerank(self) -> None:
-        """回填必须发生在重排之前——否则重排看到的还是子块。"""
-        index = FakeIndex([row("c1", parent="p1")], parents={"p1": {"content": "父块"}})
+    async def test_parent_backfill_happens_after_rerank(self) -> None:
+        """回填发生在重排之后：送进重排的是子块，最终命中里是父块全文。"""
+        index = FakeIndex(
+            [row("c1", parent="p1", content="子块")],
+            parents={"p1": {"content": "父块", "page_start": 1}},
+        )
         reranker = FakeReranker([0.9])
 
-        await retrieve("问题", kb_ids=["kb1"], embedder=FakeEmbedder(),
-                       index=index, reranker=reranker, intent=Intent.DEFINE)
+        outcome = await retrieve("问题", kb_ids=["kb1"], embedder=FakeEmbedder(),
+                                 index=index, reranker=reranker, intent=Intent.DEFINE)
 
-        assert index.fetch_calls, "没有回填父块就送去重排了"
-        assert reranker.calls[0][1] == ["父块"]
+        assert reranker.calls[0][1] == ["子块"], "重排前不该已经回填"
+        assert index.fetch_calls, "选出结果后必须回填父块"
+        assert outcome.hits and outcome.hits[0].content == "父块", "生成阶段要拿到父块全文"
 
     async def test_rerank_candidates_capped(self) -> None:
         """去重后候选可能有几十个，全送去交叉编码在 CPU 上会慢到不可接受。"""

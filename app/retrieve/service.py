@@ -185,15 +185,16 @@ async def retrieve(
     deduped = dedupe_by_parent(fused)
     stats["after_dedupe"] = len(deduped)
 
-    # 5. 父块回填。
-    # 顺序很关键：**先回填再重排**。交叉编码要判断的是"这段内容能不能回答这个问题"，
-    # 拿 300 字的子块去打分，看到的往往是半句假设、半句结论，模型只能靠猜；
-    # 拿 1200 字的父块打分，上下文完整，判别质量明显更高。
-    # 代价是重排文本变长（约 4 倍计算量），靠 rerank_max_candidates 和
-    # rerank_max_length 两个上限控回来。
-    deduped = await _backfill_parents(deduped, index=index)
-
-    # 6. 重排（用原始问题，且只重排 RRF 排名靠前的一批）
+    # 5. 重排（用原始问题，只重排 RRF 排名靠前的一批）
+    #
+    # 这里曾经是「先回填父块再重排」，理由写得很顺：拿 300 字子块打分看到的是
+    # 半句假设半句结论，拿 1200 字父块打分上下文完整，判别质量更高。
+    # **这个假设是错的。** scripts/_rerank_input_ab.py 在 26 道概念题上实测：
+    #   金标平均分  子块 0.7043 / 父块 0.6472
+    #   逐题对比    子块更好 15 题，父块更好 11 题
+    #   灾难案例    c006 #1→#15、c011 #1→#13、c016 #1→#13
+    # 父块里只有 1/4 的内容和问题相关，交叉编码器看的是整段相关性，被稀释了；
+    # 被稀释到阈值以下，正确答案就直接消失。父块全文只该用于生成，不该用于打分。
     rerank_ok = False
     rerank_input = deduped
     if reranker is not None:
@@ -228,16 +229,26 @@ async def retrieve(
     stats["rerank_ok"] = rerank_ok
     stats["after_threshold"] = len(candidates)
 
-    # 8. 按预算裁剪
+    # 8. 按预算裁出前 N 条（这一步还是子块正文，条数与预算都按子块算）
     selected = select_context(
         candidates,
         top_n=conf.rerank_topk,
         threshold=0,
         max_chars=conf.context_max_chars,
     )
+
+    # 9. 回填父块：只给生成用，不参与打分。
+    # 回填后单条从 ~300 字涨到 ~1200 字，所以要按字符预算再裁一次。
+    selected = await _backfill_parents(selected, index=index)
+    selected = select_context(
+        selected,
+        top_n=conf.rerank_topk,
+        threshold=0,
+        max_chars=conf.context_max_chars,
+    )
     stats["selected"] = len(selected)
 
-    # 9. 补齐文献元信息（书名/版次）
+    # 10. 补齐文献元信息（书名/版次）
     if doc_meta is not None:
         await _attach_doc_meta(selected, doc_meta)
 
