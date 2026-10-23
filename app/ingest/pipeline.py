@@ -198,7 +198,14 @@ class IngestPipeline:
         return self._embedder
 
     # ------------------------------------------------------------ 主流程
-    async def run(self, doc_id: str, *, max_pages: int | None = None) -> IngestReport:
+    async def run(
+        self,
+        doc_id: str,
+        *,
+        max_pages: int | None = None,
+        start_page: int | None = None,
+        end_page: int | None = None,
+    ) -> IngestReport:
         started = time.perf_counter()
         report = IngestReport(doc_id=doc_id, status="failed")
 
@@ -212,7 +219,9 @@ class IngestPipeline:
             filename = document.filename
 
         try:
-            parsed = await self._stage_parse(doc_id, path, filename, max_pages)
+            parsed = await self._stage_parse(
+                doc_id, path, filename, max_pages, start_page, end_page
+            )
             report.pages = parsed.page_count
             if not parsed.pages:
                 raise RuntimeError("解析结果为空：可能是纯图片页或加密 PDF")
@@ -274,7 +283,13 @@ class IngestPipeline:
 
     # ------------------------------------------------------------ 各阶段
     async def _stage_parse(
-        self, doc_id: str, path: str, filename: str, max_pages: int | None
+        self,
+        doc_id: str,
+        path: str,
+        filename: str,
+        max_pages: int | None,
+        start_page: int | None = None,
+        end_page: int | None = None,
     ) -> ParsedDoc:
         await self._update(doc_id, status="parsing", last_stage="parsing")
         parser = self._parser
@@ -283,7 +298,9 @@ class IngestPipeline:
 
             parser = pick_parser(filename)
         # 解析是同步阻塞的（MinerU/CPU 推理），放线程池避免卡事件循环
-        return await asyncio.to_thread(parser.parse, path, max_pages=max_pages)
+        return await asyncio.to_thread(
+            parser.parse, path, max_pages=max_pages, start_page=start_page, end_page=end_page
+        )
 
     async def _stage_chunk(self, doc_id: str, kb_id: str, parsed: ParsedDoc) -> ChunkPlan:
         await self._update(doc_id, status="chunking", last_stage="chunking")

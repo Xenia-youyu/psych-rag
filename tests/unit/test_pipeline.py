@@ -29,7 +29,14 @@ class FakeParser:
         self.pages = pages if pages is not None else ["第一页正文。" * 60, "第二页正文。" * 60]
         self.calls: list[str] = []
 
-    def parse(self, path: str, *, max_pages: int | None = None) -> ParsedDoc:
+    def parse(
+        self,
+        path: str,
+        *,
+        max_pages: int | None = None,
+        start_page: int | None = None,
+        end_page: int | None = None,
+    ) -> ParsedDoc:
         self.calls.append(path)
         return ParsedDoc(
             source_path=path,
@@ -42,7 +49,14 @@ class FakeParser:
 class BrokenParser:
     name = "broken"
 
-    def parse(self, path: str, *, max_pages: int | None = None) -> ParsedDoc:
+    def parse(
+        self,
+        path: str,
+        *,
+        max_pages: int | None = None,
+        start_page: int | None = None,
+        end_page: int | None = None,
+    ) -> ParsedDoc:
         raise RuntimeError("解析器炸了")
 
 

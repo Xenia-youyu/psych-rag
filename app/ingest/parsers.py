@@ -97,7 +97,20 @@ class MinerUParser:
         self.tier = tier or conf.mineru_tier
         self.ocr_mode = ocr_mode or conf.mineru_ocr_mode
 
-    def parse(self, path: str, *, max_pages: int | None = None) -> ParsedDoc:
+    def parse(
+        self,
+        path: str,
+        *,
+        max_pages: int | None = None,
+        start_page: int | None = None,
+        end_page: int | None = None,
+    ) -> ParsedDoc:
+        """start_page/end_page 是 1 基闭区间，用于分段入库。
+
+        为什么需要分段：MinerU 的 OCR 后处理会把检测框旋转裁剪，
+        遇到几何退化的框（宽或高为 0）就抛 ValueError，
+        **一个坏框会让整本书返回 0 页**。分段落库能把损失限制在一段内。
+        """
         try:
             from mineru.parser import parse as mineru_parse
         except ImportError as exc:  # pragma: no cover - 环境问题
@@ -106,7 +119,12 @@ class MinerUParser:
                 "mineru-models-download --tier basic --small-backend onnx"
             ) from exc
 
-        page_range = f"1-{max_pages}" if max_pages else ""
+        if start_page or end_page:
+            page_range = f"{start_page or 1}-{end_page or max_pages or 100000}"
+        elif max_pages:
+            page_range = f"1-{max_pages}"
+        else:
+            page_range = ""
         logger.info(
             "parser.mineru.start",
             extra={
@@ -172,10 +190,17 @@ class SimpleParser:
 
     name = "simple"
 
-    def parse(self, path: str, *, max_pages: int | None = None) -> ParsedDoc:
+    def parse(
+        self,
+        path: str,
+        *,
+        max_pages: int | None = None,
+        start_page: int | None = None,
+        end_page: int | None = None,
+    ) -> ParsedDoc:
         suffix = Path(path).suffix.lower()
         if suffix == ".pdf":
-            pages = self._read_pdf(path, max_pages)
+            pages = self._read_pdf(path, max_pages, start_page, end_page)
         elif suffix in (".docx", ".doc"):
             pages = self._read_docx(path)
         else:
@@ -194,14 +219,24 @@ class SimpleParser:
         )
         return doc
 
-    def _read_pdf(self, path: str, max_pages: int | None) -> list[ParsedPage]:
+    def _read_pdf(
+        self,
+        path: str,
+        max_pages: int | None,
+        start_page: int | None = None,
+        end_page: int | None = None,
+    ) -> list[ParsedPage]:
         import pymupdf
 
         document = pymupdf.open(path)
         try:
-            limit = min(max_pages, document.page_count) if max_pages else document.page_count
+            first = (start_page or 1) - 1
+            last = end_page or document.page_count
+            if max_pages:
+                last = min(last, first + max_pages)
+            last = min(last, document.page_count)
             pages: list[ParsedPage] = []
-            for index in range(limit):
+            for index in range(max(first, 0), max(last, 0)):
                 text = document[index].get_text().strip()
                 if text:
                     pages.append(ParsedPage(page_no=index + 1, text=text))

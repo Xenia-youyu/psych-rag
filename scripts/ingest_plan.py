@@ -95,11 +95,15 @@ async def main() -> int:
     parser.add_argument("--match", default="", help="只处理文件名包含该关键字的文件")
     parser.add_argument("--limit", type=int, default=0, help="最多处理前 N 个（0 = 不限）")
     parser.add_argument("--report", default="")
+    parser.add_argument("--start-page", type=int, default=0, help="从第几页开始（1 基，0 = 第 1 页）")
+    parser.add_argument("--end-page", type=int, default=0, help="到第几页结束（0 = 最后一页）")
     args = parser.parse_args()
 
     setup_logging()
     batch, paths = load_batch(Path(args.plan), args.batch)
     pages = None if args.pages == 0 else args.pages
+    start = args.start_page or None
+    end = args.end_page or None
 
     if args.match:
         paths = [p for p in paths if args.match in p.name]
@@ -143,11 +147,13 @@ async def main() -> int:
 
     for order, path in enumerate(paths, 1):
         content_hash = sha256_of(path)
-        doc_id = await create_document(kb_id, path, pages, content_hash)
+        doc_id = await create_document(
+            kb_id, path, pages, content_hash, start_page=start, end_page=end
+        )
         label = path.name if len(path.name) <= 34 else path.name[:31] + "…"
         print(f"[{order}/{len(paths)}] {label:36}", end="", flush=True)
 
-        report = await pipeline.run(doc_id, max_pages=pages)
+        report = await pipeline.run(doc_id, max_pages=pages, start_page=start, end_page=end)
         print(
             f"\r[{order}/{len(paths)}] {report.status:6} {label:36} "
             f"页 {report.pages:4d} 块 {report.children:5d} 向量 {report.vectors:5d} "

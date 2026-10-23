@@ -88,21 +88,40 @@ async def find_existing(kb_id: str, content_hash: str, pages: int | None) -> Doc
     return None
 
 
-async def create_document(kb_id: str, path: Path, pages: int | None, content_hash: str) -> str:
+async def create_document(
+    kb_id: str,
+    path: Path,
+    pages: int | None,
+    content_hash: str,
+    *,
+    start_page: int | None = None,
+    end_page: int | None = None,
+) -> str:
     doc_id = uuid.uuid4().hex
+    # 分段落库时同一个文件名会出现多条记录，光看文件名分不清是哪一段。
+    # 在展示名后标上页码区间，引用来源里也看得出这段覆盖到哪。
+    display_name = path.name
+    if start_page or end_page:
+        span = f"{start_page or 1}-{end_page or '末'}页"
+        display_name = f"{path.stem}（{span}）{path.suffix}"
     async with SessionLocal() as session:
         session.add(
             Document(
                 id=doc_id,
                 kb_id=kb_id,
-                filename=path.name,
+                filename=display_name,
                 file_type=path.suffix.lstrip(".").lower(),
                 size_bytes=path.stat().st_size,
                 status="uploaded",
                 last_stage="uploaded",
                 storage_path=str(path),
                 content_sha256=content_hash,
-                parse_params={"max_pages": pages, "source": "ingest_batch.py"},
+                parse_params={
+                    "max_pages": pages,
+                    "start_page": start_page,
+                    "end_page": end_page,
+                    "source": "ingest_batch.py",
+                },
             )
         )
         await session.commit()
