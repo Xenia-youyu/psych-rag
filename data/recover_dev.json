@@ -1,0 +1,22 @@
+{
+  "batch": "batch2",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 3685.7,
+  "items": [
+    {
+      "file": "《发展心理学》林崇德 第三版（高清）.pdf",
+      "window": [
+        null,
+        null
+      ],
+      "status": "done",
+      "pages": 557,
+      "children": 1971,
+      "vectors": 2540,
+      "seconds": 3685.3,
+      "error": ""
+    }
+  ]
+}

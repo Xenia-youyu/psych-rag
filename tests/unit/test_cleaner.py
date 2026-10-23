@@ -6,7 +6,12 @@
 
 from __future__ import annotations
 
-from app.ingest.cleaner import is_watermark_only, strip_watermark
+from app.ingest.cleaner import (
+    is_watermark_only,
+    repair_text,
+    strip_inline_watermark,
+    strip_watermark,
+)
 from app.ingest.pipeline import ChunkPlan, clean_watermarks
 
 BODY = (
@@ -94,3 +99,41 @@ class TestCleanPlan:
 
         assert dropped == 1
         assert cleaned.children == []
+
+
+class TestInlineWatermark:
+    """页眉式水印：被 OCR 拼进正文开头，按行删不掉，只能按短语删。"""
+
+    def test_removes_header_phrase_merged_into_text(self) -> None:
+        text = "仅供交流学习，禁止倒卖！第四版前言我很欣赏哲学家托马斯·曼的一句话"
+        cleaned, hits = strip_inline_watermark(text)
+
+        assert hits == 1
+        assert cleaned == "第四版前言我很欣赏哲学家托马斯·曼的一句话"
+
+    def test_removes_when_followed_by_newline(self) -> None:
+        cleaned, hits = strip_inline_watermark("仅供交流学习，禁止倒卖！\n2\n社会心理学（第四版）")
+
+        assert hits == 1
+        assert cleaned.startswith("2")
+
+    def test_tolerates_spaces_between_chars(self) -> None:
+        """OCR 抖动会把字拆开：供 交 流 学 习。"""
+        cleaned, hits = strip_inline_watermark("仅供 交流 学习，禁止 倒卖！正文开始")
+
+        assert hits == 1
+        assert "禁止" not in cleaned
+
+    def test_keeps_legitimate_text(self) -> None:
+        """正文里出现「内部资料」这类词不该被误删——所以短语表只收高置信项。"""
+        text = "本文属于内部资料性出版物的范畴，需要按相关规定处理。"
+        cleaned, hits = strip_inline_watermark(text)
+
+        assert hits == 0
+        assert cleaned == text
+
+    def test_repair_text_applies_inline_before_line_rule(self) -> None:
+        text = "仅供交流学习，禁止倒卖！" + BODY + "\n资料下载：bbs.libidos.cn"
+        assert "禁止倒卖" not in repair_text(text)
+        assert "bbs.libidos.cn" not in repair_text(text)
+        assert BODY.strip()[:12] in repair_text(text)

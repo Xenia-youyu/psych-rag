@@ -1,0 +1,87 @@
+{
+  "batch": "batch2",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "pages": null,
+  "total_seconds": 9.7,
+  "items": [
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        1,
+        64
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 4.3,
+      "error": "PermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\86188\\\\.mineru\\\\models\\\\.locks\\\\MinerU-4_models_onnx.lock'"
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        65,
+        128
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 1.1,
+      "error": "PermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\86188\\\\.mineru\\\\models\\\\.locks\\\\MinerU-4_models_onnx.lock'"
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        129,
+        192
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 1.0,
+      "error": "PermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\86188\\\\.mineru\\\\models\\\\.locks\\\\MinerU-4_models_onnx.lock'"
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        193,
+        256
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 1.0,
+      "error": "PermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\86188\\\\.mineru\\\\models\\\\.locks\\\\MinerU-4_models_onnx.lock'"
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        257,
+        320
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 1.0,
+      "error": "PermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\86188\\\\.mineru\\\\models\\\\.locks\\\\MinerU-4_models_onnx.lock'"
+    },
+    {
+      "file": "《心理与教育测量》戴海琦 第四版.pdf",
+      "window": [
+        321,
+        363
+      ],
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 0.9,
+      "error": "PermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\86188\\\\.mineru\\\\models\\\\.locks\\\\MinerU-4_models_onnx.lock'"
+    }
+  ]
+}
