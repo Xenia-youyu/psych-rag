@@ -882,6 +882,11 @@ DASHSCOPE_API_KEY = sk-xxx    ; 会 setdefault 注入环境变量，环境变量
 
 #### 已知限制
 
+- **范围只到知识检索。** 不做咨询分流、不入咨询语料（授权链与个人信息问题，
+  详见 `data/corpus_plan.json` 的 `scope_decisions`）。
+- **安全护栏覆盖不足。** `app/generate/safety.py` 仍在链路里，但实测 40 条危机输入
+  只拦下 3 条（明示 15% / 隐晦 0%），7 条会被当成知识题作答。按范围决定不加固；
+  **面向真实用户开放前必须先补这一块**。评估集 `data/golden/triage.jsonl`（81 条）已备。
 - **Element Plus 全量引入，主包 1.27 MB（gzip 411 KB）。** 演示够用；
   优化可换 `unplugin-vue-components` 按需引入，能砍一半以上。
 - **没做移动端适配。** 桌面优先，窄屏下侧边栏和表格会挤。
