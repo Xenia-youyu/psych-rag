@@ -119,6 +119,16 @@ async def main() -> int:
         print("没有知识库")
         return 1
 
+    # 金标要按「父块」算，不按「子块」算。
+    # 一个父块下有 3-5 个兄弟子块，命中任意一个就等于拿到了同一段上下文；
+    # 按子块算 Recall 会变成「命中了几个兄弟」，数字低但没有实际含义。
+    # 映射要覆盖**全部**块，不能只覆盖原始金标：
+    # 金标会被 expand_gold 加上同父块的兄弟，兄弟的 id 不在原始集合里，
+    # 只查原始金标会导致「5 个兄弟被当成 5 段」。
+    async with SessionLocal() as session:
+        rows = (await session.execute(select(Chunk.id, Chunk.parent_id))).all()
+    parent_of = {cid: (pid or cid) for cid, pid in rows}
+
     index = MilvusIndex()
     embedder = build_embedder()
     reranker = BGEReranker()
@@ -175,10 +185,12 @@ async def main() -> int:
                            "reason": f"检索异常 {type(exc).__name__}"})
             continue
 
-        ranked = [hit.chunk_id for hit in outcome.hits[:10]]
-        found = gold & set(ranked)
-        recall = len(found) / len(gold)
-        rank = next((i + 1 for i, cid in enumerate(ranked) if cid in gold), 0)
+        top = outcome.hits[:10]
+        gold_parents = {parent_of.get(g, g) for g in gold}
+        hit_parents = [(h.parent_id or h.chunk_id) for h in top]
+        found = gold_parents & set(hit_parents)
+        recall = len(found) / len(gold_parents)
+        rank = next((i + 1 for i, key in enumerate(hit_parents) if key in gold_parents), 0)
         mrr = 1.0 / rank if rank else 0.0
 
         bucket = stats[kind]
@@ -189,7 +201,7 @@ async def main() -> int:
 
         if not found:
             misses.append({"id": item["id"], "type": kind, "question": question,
-                           "reason": f"前 10 未命中（gold {len(gold)} 块）"})
+                           "reason": f"前 10 未命中（gold {len(gold_parents)} 段 / {len(gold)} 块）"})
 
         if order % 10 == 0:
             print(f"  …{order}/{len(items)}")

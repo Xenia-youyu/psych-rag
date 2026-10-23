@@ -49,7 +49,13 @@ OUT_DEFAULT = Path(__file__).resolve().parent.parent / "data" / "golden" / "ques
 
 # 只有教材类文档才有"知识点"。哲学著作和写作规范里抽出来的问题
 # 会是"某人哪年发了什么文章""期刊多久出一期"——那不是知识问答。
-DOC_INCLUDE = ("实验心理学", "教育心理学", "研究方法", "儿童心理学", "心理咨询", "心理学导论")
+# 教材类文档才有"知识点"。第二批 OCR 进来后把这批也纳入，
+# 否则生成器只会从第一批那几本书里出题，覆盖面反而变窄。
+DOC_INCLUDE = (
+    "实验心理学", "教育心理学", "研究方法", "儿童心理学", "心理咨询",
+    "心理学导论", "变态心理学", "社会心理学", "管理心理学", "人格心理学",
+    "发展心理学", "心理与教育测量", "统计学",
+)
 DOC_EXCLUDE = ("论文写作规范", "人的条件", "人类与大地母亲", "论人的天性", "逻辑图")
 
 # 文献引用、期刊信息、版权声明——都不该变成题目
@@ -144,7 +150,7 @@ def clean_question(text: str) -> str:
 
 
 async def generate_one(
-    client: LLMClient, prompt: str, content_a: str, content_b: str = ""
+    client: LLMClient, prompt: str, content_a: str, content_b: str = "", *, kind: str = "concept"
 ) -> dict | None:
     data = None
     # 并发高了会撞超时（client 的 timeout=30s），返回空串而不是报错。
@@ -152,7 +158,11 @@ async def generate_one(
     for attempt in range(2):
         try:
             data = await client.chat_json(
-                [{"role": "user", "content": prompt}], temperature=0.7, max_tokens=900
+                [{"role": "user", "content": prompt}], temperature=0.7,
+                # 不能写死小额度：deepseek-flash 是推理模型，token 先花在思考上。
+                # 900 时实测 JSON 被从中间截断（{"question": "同为），
+                # 表现为 json_parse_failed 而看不出是额度不够。
+                max_tokens=settings.llm.active().max_tokens_json * 2,
             )
             break
         except Exception:
@@ -163,10 +173,23 @@ async def generate_one(
 
     question = clean_question(str(data.get("question", "")))
     points = [str(p).strip() for p in (data.get("key_points") or []) if str(p).strip()]
-    if not (8 <= len(question) <= 40) or not (2 <= len(points) <= 5):
+
+    # 长度上限要分题型：概念题（「什么是负强化」）8-40；
+    # 对比题（「比较两则材料对…的解释」）12-70；
+    # 多跳题要「综合两份材料」，实测 75-123 字，放到 130。
+    # 之前一律按 8-40 卡，把对比和多跳全静默丢掉了——
+    # 表现为「配对成功但生成 0 条」，而且没有任何日志。
+    low, high = {"concept": (8, 40), "compare": (12, 70), "multihop": (12, 130)}[kind]
+    if not (low <= len(question) <= high):
+        print(f"[丢弃:{kind}] 问句长度 {len(question)} 不在 {low}-{high}：{question[:40]}")
+        return None
+    if not (2 <= len(points) <= 5):
+        print(f"[丢弃:{kind}] 要点数 {len(points)} 不在 2-5：{question[:40]}")
         return None
     # 抄袭检查：和原文连续重合超过 10 字，说明这题不用检索、关键词就能答
-    if longest_common(question, content_a) > 10:
+    overlap = longest_common(question, content_a)
+    if overlap > 10:
+        print(f"[丢弃:{kind}] 与原文重合 {overlap} 字：{question[:40]}")
         return None
     if content_b and longest_common(question, content_b) > 10:
         return None
@@ -175,7 +198,7 @@ async def generate_one(
 
 async def main() -> int:
     parser = argparse.ArgumentParser(description="生成黄金集候选")
-    parser.add_argument("--concept", type=int, default=30)
+    parser.add_argument("--concept", type=int, default=30)  # 0 = 不生成该类
     parser.add_argument("--compare", type=int, default=20)
     parser.add_argument("--multihop", type=int, default=15)
     parser.add_argument("--refuse", type=int, default=15)
@@ -280,13 +303,17 @@ async def main() -> int:
             _n1, a, n2, b = pair
             multihop_jobs.append((lookup[item[0]][0], a, n2, b))
 
+    print(f"[配对] 候选块 {len(seeds)} | 同文档对 {len(compare_jobs)} | 跨文档对 {len(multihop_jobs)}")
     client = LLMClient(settings.llm.active())
     sem = asyncio.Semaphore(args.workers)
     items: list[dict] = []
+    missing: list[str] = []
 
     async def run(kind: str, prompt: str, a_text: str, b_text: str, meta: dict) -> None:
         async with sem:
-            result = await generate_one(client, prompt, a_text, b_text)
+            result = await generate_one(client, prompt, a_text, b_text, kind=kind)
+        if result is None:
+            missing.append(kind)
         if result:
             items.append({"type": kind, **result, **meta, "status": "draft"})
 
@@ -354,6 +381,8 @@ async def main() -> int:
 
     from collections import Counter
 
+    if missing:
+        print(f"[生成失败] {len(missing)} 条（{Counter(missing)}）")
     counts = Counter(item["type"] for item in items)
     print(f"\n生成 {len(items)} 条 → {out}")
     for kind in ("concept", "compare", "multihop", "refuse"):
