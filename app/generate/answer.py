@@ -109,8 +109,24 @@ def find_dangling(text: str, citations: list[Citation]) -> list[str]:
     return [sid for sid in extract_citation_ids(text) if sid not in valid]
 
 
+# 拒答话术都很短。答案超过这个长度就一定是真回答，里面提到「未覆盖」
+# 也只是在说明局部缺内容，不是拒绝作答。
+_NO_CONTEXT_MAX_CHARS = 120
+
+
 def is_no_context_answer(text: str) -> bool:
-    return any(marker in (text or "") for marker in NO_CONTEXT_MARKERS)
+    """判断这一条是不是「拒答」。
+
+    只做子串匹配会把正常回答判错：实测 c007「假设检验有哪些步骤」答了 1268 字、
+    带 5 条引用，但正文里有一句「第 (3)~(5) 步…当前知识库未覆盖这一块」，
+    于是整篇被判成拒答。所以要加长度门槛——拒答模板只有一百来字。
+    """
+    body = (text or "").strip()
+    if not body:
+        return True
+    if len(body) > _NO_CONTEXT_MAX_CHARS:
+        return False
+    return any(marker in body for marker in NO_CONTEXT_MARKERS)
 
 
 def _messages(
@@ -168,6 +184,26 @@ async def generate(
     # 不写死 max_tokens：跟 config.ini 走。写死 1200 时实测把答案截断在表格中间
     result = await llm.chat(messages)
     latency_ms = int((time.perf_counter() - started) * 1000)
+
+    # 推理模型会把 token 先花在思考上，额度用尽时正文是空串。
+    # 实测 m009（对比型多跳题）tokens_out 恰好等于上限 2400、正文 0 字，
+    # 前端表现为「转了半天圈什么都没出来」。空正文时放宽额度重试一次。
+    if not (result.text or "").strip():
+        conf = getattr(llm, "conf", None)
+        base = getattr(conf, "max_tokens", None) or 2400
+        budget = int(base * 1.8)
+        logger.warning(
+            "answer.empty_retry",
+            extra={"extra_fields": {"question": question[:40], "retry_max_tokens": budget}},
+        )
+        retry_started = time.perf_counter()
+        result = await llm.chat(messages, max_tokens=budget)
+        latency_ms = int((time.perf_counter() - started) * 1000)
+        if not (result.text or "").strip():
+            logger.error(
+                "answer.empty_after_retry",
+                extra={"extra_fields": {"question": question[:40], "retry_ms": int((time.perf_counter() - retry_started) * 1000)}},
+            )
 
     dangling = find_dangling(result.text, citations)
     if dangling:
