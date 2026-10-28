@@ -10,13 +10,13 @@
 
 ## 一、环境准备
 
-### 1.1 共享服务器状态（2026-10-21 全部打通）
+### 1.1 共享服务器状态（地址 2026-10-28 核对为 192.168.34.181）
 
 | 服务 | 端口 | 状态 | 说明 |
 |---|---|---|---|
-| MySQL | `192.168.34.32:3306` | ✅ 8.0.43 | 独立库 `psych_rag`，8 张 `psy_*` 表 |
-| Milvus | `192.168.34.32:19530` | ✅ 3.x | db `itcast` / collection `psych_chunks_v1`，`kb_id` 作分区键 |
-| Redis | `192.168.34.32:6379` | 端口可达 | `enabled=false`，M4 才用 |
+| MySQL | `192.168.34.181:3306` | ✅ 8.0.43 | 独立库 `psych_rag`，8 张 `psy_*` 表 |
+| Milvus | `192.168.34.181:19530` | ✅ 3.x | db `itcast` / collection `psych_chunks_v2`，`kb_id` 作分区键 |
+| Redis | `192.168.34.181:6379` | 端口可达 | `enabled=false`，M4 才用 |
 
 ```bash
 .venv/Scripts/python.exe -m app.check_env

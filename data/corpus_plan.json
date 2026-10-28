@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-10-22",
+  "generated": "2026-10-28",
   "root": "D:\\心理学文档",
   "criteria": [
     "书名是学科命名而非专题/题集，能覆盖学科骨架",
@@ -201,21 +201,21 @@
       "reason": "368 页里只有第 1 页有文本层（2057 字），正文全是扫描图，必须 OCR",
       "note": "2026-10-23 已完成入库",
       "batch": "batch2"
-    }
-  ],
-  "pending_recovery": [
+    },
     {
       "subject": "普通心理学",
       "path": "普通心理学\\心理学导论 梁宁建 上海教育出版社 第2版.pdf",
       "pages": 617,
       "chars_per_page": 0,
       "size_mb": 195.9,
-      "reason": "OCR 后处理遇到几何退化的文本框，warp_image 抛 min(size)<=0，整本返回 0 页。需分段落库绕过（已支持 --start-page/--end-page），并二分 129-192 定位坏段。",
-      "known_bad_window": "129-192"
+      "reason": "普通心理学唯一空白学科；扫描版，需 OCR",
+      "batch": "batch2",
+      "note": "2026-10-28 已完成入库（616/617 页 · 2413 子块 · 3052 向量；15 段分段落库，坏页 138 跳过）"
     }
   ],
+  "pending_recovery": [],
   "batch2_result": {
-    "finished": "2026-10-23 18:52",
+    "finished": "2026-10-28 16:10",
     "books": {
       "心理与教育测量": {
         "pages_total": 363,
@@ -231,6 +231,13 @@
           54,
           216
         ]
+      },
+      "心理学导论": {
+        "pages_total": 617,
+        "pages_ingested": 616,
+        "bad_pages": [
+          138
+        ]
       }
     },
     "lost_pages": [
@@ -245,9 +252,13 @@
       [
         "心理与教育统计学",
         216
+      ],
+      [
+        "心理学导论",
+        138
       ]
     ],
-    "reason": "这 3 页的 OCR 检测框几何退化，MinerU 的 warp_image 抛 min(size)<=0。已用 64→16→8→4→1 页四级细分定位到单页，其余全部恢复。"
+    "reason": "OCR 检测框几何退化会让 MinerU 的 warp_image 抛 min(size)<=0，被它命中的那一段整段返回 0 页。已用 scripts/recover_book.py 做递归细分（64→32→16→8→4→2→1 页）自动定位坏页：测量 p83、统计学 p54/p216、导论 p138 共 4 页永久缺失，其余全部恢复。"
   },
   "scope_decisions": [
     {

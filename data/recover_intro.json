@@ -1,0 +1,333 @@
+{
+  "file": "D:\\心理学文档\\普通心理学\\心理学导论 梁宁建 上海教育出版社 第2版.pdf",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "total_pages": 617,
+  "chunk_pages": 64,
+  "total_seconds": 3546.4,
+  "bad_pages": [
+    138
+  ],
+  "missing_pages": [
+    138
+  ],
+  "failed_doc_ids": [
+    "0c870b089abd42aeb04d00a860b98d52",
+    "23e908012ee646f2afdf59afd7b534b5",
+    "00baf2a5099d41ffa9dc06b5cd70cc84",
+    "510dde2797094efb87b8219cc18f1311",
+    "239d970a2ebd41dfaa1e929cd02a43bc",
+    "eefd2df9deeb4d978005970c31e90501",
+    "cf61865dc9fd47da9ff3a94174968331"
+  ],
+  "items": [
+    {
+      "window": [
+        1,
+        64
+      ],
+      "depth": 0,
+      "doc_id": "88eecf6cd19b46a9bd3052ebe491777e",
+      "status": "done",
+      "pages": 64,
+      "children": 190,
+      "vectors": 244,
+      "seconds": 305.2,
+      "error": ""
+    },
+    {
+      "window": [
+        65,
+        128
+      ],
+      "depth": 0,
+      "doc_id": "49c9db58b2f74d9ca66b824f4888b4da",
+      "status": "done",
+      "pages": 64,
+      "children": 245,
+      "vectors": 308,
+      "seconds": 338.6,
+      "error": ""
+    },
+    {
+      "window": [
+        129,
+        192
+      ],
+      "depth": 0,
+      "doc_id": "0c870b089abd42aeb04d00a860b98d52",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 129.8,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        129,
+        160
+      ],
+      "depth": 1,
+      "doc_id": "23e908012ee646f2afdf59afd7b534b5",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 73.6,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        129,
+        144
+      ],
+      "depth": 2,
+      "doc_id": "00baf2a5099d41ffa9dc06b5cd70cc84",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 45.2,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        129,
+        136
+      ],
+      "depth": 3,
+      "doc_id": "31f5fe8f30a84daf882649da6900fff5",
+      "status": "done",
+      "pages": 8,
+      "children": 33,
+      "vectors": 42,
+      "seconds": 43.0,
+      "error": ""
+    },
+    {
+      "window": [
+        137,
+        144
+      ],
+      "depth": 3,
+      "doc_id": "510dde2797094efb87b8219cc18f1311",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 27.0,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        137,
+        140
+      ],
+      "depth": 4,
+      "doc_id": "239d970a2ebd41dfaa1e929cd02a43bc",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 11.9,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        137,
+        138
+      ],
+      "depth": 5,
+      "doc_id": "eefd2df9deeb4d978005970c31e90501",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 7.3,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        137,
+        137
+      ],
+      "depth": 6,
+      "doc_id": "31ed7e909b144750bc35528f6b123a82",
+      "status": "done",
+      "pages": 1,
+      "children": 6,
+      "vectors": 8,
+      "seconds": 11.1,
+      "error": ""
+    },
+    {
+      "window": [
+        138,
+        138
+      ],
+      "depth": 6,
+      "doc_id": "cf61865dc9fd47da9ff3a94174968331",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 4.3,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        139,
+        140
+      ],
+      "depth": 5,
+      "doc_id": "3398a7cc47c640e4b73a8f18f9b81829",
+      "status": "done",
+      "pages": 2,
+      "children": 8,
+      "vectors": 10,
+      "seconds": 17.1,
+      "error": ""
+    },
+    {
+      "window": [
+        141,
+        144
+      ],
+      "depth": 4,
+      "doc_id": "75966523dad948b1acb90f0d5db01794",
+      "status": "done",
+      "pages": 4,
+      "children": 12,
+      "vectors": 16,
+      "seconds": 27.3,
+      "error": ""
+    },
+    {
+      "window": [
+        145,
+        160
+      ],
+      "depth": 2,
+      "doc_id": "8a1287bcc25d469691be2bfda5bd9e53",
+      "status": "done",
+      "pages": 16,
+      "children": 56,
+      "vectors": 73,
+      "seconds": 86.1,
+      "error": ""
+    },
+    {
+      "window": [
+        161,
+        192
+      ],
+      "depth": 1,
+      "doc_id": "dbd013ffa02842ef9b4da4eeec931673",
+      "status": "done",
+      "pages": 32,
+      "children": 106,
+      "vectors": 138,
+      "seconds": 146.4,
+      "error": ""
+    },
+    {
+      "window": [
+        193,
+        256
+      ],
+      "depth": 0,
+      "doc_id": "66820a4d4c164cc8908a7b1fe3919126",
+      "status": "done",
+      "pages": 64,
+      "children": 242,
+      "vectors": 309,
+      "seconds": 308.9,
+      "error": ""
+    },
+    {
+      "window": [
+        257,
+        320
+      ],
+      "depth": 0,
+      "doc_id": "90860b2b570245c4a140e5e627a502d1",
+      "status": "done",
+      "pages": 64,
+      "children": 287,
+      "vectors": 357,
+      "seconds": 450.7,
+      "error": ""
+    },
+    {
+      "window": [
+        321,
+        384
+      ],
+      "depth": 0,
+      "doc_id": "e596572e5a284acd858e93246c9da662",
+      "status": "done",
+      "pages": 64,
+      "children": 234,
+      "vectors": 298,
+      "seconds": 262.5,
+      "error": ""
+    },
+    {
+      "window": [
+        385,
+        448
+      ],
+      "depth": 0,
+      "doc_id": "2dd27ec8d7d343ddb070d0bad70d0407",
+      "status": "done",
+      "pages": 64,
+      "children": 255,
+      "vectors": 319,
+      "seconds": 290.9,
+      "error": ""
+    },
+    {
+      "window": [
+        449,
+        512
+      ],
+      "depth": 0,
+      "doc_id": "4eebdf5bb0944c05b6fdc99b29a508ff",
+      "status": "done",
+      "pages": 64,
+      "children": 276,
+      "vectors": 349,
+      "seconds": 358.8,
+      "error": ""
+    },
+    {
+      "window": [
+        513,
+        576
+      ],
+      "depth": 0,
+      "doc_id": "a56f518644be460096260754ebcaa6cc",
+      "status": "done",
+      "pages": 64,
+      "children": 274,
+      "vectors": 339,
+      "seconds": 336.2,
+      "error": ""
+    },
+    {
+      "window": [
+        577,
+        617
+      ],
+      "depth": 0,
+      "doc_id": "1183c3cb2c1d4946aaf598a71101800f",
+      "status": "done",
+      "pages": 41,
+      "children": 189,
+      "vectors": 242,
+      "seconds": 264.2,
+      "error": ""
+    }
+  ]
+}
