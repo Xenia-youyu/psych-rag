@@ -1,0 +1,97 @@
+{
+  "file": "D:\\心理学文档\\心理学教材\\[当代认知心理学].梁宁建.扫描版.pdf",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "total_pages": 352,
+  "chunk_pages": 64,
+  "total_seconds": 1580.1,
+  "bad_pages": [],
+  "missing_pages": [],
+  "failed_doc_ids": [],
+  "items": [
+    {
+      "window": [
+        1,
+        64
+      ],
+      "depth": 0,
+      "doc_id": "d997b5cfde544a5a885df6ae78ebd2d8",
+      "status": "done",
+      "pages": 64,
+      "children": 139,
+      "vectors": 190,
+      "seconds": 286.4,
+      "error": ""
+    },
+    {
+      "window": [
+        65,
+        128
+      ],
+      "depth": 0,
+      "doc_id": "1cc5f407d00f419a81ae059c9779108b",
+      "status": "done",
+      "pages": 64,
+      "children": 175,
+      "vectors": 240,
+      "seconds": 336.6,
+      "error": ""
+    },
+    {
+      "window": [
+        129,
+        192
+      ],
+      "depth": 0,
+      "doc_id": "89144f2727574a9e88b2b80739a24e15",
+      "status": "done",
+      "pages": 64,
+      "children": 167,
+      "vectors": 231,
+      "seconds": 290.1,
+      "error": ""
+    },
+    {
+      "window": [
+        193,
+        256
+      ],
+      "depth": 0,
+      "doc_id": "2d079c30bcc7426bb91d1444c34da092",
+      "status": "done",
+      "pages": 64,
+      "children": 174,
+      "vectors": 236,
+      "seconds": 248.2,
+      "error": ""
+    },
+    {
+      "window": [
+        257,
+        320
+      ],
+      "depth": 0,
+      "doc_id": "a039207842d9437699f756d2a302392c",
+      "status": "done",
+      "pages": 64,
+      "children": 166,
+      "vectors": 229,
+      "seconds": 249.5,
+      "error": ""
+    },
+    {
+      "window": [
+        321,
+        352
+      ],
+      "depth": 0,
+      "doc_id": "f93383228296477f8d0c9485a007dcd8",
+      "status": "done",
+      "pages": 32,
+      "children": 100,
+      "vectors": 135,
+      "seconds": 169.2,
+      "error": ""
+    }
+  ]
+}

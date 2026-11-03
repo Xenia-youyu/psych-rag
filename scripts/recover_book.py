@@ -86,6 +86,8 @@ async def main() -> int:
     ap.add_argument("--chunk-pages", type=int, default=64, help="首轮分段大小")
     ap.add_argument("--min-window", type=int, default=1, help="细分到多小就认定坏页")
     ap.add_argument("--total-pages", type=int, default=0, help="plan 里没写页数时手工给")
+    ap.add_argument("--start-page", type=int, default=0, help="从第几页开始跑（1 基，0 = 第 1 页）。断点续跑用")
+    ap.add_argument("--end-page", type=int, default=0, help="跑到第几页结束（0 = 最后一页）")
     ap.add_argument("--report", default="")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
@@ -102,14 +104,23 @@ async def main() -> int:
         print("不知道总页数：plan 里没有这本，用 --total-pages 指定")
         return 1
 
+    # 断点续跑：--start-page/--end-page 只跑这一段区间，递归细分逻辑不变。
+    # 上一轮跑一半断掉（服务器掉线）时，从已入库的最后一页接着跑，不用整本重来。
+    lo = args.start_page or 1
+    hi = args.end_page or total
+    if not (1 <= lo <= hi <= total):
+        print(f"页区间非法：{lo}-{hi}（总页 {total}）")
+        return 1
+
     windows = [
-        (ws, min(ws + args.chunk_pages - 1, total))
-        for ws in range(1, total + 1, args.chunk_pages)
+        (ws, min(ws + args.chunk_pages - 1, hi))
+        for ws in range(lo, hi + 1, args.chunk_pages)
     ]
 
     print("=" * 84)
     print(f"目标 {path.name}")
-    print(f"总页 {total} | 首轮 {len(windows)} 段 × {args.chunk_pages} 页 | 最小窗口 {args.min_window} 页")
+    print(f"总页 {total} | 本次区间 {lo}-{hi} | 首轮 {len(windows)} 段 × {args.chunk_pages} 页 "
+          f"| 最小窗口 {args.min_window} 页")
     for ws, we in windows:
         print(f"   {ws:>4}-{we:<4}", end="")
     print()
@@ -183,7 +194,7 @@ async def main() -> int:
     )
     print(f"坏页清单：{bad_pages or '无'}")
     covered = sorted({p for r in ok for p in range(r["window"][0], r["window"][1] + 1)})
-    missing = [p for p in range(1, total + 1) if p not in set(covered)]
+    missing = [p for p in range(lo, hi + 1) if p not in set(covered)]
     print(f"未覆盖页（坏页 + 空页）：{missing or '无'}")
     print("=" * 84)
 

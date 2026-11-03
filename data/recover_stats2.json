@@ -1,0 +1,468 @@
+{
+  "file": "D:\\心理学文档\\教育心理学\\现代心理与教育统计学 张厚粲 第4版.pdf",
+  "kb_id": "abe4b4049944495a86a7714b26aad30c",
+  "kb_name": "批量入库库",
+  "total_pages": 516,
+  "chunk_pages": 64,
+  "total_seconds": 8474.6,
+  "bad_pages": [
+    200,
+    296
+  ],
+  "missing_pages": [
+    200,
+    296
+  ],
+  "failed_doc_ids": [
+    "26cccca77e674765ac4e5222b0ece481",
+    "572a9935880b4ec698bd4b857a6e9b56",
+    "e1336da5632242939fe8b4dc08424d7b",
+    "385c86af3cc44b248e0708cc53454c49",
+    "a0b23296ce514611be5f067b498494d9",
+    "61686ce758664fccbf983317d95a69e7",
+    "b05de38893664a28967b17c47d1fc96d",
+    "55277347257942c0b2d6becf8d3c3748",
+    "39ab8da0f31e4486a3b579ba867ac0ea",
+    "8ec85b24deff4e2093bac4a1c3667269",
+    "76dd1a4c4bdf4d4abbfd67a1cbf71fdf",
+    "68f1cd83fe314b6a9f5f2921b1534564",
+    "30c3ef1128f34b34be69e6f7fddb7150",
+    "8f3f7efa10c8457d86e2484a2222b7b4"
+  ],
+  "items": [
+    {
+      "window": [
+        81,
+        144
+      ],
+      "depth": 0,
+      "doc_id": "8c219ccd7ad847b583f06ec05fa9d342",
+      "status": "done",
+      "pages": 64,
+      "children": 262,
+      "vectors": 349,
+      "seconds": 740.5,
+      "error": ""
+    },
+    {
+      "window": [
+        145,
+        208
+      ],
+      "depth": 0,
+      "doc_id": "26cccca77e674765ac4e5222b0ece481",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 702.0,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        145,
+        176
+      ],
+      "depth": 1,
+      "doc_id": "3159a2008b9e4f2981b6285cd4e3115a",
+      "status": "done",
+      "pages": 32,
+      "children": 128,
+      "vectors": 170,
+      "seconds": 384.7,
+      "error": ""
+    },
+    {
+      "window": [
+        177,
+        208
+      ],
+      "depth": 1,
+      "doc_id": "572a9935880b4ec698bd4b857a6e9b56",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 301.8,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        177,
+        192
+      ],
+      "depth": 2,
+      "doc_id": "d667b042cce94681969c46dce96383ef",
+      "status": "done",
+      "pages": 16,
+      "children": 66,
+      "vectors": 88,
+      "seconds": 152.0,
+      "error": ""
+    },
+    {
+      "window": [
+        193,
+        208
+      ],
+      "depth": 2,
+      "doc_id": "e1336da5632242939fe8b4dc08424d7b",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 183.5,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        193,
+        200
+      ],
+      "depth": 3,
+      "doc_id": "385c86af3cc44b248e0708cc53454c49",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 131.0,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        193,
+        196
+      ],
+      "depth": 4,
+      "doc_id": "cf955df9314d4b5ba2bb72682bfb7826",
+      "status": "done",
+      "pages": 4,
+      "children": 16,
+      "vectors": 20,
+      "seconds": 54.6,
+      "error": ""
+    },
+    {
+      "window": [
+        197,
+        200
+      ],
+      "depth": 4,
+      "doc_id": "a0b23296ce514611be5f067b498494d9",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 91.6,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        197,
+        198
+      ],
+      "depth": 5,
+      "doc_id": "7bb2b54b9a32499ba220994fa1d13c91",
+      "status": "done",
+      "pages": 2,
+      "children": 10,
+      "vectors": 12,
+      "seconds": 58.2,
+      "error": ""
+    },
+    {
+      "window": [
+        199,
+        200
+      ],
+      "depth": 5,
+      "doc_id": "61686ce758664fccbf983317d95a69e7",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 42.9,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        199,
+        199
+      ],
+      "depth": 6,
+      "doc_id": "482ca4e198ae4293bde192d632ad9078",
+      "status": "done",
+      "pages": 1,
+      "children": 6,
+      "vectors": 8,
+      "seconds": 38.2,
+      "error": ""
+    },
+    {
+      "window": [
+        200,
+        200
+      ],
+      "depth": 6,
+      "doc_id": "b05de38893664a28967b17c47d1fc96d",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 13.4,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        201,
+        208
+      ],
+      "depth": 3,
+      "doc_id": "a95bea63718d4ccab5ebe4e93f202ed6",
+      "status": "done",
+      "pages": 8,
+      "children": 32,
+      "vectors": 41,
+      "seconds": 79.5,
+      "error": ""
+    },
+    {
+      "window": [
+        209,
+        272
+      ],
+      "depth": 0,
+      "doc_id": "c697ceabcf784c02be344b6d239c7a8b",
+      "status": "done",
+      "pages": 64,
+      "children": 298,
+      "vectors": 376,
+      "seconds": 1215.6,
+      "error": ""
+    },
+    {
+      "window": [
+        273,
+        336
+      ],
+      "depth": 0,
+      "doc_id": "55277347257942c0b2d6becf8d3c3748",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 874.8,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        273,
+        304
+      ],
+      "depth": 1,
+      "doc_id": "39ab8da0f31e4486a3b579ba867ac0ea",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 332.8,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        273,
+        288
+      ],
+      "depth": 2,
+      "doc_id": "cae4937ac7994493bf426a32fd25ff10",
+      "status": "done",
+      "pages": 16,
+      "children": 71,
+      "vectors": 93,
+      "seconds": 207.0,
+      "error": ""
+    },
+    {
+      "window": [
+        289,
+        304
+      ],
+      "depth": 2,
+      "doc_id": "8ec85b24deff4e2093bac4a1c3667269",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 172.4,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        289,
+        296
+      ],
+      "depth": 3,
+      "doc_id": "76dd1a4c4bdf4d4abbfd67a1cbf71fdf",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 89.7,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        289,
+        292
+      ],
+      "depth": 4,
+      "doc_id": "94dadec80cf14c1093b08aa046fdf951",
+      "status": "done",
+      "pages": 4,
+      "children": 18,
+      "vectors": 23,
+      "seconds": 53.5,
+      "error": ""
+    },
+    {
+      "window": [
+        293,
+        296
+      ],
+      "depth": 4,
+      "doc_id": "68f1cd83fe314b6a9f5f2921b1534564",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 50.4,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        293,
+        294
+      ],
+      "depth": 5,
+      "doc_id": "e8a9e73836754ea78287bb24b775ef3b",
+      "status": "done",
+      "pages": 2,
+      "children": 11,
+      "vectors": 15,
+      "seconds": 34.9,
+      "error": ""
+    },
+    {
+      "window": [
+        295,
+        296
+      ],
+      "depth": 5,
+      "doc_id": "30c3ef1128f34b34be69e6f7fddb7150",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 22.9,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        295,
+        295
+      ],
+      "depth": 6,
+      "doc_id": "6b61f4f287ec403b92b499d6eb7006bf",
+      "status": "done",
+      "pages": 1,
+      "children": 4,
+      "vectors": 5,
+      "seconds": 15.3,
+      "error": ""
+    },
+    {
+      "window": [
+        296,
+        296
+      ],
+      "depth": 6,
+      "doc_id": "8f3f7efa10c8457d86e2484a2222b7b4",
+      "status": "failed",
+      "pages": 0,
+      "children": 0,
+      "vectors": 0,
+      "seconds": 18.8,
+      "error": "ValueError: Unsupported warp settings"
+    },
+    {
+      "window": [
+        297,
+        304
+      ],
+      "depth": 3,
+      "doc_id": "cb00f1f2ce704c6297f7506b5ffb738e",
+      "status": "done",
+      "pages": 8,
+      "children": 36,
+      "vectors": 47,
+      "seconds": 111.8,
+      "error": ""
+    },
+    {
+      "window": [
+        305,
+        336
+      ],
+      "depth": 1,
+      "doc_id": "9c2eec8439694f4f907c18b6f8cfae7b",
+      "status": "done",
+      "pages": 32,
+      "children": 158,
+      "vectors": 201,
+      "seconds": 563.7,
+      "error": ""
+    },
+    {
+      "window": [
+        337,
+        400
+      ],
+      "depth": 0,
+      "doc_id": "3bd414d8e3d74847a1c057ca13f32d8e",
+      "status": "done",
+      "pages": 64,
+      "children": 274,
+      "vectors": 362,
+      "seconds": 691.6,
+      "error": ""
+    },
+    {
+      "window": [
+        401,
+        464
+      ],
+      "depth": 0,
+      "doc_id": "68697b1d79d8400e9754883bf26ae48c",
+      "status": "done",
+      "pages": 64,
+      "children": 320,
+      "vectors": 411,
+      "seconds": 558.2,
+      "error": ""
+    },
+    {
+      "window": [
+        465,
+        516
+      ],
+      "depth": 0,
+      "doc_id": "e1bf7344a35342e797b72fc14021d75e",
+      "status": "done",
+      "pages": 52,
+      "children": 378,
+      "vectors": 558,
+      "seconds": 486.8,
+      "error": ""
+    }
+  ]
+}

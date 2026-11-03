@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-10-28",
+  "generated": "2026-11-03",
   "root": "D:\\心理学文档",
   "criteria": [
     "书名是学科命名而非专题/题集，能覆盖学科骨架",
@@ -98,6 +98,63 @@
       "est_hours": "4-7",
       "note": "已全部完成，见 batch2_result",
       "items": []
+    },
+    {
+      "id": "batch3",
+      "name": "补空白学科（生理 / 认知 / 统计）",
+      "parser": "mineru",
+      "pages": 0,
+      "est_hours": "2-2.5",
+      "note": "2026-11-03 完成。三本全是扫描版，64 页分段 + 递归细分。生理 287/288（坏页 190）、认知 352/352（零坏页）、统计 514/516（坏页 200/296）。统计曾在 10-31 因服务器掉线中断于 p96，11-03 用 recover_book 新增的 --start-page/--end-page 断点续跑补完。",
+      "items": [
+        {
+          "subject": "生理心理学",
+          "path": "心理学教材\\[生理心理学].沈政&林庶芝.扫描版.pdf",
+          "pages": 288,
+          "chars_per_page": 0,
+          "size_mb": 7.1,
+          "reason": "生理心理学是库里检索分最低的空白（top1 仅 0.651），且是考研主干",
+          "result": {
+            "pages_ingested": 287,
+            "bad_pages": [
+              190
+            ],
+            "segments": 17
+          },
+          "note": "2026-11-03 完成入库：287/288 页、17 段、坏页 [190]"
+        },
+        {
+          "subject": "认知心理学",
+          "path": "心理学教材\\[当代认知心理学].梁宁建.扫描版.pdf",
+          "pages": 352,
+          "chars_per_page": 0,
+          "size_mb": 6.7,
+          "reason": "认知心理学无专书，现靠《心理学导论》一章代打，讲不了信息加工范式",
+          "result": {
+            "pages_ingested": 352,
+            "bad_pages": [],
+            "segments": 6
+          },
+          "note": "2026-11-03 完成入库：352/352 页、6 段、坏页 无"
+        },
+        {
+          "subject": "心理统计学",
+          "path": "教育心理学\\现代心理与教育统计学 张厚粲 第4版.pdf",
+          "pages": 516,
+          "chars_per_page": 0,
+          "size_mb": 62.4,
+          "reason": "张厚粲第4版是考研标准教材；库里只有邵志芳，c021 信度题一直在阈值边缘",
+          "result": {
+            "pages_ingested": 514,
+            "bad_pages": [
+              200,
+              296
+            ],
+            "segments": 43
+          },
+          "note": "2026-11-03 完成入库：514/516 页、43 段、坏页 [200, 296]"
+        }
+      ]
     }
   ],
   "excluded": [
