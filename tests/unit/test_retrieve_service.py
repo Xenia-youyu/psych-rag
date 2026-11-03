@@ -176,17 +176,22 @@ class TestRerankAndThreshold:
         assert [hit.chunk_id for hit in outcome.hits] == ["c3", "c2", "c1"]
 
     async def test_irrelevant_score_near_half_is_rejected(self) -> None:
-        """实测结论：bge-reranker 对不相关段落的 logit 接近 0，sigmoid 后就是 0.5。
-        阈值若设在 0.15 以下，等于不过滤——真实书测时确实把无关内容当过答案。
-        这条用例钉住"0.5 左右必须被拒"这个语义。"""
+        """bge-reranker 对不相关段落 sigmoid 后≈0.5，所以阈值设在 0.15 以下等于不过滤。
+        这条用例钉住的是"阈值不能低到无效区间"，不是某个具体数字。
+
+        2026-11-03 调整：阈值 0.54 → 0.50。67 条有效题实测 0.50 全面更优
+        （compare 0.792→0.955，multihop 0.769→0.846），代价是多喂一两条让模型自己判断；
+        0.51 分会被保留是**有意为之**——正确块 m001 的 rerank 只有 0.5293，
+        用 0.54 切会把正确答案一起切掉。"""
         index = FakeIndex([row("c1")])
         reranker = FakeReranker([0.51])
 
         outcome = await retrieve("问题", kb_ids=["kb1"], embedder=FakeEmbedder(),
                                  index=index, reranker=reranker, intent=Intent.DEFINE)
 
-        assert outcome.is_empty
-        assert settings.retrieval.rerank_score_threshold > 0.51
+        # 0.51 现在保留（阈值 0.50），但阈值本身不许退回到不过滤的区间
+        assert len(outcome.hits) == 1
+        assert settings.retrieval.rerank_score_threshold >= 0.50
 
     async def test_threshold_filters_low_scores(self) -> None:
         index = FakeIndex([row("c1"), row("c2")])
