@@ -142,7 +142,9 @@ async function reindexNow() {
   try {
     const result = await api.reindexDocument(props.docId)
     await loadPending()
-    ElMessage.success(`已重建 ${result.reindexed} 个块的向量，现在可以按新内容检索`)
+    // 实测（2026-11-05 单块）：接口 0.82s，Milvus 新正文可见 1.35s。
+    // 不做 flush 是因为整集合 flush 要 30 秒，为 1 秒延迟付这个代价不值。
+    ElMessage.success(`已重建 ${result.reindexed} 个块的向量，约 1 秒后按新内容可检索`)
   } catch (error) {
     // 失败时后端会保留 needs_reindex 标记，再点一次就是重试
     ElMessage.error(errorMessage(error))

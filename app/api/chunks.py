@@ -144,6 +144,10 @@ async def reindex_document(doc_id: str, user: CurrentUser, session: SessionDep) 
     只处理子块：MySQL 的 psy_chunks 只存子块，父块只在 Milvus 里做回填用，
     父块正文不从子块推导，所以子块改了不影响父块向量。
 
+    已知行为：upsert 之后 Milvus 有约 1 秒的可见延迟（growing segment）。
+    实测单块：接口 0.82s、新正文 1.35s 可见（2026-11-05）。不调 flush——
+    整集合 flush 要 30 秒，为 1 秒延迟付这个代价不值。前端提示里写明了这点。
+
     先写向量、成功后才清标记。写失败就把标记原样留着，让用户能重试——
     反过来（先清标记）等于把"未生效"变成"永久未生效且无人知晓"。
     """
