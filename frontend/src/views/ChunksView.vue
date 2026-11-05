@@ -24,6 +24,7 @@ const chunks = ref<Chunk[]>([])
 const total = ref(0)
 const loading = ref(false)
 const pending = ref(0)
+const reindexing = ref(false)
 
 const query = reactive({ page: 1, size: 20, keyword: '', only_enabled: false })
 
@@ -135,6 +136,21 @@ async function saveEdit() {
   }
 }
 
+async function reindexNow() {
+  if (!props.docId) return
+  reindexing.value = true
+  try {
+    const result = await api.reindexDocument(props.docId)
+    await loadPending()
+    ElMessage.success(`已重建 ${result.reindexed} 个块的向量，现在可以按新内容检索`)
+  } catch (error) {
+    // 失败时后端会保留 needs_reindex 标记，再点一次就是重试
+    ElMessage.error(errorMessage(error))
+  } finally {
+    reindexing.value = false
+  }
+}
+
 async function remove(chunk: Chunk) {
   try {
     await ElMessageBox.confirm('删除后该段内容不再参与检索，且无法恢复。', '确认删除文本块', {
@@ -191,8 +207,14 @@ async function remove(chunk: Chunk) {
       :closable="false"
       class="banner"
       title="有文本块改过但还没重建向量"
-      :description="`${pending} 个块的内容已更新，但检索用的还是旧向量。重建功能在 M2 剩余项里，当前请以禁用代替修改。`"
-    />
+    >
+      <div class="reindex-row">
+        <span>{{ pending }} 个块的内容已更新，检索用的还是旧向量。重建会调用向量模型，只处理改动过的块。</span>
+        <el-button size="small" type="warning" :loading="reindexing" @click="reindexNow">
+          立即重建
+        </el-button>
+      </div>
+    </el-alert>
 
     <div class="panel filters">
       <el-input
@@ -274,7 +296,7 @@ async function remove(chunk: Chunk) {
     <el-dialog v-model="dialogVisible" title="编辑文本块" width="640px" :close-on-click-modal="false">
       <el-input v-model="draft" type="textarea" :rows="12" maxlength="8000" show-word-limit />
       <p class="dialog-hint muted">
-        改完保存只会更新数据库里的内容，向量要重建才会跟着变。
+        保存后正文立即生效，但检索仍用旧向量；保存完在页面顶部点「立即重建」即可。
       </p>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -293,6 +315,14 @@ async function remove(chunk: Chunk) {
 
 .banner {
   margin-bottom: 14px;
+}
+
+.reindex-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
 }
 
 .filters {

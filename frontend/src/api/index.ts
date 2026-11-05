@@ -83,6 +83,10 @@ export const api = {
   deleteChunk: (chunkId: string) => http.delete(`/api/chunks/${chunkId}`).then((r) => r.data),
   pendingReindex: (docId: string) =>
     http.get<{ doc_id: string; pending: number }>(`/api/documents/${docId}/pending-reindex`).then((r) => r.data),
+  reindexDocument: (docId: string) =>
+    http
+      .post<{ doc_id: string; reindexed: number; remaining: number }>(`/api/documents/${docId}/reindex`)
+      .then((r) => r.data),
 
   // ---------------------------------------------------------------- 每日推荐
   recommendDaily: (kbId: string, variation = 0, limit = 3) =>

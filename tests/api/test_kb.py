@@ -11,7 +11,7 @@ from httpx import AsyncClient
 
 from app.config import BASE_DIR, settings
 from app.core.captcha import hash_code
-from app.db.models import Captcha, Chunk
+from app.db.models import Captcha, Chunk, Document, Document
 
 VALID_CODE = "AB34"
 
@@ -257,6 +257,29 @@ class TestChunks:
         doc_id = (await upload(client, headers, kb_id)).json()["id"]
         return kb_id, doc_id
 
+    async def _seed_doc(self, client: AsyncClient, kb_id: str, doc_id: str) -> None:
+        """直接插一条 done 状态的文档记录，不走 upload。
+
+        走 upload 会触发后台解析任务，那条路径用的是真实 SessionLocal（指向生产库），
+        在共享库不可达时会让整条用例失败——测重建逻辑不该被这个拖累。
+        """
+        async with client.session_factory() as session:
+            session.add(
+                Document(
+                    id=doc_id,
+                    kb_id=kb_id,
+                    filename="reindex-test.pdf",
+                    file_type="pdf",
+                    size_bytes=1,
+                    status="done",
+                    last_stage="done",
+                    storage_path="",
+                    content_sha256="",
+                    parse_params={},
+                )
+            )
+            await session.commit()
+
     async def _seed_chunks(self, client: AsyncClient, kb_id: str, doc_id: str, count: int = 5) -> None:
         async with client.session_factory() as session:
             for index in range(count):
@@ -311,8 +334,10 @@ class TestChunks:
         self, sqlite_client: AsyncClient, cleanup_uploads
     ) -> None:
         _, headers = await make_user(sqlite_client)
-        kb_id, doc_id = await self._prepare_doc(sqlite_client, headers)
+        kb_id = await create_kb(sqlite_client, headers)
         cleanup_uploads.append(kb_id)
+        doc_id = f"doc_reindex_{uuid.uuid4().hex[:8]}"
+        await self._seed_doc(sqlite_client, kb_id, doc_id)
         await self._seed_chunks(sqlite_client, kb_id, doc_id, 1)
 
         chunk_id = f"{doc_id}_c0"
@@ -333,8 +358,10 @@ class TestChunks:
 
     async def test_disable_chunk(self, sqlite_client: AsyncClient, cleanup_uploads) -> None:
         _, headers = await make_user(sqlite_client)
-        kb_id, doc_id = await self._prepare_doc(sqlite_client, headers)
+        kb_id = await create_kb(sqlite_client, headers)
         cleanup_uploads.append(kb_id)
+        doc_id = f"doc_reindex_{uuid.uuid4().hex[:8]}"
+        await self._seed_doc(sqlite_client, kb_id, doc_id)
         await self._seed_chunks(sqlite_client, kb_id, doc_id, 2)
 
         chunk_id = f"{doc_id}_c0"
@@ -347,8 +374,10 @@ class TestChunks:
 
     async def test_empty_content_rejected(self, sqlite_client: AsyncClient, cleanup_uploads) -> None:
         _, headers = await make_user(sqlite_client)
-        kb_id, doc_id = await self._prepare_doc(sqlite_client, headers)
+        kb_id = await create_kb(sqlite_client, headers)
         cleanup_uploads.append(kb_id)
+        doc_id = f"doc_reindex_{uuid.uuid4().hex[:8]}"
+        await self._seed_doc(sqlite_client, kb_id, doc_id)
         await self._seed_chunks(sqlite_client, kb_id, doc_id, 1)
 
         response = await sqlite_client.patch(
@@ -356,10 +385,114 @@ class TestChunks:
         )
         assert response.status_code == 400
 
+    async def test_reindex_only_touches_marked_chunks(
+        self, sqlite_client: AsyncClient, cleanup_uploads, monkeypatch
+    ) -> None:
+        """重建只处理标了 needs_reindex 的块，成功后才清标记。
+
+        embedding 和 Milvus 全部打桩：这条用例测的是「哪些块被重算、标记何时清掉」，
+        不该真去连向量库（历史上集成测试硬写生产集合，出过 7 个假失败）。
+        """
+        _, headers = await make_user(sqlite_client)
+        kb_id = await create_kb(sqlite_client, headers)
+        cleanup_uploads.append(kb_id)
+        doc_id = f"doc_reindex_{uuid.uuid4().hex[:8]}"
+        await self._seed_doc(sqlite_client, kb_id, doc_id)
+        await self._seed_chunks(sqlite_client, kb_id, doc_id, 2)
+
+        async with sqlite_client.session_factory() as session:
+            target = await session.get(Chunk, f"{doc_id}_c0")
+            target.meta = {"needs_reindex": True}
+            await session.commit()
+
+        class _Vec:
+            dense = [0.1] * 8
+            sparse = None
+
+        class _Emb:
+            async def encode(self, texts):
+                return [_Vec() for _ in texts]
+
+        upserted: list[dict] = []
+
+        class _Idx:
+            async def upsert(self, records):
+                upserted.extend(records)
+                return len(records)
+
+        monkeypatch.setattr("app.clients.embed_client.build_embedder", lambda *a, **k: _Emb())
+        monkeypatch.setattr("app.clients.milvus_client.MilvusIndex", lambda *a, **k: _Idx())
+
+        resp = await sqlite_client.post(f"/api/documents/{doc_id}/reindex", headers=headers)
+        assert resp.status_code == 200
+        assert resp.json()["reindexed"] == 1
+        assert [r["chunk_id"] for r in upserted] == [f"{doc_id}_c0"]
+
+        async with sqlite_client.session_factory() as session:
+            marked = await session.get(Chunk, f"{doc_id}_c0")
+            untouched = await session.get(Chunk, f"{doc_id}_c1")
+            assert "needs_reindex" not in (marked.meta or {})
+            assert (marked.meta or {}).get("reindexed_at")
+            assert untouched.meta == {}
+
+        pending = (
+            await sqlite_client.get(
+                f"/api/documents/{doc_id}/pending-reindex", headers=headers
+            )
+        ).json()
+        assert pending["pending"] == 0
+
+    async def test_reindex_failure_keeps_flag(
+        self, sqlite_client: AsyncClient, cleanup_uploads, monkeypatch
+    ) -> None:
+        """向量写失败时标记必须留着，否则这个块永远检索不到新内容且无人知晓。"""
+        _, headers = await make_user(sqlite_client)
+        kb_id = await create_kb(sqlite_client, headers)
+        cleanup_uploads.append(kb_id)
+        doc_id = f"doc_reindex_{uuid.uuid4().hex[:8]}"
+        await self._seed_doc(sqlite_client, kb_id, doc_id)
+        await self._seed_chunks(sqlite_client, kb_id, doc_id, 1)
+
+        async with sqlite_client.session_factory() as session:
+            chunk = await session.get(Chunk, f"{doc_id}_c0")
+            chunk.meta = {"needs_reindex": True}
+            await session.commit()
+
+        class _Vec:
+            dense = [0.1] * 8
+            sparse = None
+
+        class _Emb:
+            async def encode(self, texts):
+                return [_Vec() for _ in texts]
+
+        class _Idx:
+            async def upsert(self, records):
+                raise RuntimeError("milvus down")
+
+        monkeypatch.setattr("app.clients.embed_client.build_embedder", lambda *a, **k: _Emb())
+        monkeypatch.setattr("app.clients.milvus_client.MilvusIndex", lambda *a, **k: _Idx())
+
+        resp = await sqlite_client.post(f"/api/documents/{doc_id}/reindex", headers=headers)
+        assert resp.status_code == 500
+
+        async with sqlite_client.session_factory() as session:
+            chunk = await session.get(Chunk, f"{doc_id}_c0")
+            assert (chunk.meta or {}).get("needs_reindex") is True
+
+        pending = (
+            await sqlite_client.get(
+                f"/api/documents/{doc_id}/pending-reindex", headers=headers
+            )
+        ).json()
+        assert pending["pending"] == 1
+
     async def test_delete_chunk(self, sqlite_client: AsyncClient, cleanup_uploads) -> None:
         _, headers = await make_user(sqlite_client)
-        kb_id, doc_id = await self._prepare_doc(sqlite_client, headers)
+        kb_id = await create_kb(sqlite_client, headers)
         cleanup_uploads.append(kb_id)
+        doc_id = f"doc_reindex_{uuid.uuid4().hex[:8]}"
+        await self._seed_doc(sqlite_client, kb_id, doc_id)
         await self._seed_chunks(sqlite_client, kb_id, doc_id, 2)
 
         assert (

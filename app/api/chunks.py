@@ -1,19 +1,21 @@
-"""文本块接口：分页查看 / 编辑 / 禁用 / 删除。
+"""文本块接口：分页查看 / 编辑 / 禁用 / 删除 / 重建向量。
 
 关于编辑后重建向量：
-本接口只改 MySQL 里的正文，并在 meta 里打 `needs_reindex=true`，
-真正的向量重建交给后台任务（M2 接 embedding 后实现）。
+编辑接口只改 MySQL 里的正文，并在 meta 里打 `needs_reindex=true`；
+重建走显式的 `POST /documents/{doc_id}/reindex`，**不是**在编辑时同步做。
 
-不做「编辑接口里同步重建向量」的理由：
-1. 重建要加载 bge-m3 并调 Milvus，一次几百毫秒到几秒，接口会超时
-2. 向量库写失败时，MySQL 已经改了，两边不一致，需要补偿逻辑
-3. 后台重建可以合并同一文档的多次编辑，避免反复重算
+不在编辑接口里同步重建的理由：
+1. 编一次要调一次 embedding API + 写 Milvus，几百毫秒级，连续改几处就变成串行等待
+2. 向量库写失败时 MySQL 已经改了，两边不一致，需要补偿逻辑
+3. 用户可能连续改几次，显式重建能把多次编辑合并成一次重算
 
-所以这里的语义是：**改内容立即生效（检索仍用旧向量），重建后台异步跟进**。
-前端在 chunk 卡片上显示"待重新索引"状态，别假装已经好了。
+重建接口的顺序是「先写向量、成功后才清标记」——反过来一旦向量写失败，
+标记就没了，这个块永远检索不到新内容，而且没人会发现。
 """
 
 from __future__ import annotations
+
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Query
 from sqlalchemy import func, select
@@ -127,12 +129,82 @@ async def delete_chunk(chunk_id: str, user: CurrentUser, session: SessionDep) ->
 async def pending_reindex(doc_id: str, user: CurrentUser, session: SessionDep) -> dict:
     await _get_owned_doc(doc_id, user.id, session)
     rows = await session.scalars(
-        select(Chunk.id).where(Chunk.doc_id == doc_id, Chunk.enabled.is_(True))
+        select(Chunk).where(Chunk.doc_id == doc_id, Chunk.enabled.is_(True))
     )
-    # 简单起见：meta 里的标记在 Python 侧检查（JSON 查询在不同数据库方言下写法不同）
-    pending = 0
-    for chunk_id in rows:
-        chunk = await session.get(Chunk, chunk_id)
-        if chunk and (chunk.meta or {}).get("needs_reindex"):
-            pending += 1
+    # meta 是 JSON 列，查询侧跨方言写法不统一，直接在 Python 侧数。
+    # 用一次 select 拿到实体，不要再按 id 逐个 get——那是 N+1。
+    pending = sum(1 for chunk in rows if (chunk.meta or {}).get("needs_reindex"))
     return {"doc_id": doc_id, "pending": pending}
+
+
+@router.post("/documents/{doc_id}/reindex", summary="重建待重建文本块的向量")
+async def reindex_document(doc_id: str, user: CurrentUser, session: SessionDep) -> dict:
+    """把标了 needs_reindex 的块重新编码并写回向量库。
+
+    只处理子块：MySQL 的 psy_chunks 只存子块，父块只在 Milvus 里做回填用，
+    父块正文不从子块推导，所以子块改了不影响父块向量。
+
+    先写向量、成功后才清标记。写失败就把标记原样留着，让用户能重试——
+    反过来（先清标记）等于把"未生效"变成"永久未生效且无人知晓"。
+    """
+    await _get_owned_doc(doc_id, user.id, session)
+
+    rows = list(
+        await session.scalars(
+            select(Chunk).where(Chunk.doc_id == doc_id, Chunk.enabled.is_(True))
+        )
+    )
+    pending = [chunk for chunk in rows if (chunk.meta or {}).get("needs_reindex")]
+    if not pending:
+        return {"doc_id": doc_id, "reindexed": 0, "remaining": 0}
+
+    from app.clients.embed_client import build_embedder
+    from app.clients.milvus_client import MilvusIndex
+
+    embedder = build_embedder()
+    index = MilvusIndex()
+    try:
+        vectors = await embedder.encode([chunk.content for chunk in pending])
+        records = []
+        for chunk, vector in zip(pending, vectors, strict=True):
+            record = {
+                "chunk_id": chunk.id,
+                "kb_id": chunk.kb_id,
+                "doc_id": chunk.doc_id,
+                "parent_id": chunk.parent_id or "",
+                "content": chunk.content[:8000],
+                "dense_vector": vector.dense,
+                "page_start": chunk.page_start,
+                "page_end": chunk.page_end,
+                "domain": "",
+                "evidence_grade": "",
+                "is_parent": False,
+            }
+            # 稀疏向量只在 provider=local 时有；dense-only 集合塞空 dict 会被拒
+            if vector.sparse:
+                record["sparse_vector"] = {int(k): v for k, v in vector.sparse.items()}
+            records.append(record)
+        await index.upsert(records)
+    except Exception as exc:  # noqa: BLE001 - 任何失败都不许清标记
+        logger.error(
+            "chunk.reindex_failed",
+            extra={"extra_fields": {"doc_id": doc_id, "count": len(pending), "error": repr(exc)}},
+        )
+        raise AppError(
+            ErrorCode.INTERNAL, f"向量重建失败（{len(pending)} 个块仍待重建）：{exc}"
+        ) from exc
+
+    stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    for chunk in pending:
+        meta = dict(chunk.meta or {})
+        meta.pop("needs_reindex", None)
+        meta["reindexed_at"] = stamp
+        # JSON 列要整体重新赋值才会被 ORM 识别为变更
+        chunk.meta = meta
+    await session.commit()
+
+    logger.info(
+        "chunk.reindexed",
+        extra={"extra_fields": {"doc_id": doc_id, "count": len(pending)}},
+    )
+    return {"doc_id": doc_id, "reindexed": len(pending), "remaining": 0}

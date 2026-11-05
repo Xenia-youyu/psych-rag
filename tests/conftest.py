@@ -91,11 +91,16 @@ def anyio_backend() -> str:
 
 
 @pytest_asyncio.fixture
-async def sqlite_client() -> AsyncGenerator[AsyncClient, None]:
+async def sqlite_client(monkeypatch) -> AsyncGenerator[AsyncClient, None]:
     """用内存 SQLite 跑接口测试。
 
     注意 StaticPool：:memory: 库是按连接隔离的，
     不共享连接池的话每个会话看到的是空库，测试会莫名其妙全挂。
+
+    还要把 `app.db.base.SessionLocal` 一起换掉：上传接口的后台解析任务
+    在函数内 `from app.db.base import SessionLocal` 取会话，只覆盖 FastAPI 的
+    `get_session` 依赖管不住它——那批用例会真去连生产 MySQL，库一不可达就整片红，
+    看着像代码坏了（2026-11-05 就这么白过一轮）。
     """
     from app.db.base import get_session
     from app.db.models import Base
@@ -110,6 +115,20 @@ async def sqlite_client() -> AsyncGenerator[AsyncClient, None]:
         await conn.run_sync(Base.metadata.create_all)
 
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
+
+    import app.db.base as db_base
+
+    monkeypatch.setattr(db_base, "SessionLocal", session_factory)
+
+    # 上传接口会把解析丢给 BackgroundTasks。接口测试不关心解析结果，
+    # 但真让它跑会去解析测试用的假 PDF（PDFium 报格式错），进而把文档状态改成
+    # failed，影响去重与统计两类断言。这里直接把它换成空操作。
+    import app.api.documents as documents_api
+
+    async def _noop_ingest(doc_id: str) -> None:
+        return None
+
+    monkeypatch.setattr(documents_api, "_run_ingest", _noop_ingest)
 
     async def override() -> AsyncGenerator:
         async with session_factory() as session:
