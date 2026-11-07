@@ -390,9 +390,7 @@ function sourceLabel(citation: Citation) {
             </svg>
           </div>
           <h1>聊聊心理健康</h1>
-          <p class="welcome-sub">
-            基于 23 本心理学教材检索，回答附书名与页码，查不到会明确说不覆盖
-          </p>
+          <p class="welcome-sub">你的专业心理学知识助手，不足之处还请多多关照哦~</p>
 
           <div class="welcome-input">
             <el-input
