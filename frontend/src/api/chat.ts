@@ -41,7 +41,9 @@ export interface StreamHandlers {
 
 export interface ChatRequestBody {
   question: string
-  kb_ids: string[]
+  /** 不传 = 由后端决定检索范围（共享语料库 + 自己的库）。
+   *  问答页不再要求用户先选知识库——那是把语料维护成本转嫁给使用者。 */
+  kb_ids?: string[]
   session_id?: string | null
   user_level?: string
 }

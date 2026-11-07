@@ -101,7 +101,7 @@ async function submit() {
       captcha_id: captcha.value.captcha_id,
       captcha_code: form.captcha_code.trim(),
     })
-    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/kb'
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
     router.replace(redirect)
   } catch (error) {
     errorText.value = errorMessage(error)

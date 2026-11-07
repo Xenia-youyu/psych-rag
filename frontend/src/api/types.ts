@@ -155,3 +155,64 @@ export interface RecommendDetail extends RecommendItem {
   is_full_parent: boolean
   related: RelatedItem[]
 }
+
+/** ---------------------------------------------------------------- 收藏 */
+
+export interface FavoriteCitation {
+  sid: string
+  doc_title: string
+  page: number
+  page_end: number
+  content: string
+}
+
+export interface Favorite {
+  id: string
+  question: string
+  answer: string
+  note: string
+  session_id: string
+  source: string
+  citations: FavoriteCitation[]
+  created_at?: string
+}
+
+export interface FavoritePage {
+  total: number
+  page: number
+  size: number
+  items: Favorite[]
+}
+
+/** ---------------------------------------------------------------- 每日知识 */
+
+export interface EffectBrief {
+  slug: string
+  name: string
+  name_en: string
+  category: string
+  founder: string
+  year: string
+  summary: string
+}
+
+export interface EffectDetail extends EffectBrief {
+  detail: string
+  experiment: string
+  example: string
+  source: string
+  related: EffectBrief[]
+}
+
+export interface EffectDaily {
+  date: string
+  variation: number
+  total: number
+  items: EffectDetail[]
+}
+
+export interface EffectList {
+  total: number
+  categories: string[]
+  items: EffectBrief[]
+}

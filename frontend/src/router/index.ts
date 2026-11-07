@@ -17,7 +17,16 @@ const router = createRouter({
       path: '/',
       component: AppLayout,
       children: [
-        { path: '', redirect: '/kb' },
+        // 问答是主入口，不再让用户先落到「知识库」再点进来
+        { path: '', name: 'chat', component: () => import('@/views/ChatView.vue') },
+        { path: 'chat', redirect: '/' },
+        {
+          path: 'favorites',
+          name: 'favorites',
+          component: () => import('@/views/FavoritesView.vue'),
+        },
+        { path: 'daily', name: 'daily', component: () => import('@/views/DailyView.vue') },
+        // 语料管理（原「知识库」）：教材上传、解析进度、文本块维护
         { path: 'kb', name: 'kb-list', component: () => import('@/views/KbListView.vue') },
         {
           path: 'kb/:kbId',
@@ -31,11 +40,9 @@ const router = createRouter({
           component: () => import('@/views/ChunksView.vue'),
           props: true,
         },
-        { path: 'daily', name: 'daily', component: () => import('@/views/RecommendView.vue') },
-        { path: 'chat', name: 'chat', component: () => import('@/views/ChatView.vue') },
       ],
     },
-    { path: '/:pathMatch(.*)*', redirect: '/kb' },
+    { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
 })
 
@@ -45,7 +52,7 @@ router.beforeEach((to) => {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
   if (to.name === 'login' && loggedIn) {
-    return { name: 'kb-list' }
+    return { name: 'chat' }
   }
   return true
 })

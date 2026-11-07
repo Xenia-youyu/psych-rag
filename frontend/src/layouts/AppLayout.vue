@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChatDotRound, Collection, Reading, SwitchButton } from '@element-plus/icons-vue'
+import { ChatDotRound, Collection, Files, Reading, SwitchButton } from '@element-plus/icons-vue'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -10,16 +10,23 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const active = computed(() => {
-  if (route.path.startsWith('/kb')) return 'kb'
+  if (route.path.startsWith('/favorites')) return 'favorites'
   if (route.path.startsWith('/daily')) return 'daily'
-  if (route.path.startsWith('/chat')) return 'chat'
-  return ''
+  if (route.path.startsWith('/kb')) return 'corpus'
+  return 'chat'
 })
 
-const items = [
-  { key: 'kb', label: '知识库', hint: '文档与文本块', icon: Collection, to: '/kb' },
-  { key: 'daily', label: '每日知识', hint: '随机推荐 · 可追问', icon: Reading, to: '/daily' },
-  { key: 'chat', label: '智能问答', hint: '检索增强回答', icon: ChatDotRound, to: '/chat' },
+const primary = [
+  { key: 'chat', label: '智能问答', hint: '教材级检索 · 回答带页码', icon: ChatDotRound, to: '/' },
+  { key: 'favorites', label: '我的知识库', hint: '收藏的知识与观点', icon: Collection, to: '/favorites' },
+  { key: 'daily', label: '每日知识', hint: '一天一个心理学效应', icon: Reading, to: '/daily' },
+]
+
+// 语料管理不属于日常路径：它是维护教材的地方，不是学习的地方。
+// 放在次要区，避免和「我的知识库」混淆——两者以前共用「知识库」这一个名字，
+// 用户分不清「我传的文档」和「我收藏的内容」。
+const secondary = [
+  { key: 'corpus', label: '语料管理', hint: '教材文档与文本块', icon: Files, to: '/kb' },
 ]
 
 function logout() {
@@ -31,7 +38,7 @@ function logout() {
 <template>
   <div class="shell">
     <aside class="side">
-      <div class="brand">
+      <router-link to="/" class="brand">
         <div class="mark">
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <path
@@ -45,13 +52,13 @@ function logout() {
         </div>
         <div>
           <div class="brand-name">心理知识库</div>
-          <div class="brand-sub">RAG 问答系统</div>
+          <div class="brand-sub">学生心理健康问答</div>
         </div>
-      </div>
+      </router-link>
 
       <nav class="nav">
         <router-link
-          v-for="item in items"
+          v-for="item in primary"
           :key="item.key"
           :to="item.to"
           class="nav-item"
@@ -65,15 +72,28 @@ function logout() {
         </router-link>
       </nav>
 
+      <div class="nav-secondary">
+        <router-link
+          v-for="item in secondary"
+          :key="item.key"
+          :to="item.to"
+          class="nav-item is-minor"
+          :class="{ 'is-active': active === item.key }"
+        >
+          <el-icon :size="15"><component :is="item.icon" /></el-icon>
+          <span class="nav-label">{{ item.label }}</span>
+        </router-link>
+      </div>
+
       <div class="side-foot">
         <div class="who">
           <div class="avatar">{{ (authStore.user?.username || '?').slice(0, 1).toUpperCase() }}</div>
           <div class="who-text">
             <div class="who-name">{{ authStore.user?.username || '未登录' }}</div>
-            <div class="who-role">普通用户</div>
+            <div class="who-role">心理学知识科普</div>
           </div>
         </div>
-        <el-button text size="small" :icon="SwitchButton" @click="logout">退出</el-button>
+        <el-button text size="small" :icon="SwitchButton" title="退出登录" @click="logout" />
       </div>
     </aside>
 
@@ -91,20 +111,21 @@ function logout() {
 }
 
 .side {
-  width: 236px;
-  flex: 0 0 236px;
+  width: 232px;
+  flex: 0 0 232px;
   background: #fff;
   border-right: 1px solid var(--app-border);
   display: flex;
   flex-direction: column;
-  padding: 18px 14px 14px;
+  padding: 16px 12px 12px;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px 8px 18px;
+  padding: 4px 8px 20px;
+  color: inherit;
 }
 
 .mark {
@@ -115,6 +136,7 @@ function logout() {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 34px;
 }
 
 .brand-name {
@@ -132,7 +154,7 @@ function logout() {
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   flex: 1;
   min-height: 0;
 }
@@ -148,12 +170,24 @@ function logout() {
 }
 
 .nav-item:hover {
-  background: #f4f5fa;
+  background: #f5f6fb;
 }
 
 .nav-item.is-active {
   background: var(--el-color-primary-light-9);
   color: var(--el-color-primary-dark-2);
+}
+
+.nav-item.is-minor {
+  padding: 7px 10px;
+  font-size: 12.5px;
+  color: var(--app-text-weak);
+  gap: 8px;
+}
+
+.nav-item.is-minor .nav-label {
+  font-size: 12.5px;
+  font-weight: 400;
 }
 
 .nav-text {
@@ -174,6 +208,12 @@ function logout() {
 
 .nav-item.is-active .nav-hint {
   color: var(--el-color-primary);
+}
+
+.nav-secondary {
+  padding: 10px 0 6px;
+  border-top: 1px solid var(--app-border);
+  margin-top: 8px;
 }
 
 .side-foot {

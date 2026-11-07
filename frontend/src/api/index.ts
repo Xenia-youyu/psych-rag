@@ -4,6 +4,12 @@ import type {
   Chunk,
   ChunkPage,
   Doc,
+  EffectDaily,
+  EffectDetail,
+  EffectList,
+  Favorite,
+  FavoriteCitation,
+  FavoritePage,
   Kb,
   KbStats,
   MessagePage,
@@ -97,6 +103,29 @@ export const api = {
       .then((r) => r.data),
   recommendDetail: (chunkId: string) =>
     http.get<RecommendDetail>(`/api/recommend/chunks/${chunkId}`).then((r) => r.data),
+
+  // ---------------------------------------------------------------- 收藏
+  listFavorites: (query: { q?: string; page?: number; size?: number } = {}) =>
+    http.get<FavoritePage>('/api/favorites', { params: query }).then((r) => r.data),
+  createFavorite: (payload: {
+    question: string
+    answer: string
+    session_id?: string
+    note?: string
+    citations?: FavoriteCitation[]
+  }) => http.post<Favorite>('/api/favorites', payload).then((r) => r.data),
+  updateFavorite: (id: string, note: string) =>
+    http.patch<Favorite>(`/api/favorites/${id}`, { note }).then((r) => r.data),
+  deleteFavorite: (id: string) => http.delete(`/api/favorites/${id}`).then((r) => r.data),
+
+  // ---------------------------------------------------------------- 每日知识
+  dailyEffects: (variation = 0, count = 1) =>
+    http
+      .get<EffectDaily>('/api/effects/daily', { params: { variation, count } })
+      .then((r) => r.data),
+  listEffects: (query: { category?: string; q?: string } = {}) =>
+    http.get<EffectList>('/api/effects', { params: query }).then((r) => r.data),
+  getEffect: (slug: string) => http.get<EffectDetail>(`/api/effects/${slug}`).then((r) => r.data),
 
   // ---------------------------------------------------------------- 会话
   listSessions: () => http.get<Session[]>('/api/sessions').then((r) => r.data),
