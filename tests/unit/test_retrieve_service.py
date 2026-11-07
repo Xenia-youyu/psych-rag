@@ -309,7 +309,11 @@ class TestDocMeta:
 
 
 class TestBudget:
-    async def test_context_truncated_by_budget(self) -> None:
+    async def test_context_truncated_by_budget(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # 预算显式钉死，不跟着 config.ini 跑：这条用例验的是「超预算要裁」这个行为，
+        # 不是「当前配置恰好是 6000」。跟着配置走的话，每次调参测试都会假红。
+        monkeypatch.setattr(settings.retrieval, "context_max_chars", 6000)
+
         rows = [row(f"c{i}", parent=f"p{i}", content="字" * 2000) for i in range(5)]
         parents = {f"p{i}": {"content": "父" * 2000, "page_start": 1, "page_end": 2} for i in range(5)}
         index = FakeIndex(rows, parents=parents)

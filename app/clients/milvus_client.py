@@ -199,6 +199,33 @@ class MilvusIndex:
         rows = collection.query(expr=f"chunk_id in [{quoted}]", output_fields=OUTPUT_FIELDS)
         return {row["chunk_id"]: row for row in rows}
 
+    def _neighbor_sync(self, doc_id: str, pages: list[int]) -> list[dict[str, Any]]:
+        if not doc_id or not pages:
+            return []
+        collection = self._collection_sync()
+        page_list = ", ".join(str(int(p)) for p in pages)
+        rows = collection.query(
+            expr=(
+                f'doc_id == "{doc_id}" and is_parent == true '
+                f"and page_start in [{page_list}]"
+            ),
+            output_fields=OUTPUT_FIELDS,
+        )
+        return list(rows)
+
+    async def fetch_neighbor_parents(
+        self, doc_id: str, pages: list[int]
+    ) -> list[dict[str, Any]]:
+        """取同一本书里指定页码上的父块。
+
+        用途是「邻页扩展」：父块按页切，一个跨页的小节（比如埃里克森八阶段
+        横跨 p48–p50）会被切成三个互不重叠的父块。只命中其中一页时，
+        上下文就只剩三分之一，模型只好如实说「未覆盖」——而书里明明有。
+        """
+        await self._ensure()
+        return await asyncio.to_thread(self._neighbor_sync, doc_id, pages)
+
+
     async def fetch_chunks(self, chunk_ids: list[str]) -> dict[str, dict[str, Any]]:
         await self._ensure()
         return await asyncio.to_thread(self._fetch_sync, chunk_ids)

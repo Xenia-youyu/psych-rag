@@ -100,7 +100,9 @@ rerank_topk = 6
 ; 2026-11-03 重标定（67 条）：0.54 concept 0.930 / compare 0.792；0.50 提升到
 ; concept 0.942 / compare 0.955 / multihop 0.846；0.45 与 0.50 同平台。
 rerank_score_threshold = 0.50
-context_max_chars = 6000
+; 8000：父块按页切，跨页小节（如埃里克森八阶段横跨 p48–p50）需要 7–8 条
+; 父块才装得全。6000 会在补全邻页后把最后一条挤掉，模型只好答「未覆盖」。
+context_max_chars = 8000
 hybrid = true
 ; 共享语料库：这些 kb 对所有登录用户可检索（逗号分隔）。
 ; 教材挂在谁名下不该影响谁能检索；留空则退回按 owner 校验。

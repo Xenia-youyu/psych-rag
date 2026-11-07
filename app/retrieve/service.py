@@ -240,9 +240,17 @@ async def retrieve(
     # 9. 回填父块：只给生成用，不参与打分。
     # 回填后单条从 ~300 字涨到 ~1200 字，所以要按字符预算再裁一次。
     selected = await _backfill_parents(selected, index=index)
+
+    # 9.5 邻页扩展：父块按页切，跨页小节会被页边界切断，
+    #     只拿到前半截时模型只能如实说「未覆盖」——而书里是有的。
+    selected, neighbor_added = await _expand_neighbors(
+        selected, index=index, query=question, reranker=reranker
+    )
+    stats["neighbor_added"] = neighbor_added
+
     selected = select_context(
         selected,
-        top_n=conf.rerank_topk,
+        top_n=conf.rerank_topk + neighbor_added,
         threshold=0,
         max_chars=conf.context_max_chars,
     )
@@ -294,6 +302,126 @@ async def _backfill_parents(hits: list[Hit], *, index: IndexLike) -> list[Hit]:
             if parent.get("page_end"):
                 hit.meta["page_end"] = parent["page_end"]
     return hits
+
+
+async def _expand_neighbors(
+    hits: list[Hit],
+    *,
+    index: IndexLike,
+    query: str = "",
+    reranker: RerankerLike | None = None,
+    span: int = 1,
+    max_seeds: int = 3,
+) -> tuple[list[Hit], int]:
+    """把命中父块的相邻页一并取回来，紧跟在原命中之后。
+
+    为什么需要这一步：父块按页切（一页 ≈ 一个父块），而教材里不少小节是跨页的。
+    「埃里克森人格发展八阶段」在发展心理学里横跨 p48–p50，只命中 p48 时，
+    上下文只剩前三个阶段——模型会老实说「本知识库未覆盖第四阶段」，
+    而书里明明写着。这不是检索不到，是拿到的东西被页边界切断了。
+
+    邻页按「种子之后」插入，不按分数重排：它们是同一段论述的后半部分，
+    跟着种子走比按相关性排序更符合阅读顺序，也不会被预算裁剪挤到队尾。
+    """
+    fetch = getattr(index, "fetch_neighbor_parents", None)
+    if fetch is None or not hits:
+        return hits, 0
+
+    known = {hit.chunk_id for hit in hits}
+    known |= {hit.parent_id for hit in hits if hit.parent_id}
+    added_count = 0
+    merged: list[Hit] = []
+
+    for seed in hits[:max_seeds]:
+        merged.append(seed)
+
+        doc_id = str(seed.meta.get("doc_id", ""))
+        page = int(seed.meta.get("page_start") or 0)
+        if not doc_id or not page:
+            continue
+
+        # 先看后一页再找前一页：跨页小节多数是往后延续的
+        pages = [page + offset for offset in range(1, span + 1)]
+        pages += [page - offset for offset in range(1, span + 1)]
+
+        try:
+            rows = await fetch(doc_id, pages)
+        except Exception as exc:  # noqa: BLE001 - 扩展失败不该让整次检索失败
+            logger.warning(
+                "retrieve.neighbor_failed",
+                extra={"extra_fields": {"doc_id": doc_id, "page": page, "error": repr(exc)}},
+            )
+            continue
+
+        # 只补一页：跨页小节通常只断一次，补两页反而会把别的来源挤出预算。
+        #
+        # 同一页会有多个父块，必须**拼接**而不是挑一个。实测教育心理学 p49：
+        # 第 8 阶段被切成「…这一阶段个体的发」+「展受前几阶段发展的影响极大…」，
+        # 挑任何一块都会丢掉半个阶段——模型只能回答「材料中没有第 8 阶段」。
+        # 拼接顺序按 chunk_id，它就是按文档顺序生成的。
+        by_page: dict[int, list[dict]] = {}
+        for row in rows:
+            page_no = int(row.get("page_start") or -1)
+            if page_no in pages:
+                by_page.setdefault(page_no, []).append(row)
+
+        ordered: list[dict] = []
+        for page_no in pages:
+            parts = sorted(by_page.get(page_no, []), key=lambda r: r.get("chunk_id", ""))
+            if not parts:
+                continue
+            merged_row = dict(parts[0])
+            merged_row["content"] = "".join(str(x.get("content") or "") for x in parts)
+            ordered.append(merged_row)
+
+        picked = ordered[:1]
+        if picked and reranker is not None and query:
+            # 邻页是「同一本书的下一页」，不等于「同一段论述的后续」。
+            # 人格心理学 p87 讲繁衍感，翻页 p88 已经在讲学派评价了——
+            # 这种邻页补进去只会占预算，还会把真正有用的来源挤到后面。
+            # 判据用「不低于种子分的 85%」，而不是绝对阈值：
+            # 补全段落天然比命中段落分低，绝对阈值会把它一起砍掉。
+            try:
+                scores = await reranker.score(query, [(picked[0].get("content") or "")[:2000]])
+                keep = scores[0] >= max(0.50, seed.score * 0.85)
+            except Exception:  # noqa: BLE001 - 打分失败就当它合格，宁可多补
+                keep = True
+            if not keep:
+                logger.info(
+                    "retrieve.neighbor_dropped",
+                    extra={"extra_fields": {"page": picked[0].get("page_start")}},
+                )
+                picked = []
+
+        for row in picked:
+            chunk_id = str(row.get("chunk_id", ""))
+            if not chunk_id or chunk_id in known:
+                continue
+            content = str(row.get("content") or "")
+            if not content.strip():
+                continue
+            known.add(chunk_id)
+            added_count += 1
+            merged.append(
+                Hit(
+                    chunk_id=chunk_id,
+                    # 分数压低一点点：邻页是补全用的，不该盖过真正命中的那一页
+                    score=seed.score * 0.97,
+                    parent_id=chunk_id,
+                    source="neighbor",
+                    content=content,
+                    meta={
+                        "doc_id": doc_id,
+                        "page_start": int(row.get("page_start") or 0),
+                        "page_end": int(row.get("page_end") or 0),
+                        "domain": row.get("domain", ""),
+                        "evidence_grade": row.get("evidence_grade", ""),
+                    },
+                )
+            )
+
+    merged.extend(hits[max_seeds:])
+    return merged, added_count
 
 
 async def _attach_doc_meta(hits: list[Hit], provider: DocMetaProvider) -> None:

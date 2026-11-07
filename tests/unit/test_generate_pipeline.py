@@ -195,7 +195,10 @@ class TestGenerate:
         result = await generate(llm, question="问题", hits=[], intent=Intent.DEFINE)
 
         assert result.no_context is True
-        assert "未覆盖" in result.text
+        # 文案从「当前知识库未覆盖」改成「没有检索到…教材段落」：
+        # 检索为空不代表库里没这本书，说「知识库未覆盖」会把用户引去补书。
+        assert "没有检索到" in result.text
+        assert "知识库未覆盖" not in result.text
         assert llm.chat_calls == [], "没有上下文就不该调模型"
 
     async def test_normal_generation(self) -> None:

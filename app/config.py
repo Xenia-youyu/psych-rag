@@ -273,7 +273,7 @@ class RetrievalConf(BaseModel):
     rrf_k: int = 60
     rerank_topk: int = 5
     rerank_score_threshold: float = 0.50
-    context_max_chars: int = 6000
+    context_max_chars: int = 8000
     hybrid: bool = True
     # 重排候选上限。去重后可能有 40 个父块，全送去交叉编码在 CPU 上是灾难。
     # 只取 RRF 前 N 个送去重排——前 8 基本覆盖真实命中，剩下的本来也进不了最终 top5。
@@ -491,7 +491,7 @@ def load_settings() -> Settings:
             rrf_k=_int("retrieval", "rrf_k", 60),
             rerank_topk=_int("retrieval", "rerank_topk", 5),
             rerank_score_threshold=_float("retrieval", "rerank_score_threshold", 0.50),
-            context_max_chars=_int("retrieval", "context_max_chars", 6000),
+            context_max_chars=_int("retrieval", "context_max_chars", 8000),
             hybrid=_bool("retrieval", "hybrid", True),
             rerank_max_candidates=_int("retrieval", "rerank_max_candidates", 20),
             rerank_max_length=_int("retrieval", "rerank_max_length", 256),
