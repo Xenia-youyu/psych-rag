@@ -316,9 +316,9 @@ async def _expand_neighbors(
     """把命中父块的相邻页一并取回来，紧跟在原命中之后。
 
     为什么需要这一步：父块按页切（一页 ≈ 一个父块），而教材里不少小节是跨页的。
-    「埃里克森人格发展八阶段」在发展心理学里横跨 p48–p50，只命中 p48 时，
-    上下文只剩前三个阶段——模型会老实说「本知识库未覆盖第四阶段」，
-    而书里明明写着。这不是检索不到，是拿到的东西被页边界切断了。
+    「埃里克森人格发展八阶段」在教育心理学里横跨 p48–p49，只命中 p48 时，
+    上下文只剩前三个阶段——模型会老实说「材料里没有第四阶段」，而书里明明写着。
+    这不是检索不到，是拿到的东西被页边界切断了。
 
     邻页按「种子之后」插入，不按分数重排：它们是同一段论述的后半部分，
     跟着种子走比按相关性排序更符合阅读顺序，也不会被预算裁剪挤到队尾。
@@ -329,12 +329,12 @@ async def _expand_neighbors(
 
     known = {hit.chunk_id for hit in hits}
     known |= {hit.parent_id for hit in hits if hit.parent_id}
-    added_count = 0
-    merged: list[Hit] = []
 
+    # ---------------------------------------------------------- 阶段一：取候选
+    # 先全部取回来再统一打分，而不是在循环里逐条调 rerank。
+    # 逐条调是串行的：3 条 × 0.3 秒 ≈ 0.9 秒，而批量一次只要 0.3 秒。
+    plans: list[tuple[Hit, dict]] = []
     for seed in hits[:max_seeds]:
-        merged.append(seed)
-
         doc_id = str(seed.meta.get("doc_id", ""))
         page = int(seed.meta.get("page_start") or 0)
         if not doc_id or not page:
@@ -365,63 +365,87 @@ async def _expand_neighbors(
             if page_no in pages:
                 by_page.setdefault(page_no, []).append(row)
 
-        ordered: list[dict] = []
+        candidate: dict | None = None
         for page_no in pages:
             parts = sorted(by_page.get(page_no, []), key=lambda r: r.get("chunk_id", ""))
             if not parts:
                 continue
-            merged_row = dict(parts[0])
-            merged_row["content"] = "".join(str(x.get("content") or "") for x in parts)
-            ordered.append(merged_row)
+            merged = dict(parts[0])
+            merged["content"] = "".join(str(x.get("content") or "") for x in parts)
+            if merged["content"].strip() and merged.get("chunk_id") not in known:
+                candidate = merged
+                break
+        if candidate is not None:
+            plans.append((seed, candidate))
 
-        picked = ordered[:1]
-        if picked and reranker is not None and query:
-            # 邻页是「同一本书的下一页」，不等于「同一段论述的后续」。
-            # 人格心理学 p87 讲繁衍感，翻页 p88 已经在讲学派评价了——
-            # 这种邻页补进去只会占预算，还会把真正有用的来源挤到后面。
-            # 判据用「不低于种子分的 85%」，而不是绝对阈值：
-            # 补全段落天然比命中段落分低，绝对阈值会把它一起砍掉。
-            try:
-                scores = await reranker.score(query, [(picked[0].get("content") or "")[:2000]])
-                keep = scores[0] >= max(0.50, seed.score * 0.85)
-            except Exception:  # noqa: BLE001 - 打分失败就当它合格，宁可多补
-                keep = True
-            if not keep:
+    if not plans:
+        return hits, 0
+
+    # ---------------------------------------------------------- 阶段二：批量过滤
+    #
+    # 邻页是「同一本书的下一页」，不等于「同一段论述的后续」。人格心理学 p87
+    # 讲繁衍感，翻页 p88 已经在讲学派评价了——这种邻页补进去只占预算，
+    # 还会把真正有用的来源挤到后面。
+    #
+    # 判据用「不低于种子分的 85%」而不是绝对阈值 0.50：补全段落天然比命中段落
+    # 分低，卡死绝对阈值会把该留的一起砍掉。实测 p88 是种子分的 70%（丢），
+    # 教育 p49 是 99%（留）。
+    keep: list[tuple[Hit, dict]] = []
+    if reranker is not None and query:
+        try:
+            scores = await reranker.score(query, [(c["content"] or "")[:2000] for _, c in plans])
+        except Exception:  # noqa: BLE001 - 打分失败就当全部合格，宁可多补
+            scores = [1.0] * len(plans)
+        for (seed, cand), score in zip(plans, scores):
+            if score >= max(0.50, seed.score * 0.85):
+                keep.append((seed, cand))
+            else:
                 logger.info(
                     "retrieve.neighbor_dropped",
-                    extra={"extra_fields": {"page": picked[0].get("page_start")}},
+                    extra={"extra_fields": {"page": cand.get("page_start"), "score": round(score, 3)}},
                 )
-                picked = []
+    else:
+        keep = plans
 
-        for row in picked:
-            chunk_id = str(row.get("chunk_id", ""))
-            if not chunk_id or chunk_id in known:
-                continue
-            content = str(row.get("content") or "")
-            if not content.strip():
-                continue
-            known.add(chunk_id)
-            added_count += 1
-            merged.append(
-                Hit(
-                    chunk_id=chunk_id,
-                    # 分数压低一点点：邻页是补全用的，不该盖过真正命中的那一页
-                    score=seed.score * 0.97,
-                    parent_id=chunk_id,
-                    source="neighbor",
-                    content=content,
-                    meta={
-                        "doc_id": doc_id,
-                        "page_start": int(row.get("page_start") or 0),
-                        "page_end": int(row.get("page_end") or 0),
-                        "domain": row.get("domain", ""),
-                        "evidence_grade": row.get("evidence_grade", ""),
-                    },
-                )
+    # ---------------------------------------------------------- 阶段三：插入
+    added: dict[str, dict] = {str(cand.get("chunk_id")): cand for _, cand in keep}
+    if not added:
+        return hits, 0
+
+    merged_hits: list[Hit] = []
+    attached: set[str] = set()
+    # 只有前 max_seeds 参与过扩展，后面几条第 4 阶段起原样接上，
+    # 否则下面 extend(hits[max_seeds:]) 会重复添加
+    for seed in hits[:max_seeds]:
+        merged_hits.append(seed)
+        cand = next((c for s_, c in keep if s_ is seed), None)
+        if cand is None:
+            continue
+        chunk_id = str(cand.get("chunk_id", ""))
+        if chunk_id in attached or chunk_id in known:
+            continue
+        attached.add(chunk_id)
+        merged_hits.append(
+            Hit(
+                chunk_id=chunk_id,
+                # 分数压低一点点：邻页是补全用的，不该盖过真正命中的那一页
+                score=seed.score * 0.97,
+                parent_id=chunk_id,
+                source="neighbor",
+                content=str(cand.get("content") or ""),
+                meta={
+                    "doc_id": str(seed.meta.get("doc_id", "")),
+                    "page_start": int(cand.get("page_start") or 0),
+                    "page_end": int(cand.get("page_end") or 0),
+                    "domain": cand.get("domain", ""),
+                    "evidence_grade": cand.get("evidence_grade", ""),
+                },
             )
+        )
 
-    merged.extend(hits[max_seeds:])
-    return merged, added_count
+    # 前 max_seeds 之外的命中没参与扩展，保持原样接在后面
+    merged_hits.extend(hits[max_seeds:])
+    return merged_hits, len(attached)
 
 
 async def _attach_doc_meta(hits: list[Hit], provider: DocMetaProvider) -> None:

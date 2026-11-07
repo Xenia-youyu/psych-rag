@@ -17,6 +17,7 @@ from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
 from typing import Any
 
+from app.config import settings
 from app.core.logging import get_logger
 from app.generate.intent import Intent
 from app.retrieve.fusion import Hit, build_context_block
@@ -170,13 +171,13 @@ async def generate(
     hits: list[Hit],
     intent: Intent,
     user_level: str = "备考学员",
-    max_chars: int = 6000,
+    max_chars: int | None = None,
 ) -> AnswerResult:
     """生成答案。hits 为空时不调模型，直接给诚实的"未覆盖"回答。"""
     if not hits:
         return AnswerResult(text=NO_CONTEXT_TEXT, no_context=True)
 
-    context = build_context_block(hits, max_chars=max_chars)
+    context = build_context_block(hits, max_chars=_context_budget(max_chars))
     citations = build_citations(hits)
     messages = _messages(question, context, intent, user_level, _evidence_flags(hits))
 
@@ -231,6 +232,16 @@ class AnswerEvent:
     data: dict[str, Any]
 
 
+def _context_budget(max_chars: int | None) -> int:
+    """上下文预算是配置项，不该在函数签名里写死。
+
+    原来这里默认 6000，而 retrieve 用的是 conf.context_max_chars（已调到 8000）：
+    检索层辛苦拼到 8000 字，进生成时又被 `block[:6000]` 砍掉一截。
+    表现是「明明补了邻页，模型还是说没有」——配置改了不生效，最难查的那种。
+    """
+    return settings.retrieval.context_max_chars if max_chars is None else max_chars
+
+
 async def generate_stream(
     llm,
     *,
@@ -238,7 +249,7 @@ async def generate_stream(
     hits: list[Hit],
     intent: Intent,
     user_level: str = "备考学员",
-    max_chars: int = 6000,
+    max_chars: int | None = None,
 ) -> AsyncIterator[AnswerEvent]:
     """流式生成答案。
 
@@ -264,7 +275,7 @@ async def generate_stream(
         )
         return
 
-    context = build_context_block(hits, max_chars=max_chars)
+    context = build_context_block(hits, max_chars=_context_budget(max_chars))
     citations = build_citations(hits)
     messages = _messages(question, context, intent, user_level, _evidence_flags(hits))
 
