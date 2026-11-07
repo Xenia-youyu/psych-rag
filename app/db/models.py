@@ -211,3 +211,59 @@ class QueryLog(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), nullable=False
     )
+
+
+class Favorite(Base, TimestampMixin):
+    """用户收藏：从问答里挑出来、值得留着再看的答案。
+
+    与「知识库」解耦——知识库是语料容器（教材），收藏是个人学习痕迹。
+    之前把两者混在一起，导致新用户必须先建库、传文档才能问问题，
+    而收藏夹在语义上根本不需要语料。
+
+    answer 存全文快照而不是 message_id 外键：会话被删掉后，
+    收藏的内容不该跟着消失——它已经是用户自己的东西了。
+    """
+
+    __tablename__ = "psy_favorites"
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True)
+    owner_id: Mapped[int] = mapped_column(
+        BIGINT_FK, ForeignKey("psy_users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    session_id: Mapped[str] = mapped_column(String(32), default="", nullable=False)
+    question: Mapped[str] = mapped_column(Text, nullable=False)
+    answer: Mapped[str] = mapped_column(Text, nullable=False)
+    # [{sid, doc_title, page, content}]，与消息里的 citations 同构
+    citations: Mapped[list[dict[str, Any]]] = mapped_column(JSON, default=list, nullable=False)
+    note: Mapped[str] = mapped_column(String(500), default="", nullable=False)
+    # 来源标签：便于按「出自哪本书/哪个学科」翻收藏
+    source: Mapped[str] = mapped_column(String(120), default="", nullable=False)
+
+    __table_args__ = (Index("idx_fav_owner_time", "owner_id", "created_at"),)
+
+
+class Effect(Base):
+    """心理学效应条目：每日知识的固定内容池。
+
+    不从教材里随机抽块——教材块是论述文，抽出来常常没头没尾
+    （"…这种偏差在实验中得到了验证。"），当"每日知识点"读不下去。
+    效应条目是结构化的：一句话定义 + 经典实验 + 生活场景，能独立成篇。
+    """
+
+    __tablename__ = "psy_effects"
+
+    id: Mapped[int] = mapped_column(BIGINT_PK, primary_key=True, autoincrement=True)
+    slug: Mapped[str] = mapped_column(String(64), unique=True, nullable=False, index=True)
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
+    name_en: Mapped[str] = mapped_column(String(120), default="", nullable=False)
+    category: Mapped[str] = mapped_column(String(24), default="社会认知", nullable=False)
+    founder: Mapped[str] = mapped_column(String(120), default="", nullable=False)
+    year: Mapped[str] = mapped_column(String(24), default="", nullable=False)
+    summary: Mapped[str] = mapped_column(String(200), nullable=False)
+    detail: Mapped[str] = mapped_column(Text, nullable=False)
+    experiment: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    example: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    # 关联效应的 slug 列表
+    related: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    source: Mapped[str] = mapped_column(String(200), default="", nullable=False)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)

@@ -286,6 +286,11 @@ class RetrievalConf(BaseModel):
     # int8 动态量化。实测 2.83 倍加速，正确文档仍排第一。
     # CPU 机器不开这个，重排基本没法用。
     rerank_quantize: bool = True
+    # 共享语料库：这些 kb 里的文档对所有登录用户可检索。
+    # 背景：教材是团队共用的，挂在某个上传者名下；如果只按 owner 校验，
+    # 新用户登录后检索范围为空，问什么都答"未覆盖"——这不是权限设计，
+    # 是把语料归属和数据权限搞混了。留空表示不做共享（回到按 owner 校验的旧行为）。
+    shared_kb_ids: list[str] = Field(default_factory=list)
 
 
 class GenerateConf(BaseModel):
@@ -491,6 +496,11 @@ def load_settings() -> Settings:
             rerank_max_candidates=_int("retrieval", "rerank_max_candidates", 20),
             rerank_max_length=_int("retrieval", "rerank_max_length", 256),
             rerank_quantize=_bool("retrieval", "rerank_quantize", True),
+            shared_kb_ids=[
+                item.strip()
+                for item in _str("retrieval", "shared_kb_ids", "").split(",")
+                if item.strip()
+            ],
         ),
         generate=GenerateConf(
             history_rounds=_int("generate", "history_rounds", 5),

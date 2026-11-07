@@ -20,6 +20,8 @@ from app.api.auth import router as auth_router
 from app.api.chat import router as chat_router
 from app.api.chunks import router as chunks_router
 from app.api.documents import router as documents_router
+from app.api.effects import router as effects_router
+from app.api.favorites import router as favorites_router
 from app.api.kb import router as kb_router
 from app.api.recommend import router as recommend_router
 from app.config import settings
@@ -119,6 +121,8 @@ app.include_router(documents_router)
 app.include_router(chunks_router)
 app.include_router(chat_router)
 app.include_router(recommend_router)
+app.include_router(favorites_router)
+app.include_router(effects_router)
 
 
 @app.get("/api/health", tags=["系统"], summary="健康检查")

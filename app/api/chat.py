@@ -63,6 +63,51 @@ logger = get_logger(__name__)
 TITLE_LIMIT = 30
 
 
+async def resolve_kb_ids(
+    requested: list[str], user_id: int, session: SessionDep
+) -> list[str]:
+    """决定这次问答检索哪些库。
+
+    请求里明确指定了就用它（仍要校验权限，越权一律 404）；
+    没指定则 = 共享语料库 + 用户自己的库。
+
+    这条兜底不是「方便」，是修一个真实故障：教材语料全部挂在当初做批量
+    入库的账号名下，其他用户登录后检索范围为空，问什么都答「未覆盖」。
+    那种情况下前端看不出任何异常——用户只会以为这系统答不出来。
+    """
+    if requested:
+        for kb_id in requested:
+            kb = await session.scalar(
+                select(KnowledgeBase).where(KnowledgeBase.id == kb_id)
+            )
+            if kb is None:
+                raise AppError(ErrorCode.KB_NOT_FOUND)
+            if kb.owner_id != user_id and kb_id not in settings.retrieval.shared_kb_ids:
+                raise AppError(ErrorCode.KB_NOT_FOUND)
+        return list(requested)
+
+    own = list(
+        await session.scalars(
+            select(KnowledgeBase.id).where(KnowledgeBase.owner_id == user_id)
+        )
+    )
+    merged = list(dict.fromkeys([*settings.retrieval.shared_kb_ids, *own]))
+    if not merged:
+        return []
+
+    # 配置里写错、或库被删掉时，Milvus 只会返回空结果，看起来像「检索坏了」。
+    # 这里先对一遍实际存在的库，把无效 id 剔掉并留日志。
+    alive = set(
+        await session.scalars(
+            select(KnowledgeBase.id).where(KnowledgeBase.id.in_(merged))
+        )
+    )
+    dead = [kb_id for kb_id in merged if kb_id not in alive]
+    if dead:
+        logger.warning("chat.kb_missing", extra={"extra_fields": {"missing": dead}})
+    return [kb_id for kb_id in merged if kb_id in alive]
+
+
 # ---------------------------------------------------------------- 运行时依赖
 class ChatRuntime:
     """问答链路用到的重对象。
@@ -175,6 +220,7 @@ async def _stream(
     session_id: str,
     is_new: bool,
     verdict: safety.SafetyVerdict,
+    kb_ids: list[str],
 ) -> AsyncIterator[str]:
     runtime = get_runtime()
     started = time.perf_counter()
@@ -210,7 +256,7 @@ async def _stream(
         else:
             outcome = await retrieve(
                 request.question,
-                kb_ids=request.kb_ids,
+                kb_ids=kb_ids,
                 embedder=runtime.embedder,
                 index=runtime.index,
                 reranker=runtime.reranker,
@@ -288,11 +334,9 @@ async def _stream(
 
 @router.post("/chat", summary="问答（SSE 流式）")
 async def chat(request: ChatRequest, user: CurrentUser, session: SessionDep) -> StreamingResponse:
-    # 1. 知识库归属。越权一律 404，不泄露"存在但没权限"
-    for kb_id in request.kb_ids:
-        kb = await session.scalar(select(KnowledgeBase).where(KnowledgeBase.id == kb_id))
-        if kb is None or kb.owner_id != user.id:
-            raise AppError(ErrorCode.KB_NOT_FOUND)
+    # 1. 检索范围：请求里没指定就用「共享语料库 + 自己的库」。
+    #    共享库对任何登录用户可检索——教材是公共资产，挂在谁名下不该影响谁能用。
+    kb_ids = await resolve_kb_ids(request.kb_ids, user.id, session)
 
     # 2. 安全熔断，在检索之前
     verdict = safety.check(request.question)
@@ -312,7 +356,7 @@ async def chat(request: ChatRequest, user: CurrentUser, session: SessionDep) -> 
                 id=session_id,
                 user_id=user.id,
                 title=request.question[:TITLE_LIMIT] or "新对话",
-                kb_ids=list(request.kb_ids),
+                kb_ids=list(kb_ids),
                 model=settings.llm.active().model,
                 params={"user_level": request.user_level},
             )
@@ -331,14 +375,14 @@ async def chat(request: ChatRequest, user: CurrentUser, session: SessionDep) -> 
             "extra_fields": {
                 "session_id": session_id,
                 "is_new": is_new,
-                "kb_count": len(request.kb_ids),
+                "kb_count": len(kb_ids),
                 "safety": verdict.triggered,
             }
         },
     )
 
     return StreamingResponse(
-        _stream(request, session_id=session_id, is_new=is_new, verdict=verdict),
+        _stream(request, session_id=session_id, is_new=is_new, verdict=verdict, kb_ids=kb_ids),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",

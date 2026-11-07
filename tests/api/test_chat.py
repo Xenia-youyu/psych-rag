@@ -357,7 +357,11 @@ class TestInterruption:
 
         request = ChatRequest(question="什么是负强化", kb_ids=[kb_id])
         agen = chat_api._stream(
-            request, session_id=session_id, is_new=False, verdict=SafetyVerdict(triggered=False)
+            request,
+            session_id=session_id,
+            is_new=False,
+            verdict=SafetyVerdict(triggered=False),
+            kb_ids=[kb_id],
         )
         await agen.__anext__()  # meta
         await agen.__anext__()  # sources

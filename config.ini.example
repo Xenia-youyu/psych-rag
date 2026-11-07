@@ -102,6 +102,9 @@ rerank_topk = 6
 rerank_score_threshold = 0.50
 context_max_chars = 6000
 hybrid = true
+; 共享语料库：这些 kb 对所有登录用户可检索（逗号分隔）。
+; 教材挂在谁名下不该影响谁能检索；留空则退回按 owner 校验。
+shared_kb_ids =
 
 [generate]
 history_rounds = 5

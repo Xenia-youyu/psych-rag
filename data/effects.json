@@ -1,0 +1,1456 @@
+[
+  {
+    "slug": "halo-effect",
+    "name": "光环效应",
+    "name_en": "Halo Effect",
+    "category": "社会认知",
+    "founder": "爱德华·桑代克",
+    "year": "1920",
+    "summary": "对一个人某一方面的好印象，会蔓延成对他整体的正面评价。",
+    "detail": "桑代克发现，军官在评价士兵时，如果认为对方外表整洁、体格好，就会顺带给出更高的忠诚度和领导力评分。也就是说，一个突出的优点像一圈光晕，把其他不相干的维度也照亮了。反过来也存在「恶魔效应」：一处坏印象会让其余评价统统打折。这让面试、评分、评优都天然不可靠——面试官很容易因为候选人表达流畅，就推断他逻辑强、抗压好、有责任心，而这些其实一项都没被验证。",
+    "experiment": "1977 年尼斯贝特与威尔逊做过一个著名演示：让大学生看同一段讲课录像，唯一区别是讲课人被描述成「热情」或「冷漠」。结果被描述为热情的那组，不仅觉得他更讨人喜欢，还给他打出了更高的外表、口音、举止评分——这些信息他们其实根本没被告知过。",
+    "example": "同一份简历，附照片好看的候选人获得的「专业能力」评分更高；同事因为一次汇报讲得漂亮，后面半年大家都默认他「考虑问题周全」。",
+    "related": [
+      "first-impression",
+      "stereotyping",
+      "barnum-effect"
+    ],
+    "source": "Thorndike, E. L. (1920). A constant error in psychological ratings."
+  },
+  {
+    "slug": "pygmalion-effect",
+    "name": "皮格马利翁效应",
+    "name_en": "Pygmalion Effect",
+    "category": "学习与教育",
+    "founder": "罗森塔尔与雅各布森",
+    "year": "1968",
+    "summary": "他人的高期待会通过日常互动悄悄提高当事人的实际表现。",
+    "detail": "教师如果真心相信某个学生「有潜力」，这种预期会落在无数细节里：多给他一点等待回答的时间、提问时语气更鼓励、答错时更容易归因为「没发挥好」而不是「能力不行」。学生接收到这些信号，投入度上升，成绩真的提高了——于是预期自我实现。名字来自希腊神话里雕刻家爱上自己作品、爱神让雕像活过来的故事。它提醒教育者：低期待同样是自我实现的，而且更常见。",
+    "experiment": "罗森塔尔和雅各布森在小学生中做了「预测未来发展的测验」，随机抽 20% 学生告诉老师「这几个孩子下学期会明显进步」。八个月后，这部分学生（尤其低年级）的智力测验成绩真的提升更多——而这份名单完全是随机生成的。",
+    "example": "老师对某个学生说「这道题你肯定能想出来，我等你」，学生多想了两分钟真的做出来了；反之「你基础就是这样，别勉强了」会让学生放弃尝试。",
+    "related": [
+      "self-fulfilling-prophecy",
+      "hawthorne-effect",
+      "stereotype-threat"
+    ],
+    "source": "Rosenthal, R., & Jacobson, L. (1968). Pygmalion in the Classroom."
+  },
+  {
+    "slug": "first-impression",
+    "name": "首因效应",
+    "name_en": "Primacy Effect",
+    "category": "社会认知",
+    "founder": "所罗门·阿希",
+    "year": "1946",
+    "summary": "最先接收到的信息对整体判断的影响，往往大于后到的信息。",
+    "detail": "阿希让被试读一组描述某人性格的形容词。同一组词，顺序不同结论就不同：先说「聪明、勤奋、冲动、挑剔、固执、嫉妒」的被试评价更正⾯，把「嫉妒、固执」放前面则评价偏负面。原因是先到的信息建立了解释框架，后面的信息会被往这个框架里塞——「聪明但固执」听起来是有主见，「嫉妒但聪明」听起来是危险。",
+    "experiment": "阿希 1946 年的经典实验里，两组被试看到完全相同的六个形容词，仅排列顺序相反，对同一个虚构人物的好感度评分差异显著。",
+    "example": "面试前三分钟决定了大半结果；第一次见新同事他迟到了，半年后你仍觉得他「不太靠谱」，即使他后面从没迟到过。",
+    "related": [
+      "halo-effect",
+      "recency-effect",
+      "anchoring"
+    ],
+    "source": "Asch, S. E. (1946). Forming impressions of personality."
+  },
+  {
+    "slug": "recency-effect",
+    "name": "近因效应",
+    "name_en": "Recency Effect",
+    "category": "记忆",
+    "founder": "默多克",
+    "year": "1962",
+    "summary": "最后出现的信息在记忆里保留得更好，也更容易左右当下的判断。",
+    "detail": "系列位置效应有两端：开头的记得清（首因），结尾的也记得清（近因），中间的最模糊。近因效应的机制是末尾的内容还留在短时记忆里没被挤出去。它能解释很多日常偏差：一场两小时的会议，你记住的往往是最后十分钟谁说了什么；绩效评估里，考核期最后一个月表现好的人，全年评价会被抬高。",
+    "experiment": "默多克 1962 年让被试听一长串单词随后自由回忆，发现回忆率呈 U 形曲线：前几个和后几个都记得好，中间最差。若在末尾插入 30 秒心算任务，末端优势消失——证明那是短时记忆在起作用。",
+    "example": "面试安排在第一位的候选人容易吃亏，除非面试官刻意记录；一学期认真、最后两周摆烂的学生，常被老师评价为「这学期不太行」。",
+    "related": [
+      "first-impression",
+      "serial-position",
+      "peak-end-rule"
+    ],
+    "source": "Murdock, B. B. (1962). The serial position effect of free recall."
+  },
+  {
+    "slug": "stereotyping",
+    "name": "刻板印象",
+    "name_en": "Stereotype",
+    "category": "社会认知",
+    "founder": "沃尔特·李普曼",
+    "year": "1922",
+    "summary": "把某个群体的少数特征套到每一个成员身上，忽略个体差异。",
+    "detail": "刻板印象是认知的省力装置：面对复杂世界，大脑用「这一类人大概什么样」快速给出判断，代价是准确率。它未必带敌意，但一定有代价——被归类的人要先证明自己是例外，才有机会被正常对待。更麻烦的是自动激活：即使你主观反对偏见，相关线索出现时，刻板印象仍会在几百毫秒内被激活，需要主动抑制。",
+    "experiment": "1995 年格林沃尔德等人的内隐联想测验（IAT）发现，多数人在「黑人—负面」「女性—家庭」这类配对上的反应速度快于反向配对，即便他们口头否认持有偏见。",
+    "example": "「理科是男生的强项」这类说法会让女生在数学考试前多一层自我怀疑；看到穿工装的人默认他是维修工而不是工程师。",
+    "related": [
+      "stereotype-threat",
+      "halo-effect",
+      "confirmation-bias"
+    ],
+    "source": "Lippmann, W. (1922). Public Opinion."
+  },
+  {
+    "slug": "stereotype-threat",
+    "name": "刻板印象威胁",
+    "name_en": "Stereotype Threat",
+    "category": "学习与教育",
+    "founder": "克劳德·斯蒂尔与约书亚·阿伦森",
+    "year": "1995",
+    "summary": "担心自己印证某个群体的负面刻板印象，反而拖低了当场表现。",
+    "detail": "它不需要对方真的歧视你——只需要你知道「我这个群体在这件事上被认为不行」。这个念头占用了工作记忆：一部分注意力从解题转移到监控自己「别搞砸、别让他们说对了」，可用的认知资源就少了。这也是为什么同一个学生在不同情境下成绩会波动：被提醒身份的那一刻，表现就掉一截。",
+    "experiment": "斯蒂尔与阿伦森让黑人和白人大学生做同一套 GRE 难度词汇题。一组被告知「这是测智力」，另一组被告知「这是研究解题过程」。前一组里黑人学生成绩明显低于白人；后一组里两者持平——差别只来自一句指导语。",
+    "example": "女生在数学竞赛前被反复提醒「女生理科弱」；农村学生在重点班被反复强调「基础差」，考试时越紧张越发挥失常。",
+    "related": [
+      "pygmalion-effect",
+      "stereotyping",
+      "test-anxiety"
+    ],
+    "source": "Steele, C. M., & Aronson, J. (1995). Stereotype threat and the intellectual test performance of African Americans."
+  },
+  {
+    "slug": "fundamental-attribution-error",
+    "name": "基本归因错误",
+    "name_en": "Fundamental Attribution Error",
+    "category": "社会认知",
+    "founder": "李·罗斯",
+    "year": "1977",
+    "summary": "解释别人的行为时高估性格、低估处境；解释自己时正好相反。",
+    "detail": "别人迟到，你想到的是「他不守时」；自己迟到，你想的是「路上堵车」。这种不对称源于视角差异：看别人时，人是画面里最显眼的东西，处境是背景；看自己时，你清楚知道当时有多少限制条件。后果是评价他人时过于苛刻，也容易把系统性问题误判为个人品质问题。",
+    "experiment": "罗斯等人做过一个辩论实验：让被试扮演正方或反方（角色是随机指派的），旁观者却普遍认为「正方立场的人本来就信这个」。即使明确告知立场是被指定的，旁观者依然如此判断。",
+    "example": "同事方案没通过，你觉得他能力不行；自己方案没通过，你归因为领导不懂、资源不够。",
+    "related": [
+      "actor-observer-bias",
+      "self-serving-bias",
+      "halo-effect"
+    ],
+    "source": "Ross, L. (1977). The intuitive psychologist and his shortcomings."
+  },
+  {
+    "slug": "actor-observer-bias",
+    "name": "行动者—观察者偏差",
+    "name_en": "Actor-Observer Bias",
+    "category": "社会认知",
+    "founder": "琼斯与尼斯贝特",
+    "year": "1971",
+    "summary": "同样一件事，当事人归因于情境，旁观者归因于性格。",
+    "detail": "它是基本归因错误的一个更具体的版本，重点在「同一个人对不同角色」的差异。开车的你被别人加塞，觉得对方没素质；你自己加塞时，觉得是前车太慢、路口设计不合理。要缓解它，最有效的方法不是「提醒自己要客观」，而是换个位置——真的去做一次对方的工作，视角带来的信息差补上了，判断自然会变。",
+    "experiment": "琼斯与尼斯贝特 1971 年让被试评价「为什么人们选某个专业」：被问到自己时，多数人强调专业本身的吸引力；被问到他人时，多数人强调对方的人格特质。",
+    "example": "学生觉得老师「故意出难题」，老师觉得学生「不肯下功夫」；管理者觉得下属「不主动」，下属觉得「没人授权」。",
+    "related": [
+      "fundamental-attribution-error",
+      "self-serving-bias",
+      "empathy-gap"
+    ],
+    "source": "Jones, E. E., & Nisbett, R. E. (1971). The actor and the observer."
+  },
+  {
+    "slug": "self-serving-bias",
+    "name": "自我服务偏差",
+    "name_en": "Self-Serving Bias",
+    "category": "社会认知",
+    "founder": "米勒与罗斯",
+    "year": "1975",
+    "summary": "成功归功于自己，失败归咎于外部，以维护自我价值感。",
+    "detail": "这种偏差在多数人身上都存在，而且有适应性价值——它保护自尊、维持继续尝试的动力。问题是它会妨碍学习：如果每次失败都被归因为「题目太偏」「运气不好」，就永远找不到自己真正需要改的地方。健康的做法不是取消这种偏差，而是给它设一个刹车：在重要决策前，强迫自己写一条「我这边可能的问题」。",
+    "experiment": "研究者分析运动员赛后采访发现：赢球时更常提「我训练刻苦」，输球时更常提「裁判/场地/伤病」。学生把考试成绩好归因于自己聪明，成绩差归因于题目难，也是同类现象。",
+    "example": "项目成功是「我策划得好」，项目失败是「配合部门不给力」；考试考好是实力，考砸是状态。",
+    "related": [
+      "fundamental-attribution-error",
+      "cognitive-dissonance",
+      "dunning-kruger"
+    ],
+    "source": "Miller, D. T., & Ross, M. (1975). Self-serving biases in the attribution of causality."
+  },
+  {
+    "slug": "false-consensus",
+    "name": "虚假共识效应",
+    "name_en": "False Consensus Effect",
+    "category": "社会认知",
+    "founder": "李·罗斯",
+    "year": "1977",
+    "summary": "高估别人和自己想法一致的程度，把「我的选择」当成「大家的常态」。",
+    "detail": "人天然围绕自己熟悉的圈子取样，而这个圈子往往和自已相似，于是「我周围人都这样」被当成「大部分人都这样」。它会让沟通失效：产品经理觉得功能显而易见，用户却完全找不到入口；老师觉得这个知识点「显然」，学生卡在原地。想校正它，唯一的办法是去问真正不同的人，而不是在脑内模拟。",
+    "experiment": "罗斯让大学生选择「是否愿意挂着 sandwich board 在校园里走 30 分钟」，然后估计有多少同学会同意。答应的人估计「多数人会答应」，拒绝的人估计「多数人会拒绝」——两边都高估了自己这一派的比例。",
+    "example": "「这个功能不是很明显吗」；「谁不知道怎么设置吧」；发朋友圈后觉得「大家都在关注这件事」。",
+    "related": [
+      "projection-bias",
+      "in-group-bias",
+      "dunning-kruger"
+    ],
+    "source": "Ross, L., Greene, D., & House, P. (1977). The false consensus effect."
+  },
+  {
+    "slug": "spotlight-effect",
+    "name": "聚光灯效应",
+    "name_en": "Spotlight Effect",
+    "category": "社会认知",
+    "founder": "吉洛维奇、梅德维克与萨维茨基",
+    "year": "2000",
+    "summary": "高估别人对自己的关注度，以为自己的窘迫全场都在看。",
+    "detail": "每个人都活在自己的视角中心，因此会系统性地高估「别人在注意我」的程度。这解释了社交焦虑的核心机制：不是别人真的在打量你，而是你假设他们在。知道这一点有实际用处——出丑时的尴尬感，通常只有当事人记得，旁人几小时内就忘了。",
+    "experiment": "研究者让大学生穿一件尴尬的名人 T 恤进入教室，事后问他们估计有多少人注意到了。被试平均估计约 46%，实际被注意到的比例只有约 23%——高估了将近一倍。",
+    "example": "演讲时说错一句话，整天觉得全公司都在议论；换了新发型进门那一刻觉得所有人都在看。",
+    "related": [
+      "illusion-of-transparency",
+      "social-anxiety",
+      "barnum-effect"
+    ],
+    "source": "Gilovich, T., Medvec, V. H., & Savitsky, K. (2000). The spotlight effect in social judgment."
+  },
+  {
+    "slug": "illusion-of-transparency",
+    "name": "透明度错觉",
+    "name_en": "Illusion of Transparency",
+    "category": "社会认知",
+    "founder": "吉洛维奇、萨维茨基与梅德维克",
+    "year": "1998",
+    "summary": "高估自己内心状态被别人看穿的程度。",
+    "detail": "紧张时你觉得「我声音都在抖，全场都看出来了」，实际上听众只看到你端坐着讲话，还可能觉得你台风稳。这对演讲、面试、谈判影响很大：因为以为情绪外露，人会花力气去压制，压制本身又消耗注意力，最后真的影响了表现。事实是，你的内部信号强度只有你自己能感知到。",
+    "experiment": "研究者让被试当众敲一首只有自己知道旋律的曲子（如《生日快乐》），并估计有多少听众能听出来。被试平均估计约 50%，实际只有约 2.5% 的人认出来。",
+    "example": "面试时手心全是汗，觉得面试官一定看出来了；和朋友吵架后觉得「我脸色肯定很难看」，对方却完全没察觉。",
+    "related": [
+      "spotlight-effect",
+      "social-anxiety"
+    ],
+    "source": "Gilovich, T., Savitsky, K., & Medvec, V. H. (1998). The illusion of transparency."
+  },
+  {
+    "slug": "cognitive-dissonance",
+    "name": "认知失调",
+    "name_en": "Cognitive Dissonance",
+    "category": "社会认知",
+    "founder": "利昂·费斯廷格",
+    "year": "1957",
+    "summary": "行为与信念冲突时产生的不适，会推动人改信念而不是改行为。",
+    "detail": "人需要维持「我是理性的、我的选择是对的」这种自洽感。当行为和信念打架，最省力的解法往往不是承认错误（那很痛），而是调整信念去配合已经发生的行为。这也是「越投入越难退出」的心理根源：付出的努力越多，越需要相信这件事值得，否则就得面对「我白费了」的痛苦。",
+    "experiment": "费斯廷格与卡尔史密斯的「枯燥任务」实验：让被试做一小时极其无聊的转钉子任务，之后请他们向下一个人撒谎说「很有趣」。拿到 1 美元报酬的人，事后真的更倾向于认为任务有趣；拿 20 美元的人反而没变——钱多的人有充分的外部理由，不需要改变态度。",
+    "example": "花大价钱买了课程，学了几节发现没用，反而更努力地夸它好；明知不合适却谈了多年的恋爱，越难解释自己为什么还在。",
+    "related": [
+      "sunk-cost",
+      "effort-justification",
+      "overjustification"
+    ],
+    "source": "Festinger, L. (1957). A Theory of Cognitive Dissonance."
+  },
+  {
+    "slug": "barnum-effect",
+    "name": "巴纳姆效应",
+    "name_en": "Barnum Effect",
+    "category": "社会认知",
+    "founder": "伯特伦·福勒",
+    "year": "1948",
+    "summary": "笼统而普遍适用的描述，会被当成精准地描写了自己。",
+    "detail": "「你有时外向亲切，有时内向谨慎」——几乎对所有人都成立，但读到的人常觉得「说到我心里了」。原因是这类描述覆盖面广、正负兼顾，人会自动挑出符合自己的部分并忽略不符的部分，这叫主观验证。星座、性格测试、伪心理学诊断都靠这个机制生效。判断一段描述是否真有信息量，看它能不能被证伪：如果它无法想象出「不符合的人」，那它什么也没说。",
+    "experiment": "福勒给全班学生做「人格测验」，实际上每个人都拿到完全相同的一段话。学生平均打分 4.26/5，认为「相当准确地描述了自己」。这段话是从报摊星座专栏里拼凑的。",
+    "example": "星座运势说「本周会有意外的人际摩擦」；某些「天赋测评」给出的报告，换个人看也觉得对。",
+    "related": [
+      "halo-effect",
+      "confirmation-bias",
+      "self-fulfilling-prophecy"
+    ],
+    "source": "Forer, B. R. (1949). The fallacy of personal validation."
+  },
+  {
+    "slug": "confirmation-bias",
+    "name": "确认偏误",
+    "name_en": "Confirmation Bias",
+    "category": "决策与判断",
+    "founder": "彼得·沃森",
+    "year": "1960",
+    "summary": "主动寻找、相信支持自己已有观点的信息，忽略相反证据。",
+    "detail": "人不是先收集证据再下结论，而是先有结论再去找证据。信息越丰富，这个偏差越严重——因为任何立场都能找到支持材料。它的危害在专业判断里尤其明显：医生一旦形成初步诊断，会不自觉地把后续症状往这个诊断上解释。对抗它的方法不是「保持客观」（做不到），而是主动构造反例：写下「如果我是错的，应该看到什么」。",
+    "experiment": "沃森的「2-4-6 任务」：告诉被试「2, 4, 6 符合某个规则」，让他们提出新数列来验证。多数人只提符合自己假设的数列（如 8, 10, 12），几乎没人主动提反例（如 4, 2, 6）。结果大多数人始终没发现真正的规则只是「任意递增数列」。",
+    "example": "认定某个同事不好相处后，他每次沉默都被读成「冷淡」，每次热情都被读成「装」；搜索结果只点开符合自己观点的文章。",
+    "related": [
+      "belief-perseverance",
+      "anchoring",
+      "survivorship-bias"
+    ],
+    "source": "Wason, P. C. (1960). On the failure to eliminate hypotheses in a conceptual task."
+  },
+  {
+    "slug": "hindsight-bias",
+    "name": "后见之明偏差",
+    "name_en": "Hindsight Bias",
+    "category": "决策与判断",
+    "founder": "巴鲁克·菲什霍夫",
+    "year": "1975",
+    "summary": "事情发生后，觉得「我早就知道会这样」，低估当时的不确定性。",
+    "detail": "一旦知道了结果，大脑会自动重写记忆，把当时模糊的判断改成确定的预测。这种「马后炮」不只是记性差，它让人无法从决策质量上学习：赌对了的烂决策被当成英明，赌输的好决策被当成愚蠢。评价一次决策，应该看当时可获得的信息和推演过程，而不是结果。",
+    "experiment": "菲什霍夫让被试阅读一段历史事件（如尼克松访华）的模糊描述，然后评估几种可能结局的概率。一组提前被告知真实结果，另一组不知道。知道结果的那组，给出的「该结果发生概率」显著更高，并且坚称「这个结果本来就很明显」。",
+    "example": "股票涨了以后说「这个趋势很明显」；比赛输了以后说「我早看出教练排兵有问题」。",
+    "related": [
+      "confirmation-bias",
+      "outcome-bias",
+      "overconfidence"
+    ],
+    "source": "Fischhoff, B. (1975). Hindsight ≠ foresight."
+  },
+  {
+    "slug": "anchoring",
+    "name": "锚定效应",
+    "name_en": "Anchoring Effect",
+    "category": "决策与判断",
+    "founder": "特沃斯基与卡尼曼",
+    "year": "1974",
+    "summary": "最先接触到的数字会成为参照点，后续判断被它拽住。",
+    "detail": "即使那个数字完全随机、与问题无关，它依然会影响你的估计。商家把原价标得很高再打折，就是先给你一个锚；谈判里先开价的人往往占优，不是因为价格合理，而是因为对方从这里开始调整。锚定的顽固之处在于：就算你被告知「这个数字是随机生成的」，影响依然存在。",
+    "experiment": "特沃斯基与卡尼曼让被试先转一个随机数字轮盘（停在 10 或 65），然后估计「非洲国家占联合国成员国的比例」。看到 10 的人平均估 25%，看到 65 的人平均估 45%——一个明明无关的随机数改变了几十个百分点的估计。",
+    "example": "看到「原价 999，现价 399」觉得赚了；面试谈薪时先报出数字的一方往往把区间拉向自己。",
+    "related": [
+      "framing-effect",
+      "first-impression",
+      "decoy-effect"
+    ],
+    "source": "Tversky, A., & Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases."
+  },
+  {
+    "slug": "availability-heuristic",
+    "name": "可得性启发",
+    "name_en": "Availability Heuristic",
+    "category": "决策与判断",
+    "founder": "特沃斯基与卡尼曼",
+    "year": "1973",
+    "summary": "越容易想起的事，被判断为发生概率越高。",
+    "detail": "大脑用「回忆的难易程度」代替「实际频率」做判断。新闻反复报道空难，人们就觉得飞机危险；实际上汽车事故死亡人数高出几个数量级。社交媒体放大了这个偏差：你看到的不是世界，而是被算法挑出来、更容易传播的极端个案。",
+    "experiment": "研究者问被试「英语里以 k 开头的单词多，还是第三个字母是 k 的单词多」。多数人答「以 k 开头多」，因为按开头字母检索更容易。实际后者大约是前者的两倍。",
+    "example": "看完医疗纠纷新闻就不敢做小手术；身边一个朋友创业成功，就觉得自己成功的概率也不低。",
+    "related": [
+      "representativeness",
+      "negativity-bias",
+      "base-rate-neglect"
+    ],
+    "source": "Tversky, A., & Kahneman, D. (1973). Availability: A heuristic for judging frequency and probability."
+  },
+  {
+    "slug": "representativeness",
+    "name": "代表性启发",
+    "name_en": "Representativeness Heuristic",
+    "category": "决策与判断",
+    "founder": "特沃斯基与卡尼曼",
+    "year": "1974",
+    "summary": "用「像不像某一类」代替「概率有多大」，忽略基础比例。",
+    "detail": "如果一个人描述得「很像」程序员（内向、爱看书、戴眼镜），你会觉得他是程序员的概率高——但忘了考虑程序员在总人口中占比很小。这种偏差最典型的后果是「合取谬误」：细节越多听起来越可信，实际概率越低，因为每个细节都是一个必须同时成立的条件。",
+    "experiment": "「琳达问题」：描述琳达关注社会议题、参加游行，然后问哪个更可能——「琳达是银行出纳」还是「琳达是银行出纳并且积极参与女权运动」。85% 以上的被试选了后者，尽管它在逻辑上必然是前者的子集，概率不可能更高。",
+    "example": "看到一个「很典型的成功创业者画像」，就高估自己模仿成功的概率；被详细的商业计划书打动，忘了先算市场总盘子。",
+    "related": [
+      "base-rate-neglect",
+      "conjunction-fallacy",
+      "availability-heuristic"
+    ],
+    "source": "Tversky, A., & Kahneman, D. (1983). Extensional versus intuitive reasoning."
+  },
+  {
+    "slug": "framing-effect",
+    "name": "框架效应",
+    "name_en": "Framing Effect",
+    "category": "决策与判断",
+    "founder": "特沃斯基与卡尼曼",
+    "year": "1981",
+    "summary": "同一件事换个说法，人的选择就会改变。",
+    "detail": "「手术成功率 90%」和「手术死亡率 10%」在数学上完全等价，但前者更容易被接受。人对损失的敏感度高于收益，所以描述成「保住多少」还是「失去多少」，会直接改变决策。这也是公共沟通的关键技巧：同样的政策、同样的风险，说法不同，公众反应可以完全相反。",
+    "experiment": "亚洲疾病问题：600 人面临死亡威胁，方案 A「确定救活 200 人」，方案 B「1/3 概率全救活、2/3 概率全死」。多数人选 A（规避风险）。换成等价表述：方案 C「确定死 400 人」，方案 D「1/3 概率无人死亡、2/3 概率全死」，多数人改选 D。同一组结果，只因框架不同，偏好反转。",
+    "example": "「瘦肉率 75%」比「肥肉率 25%」更让人想买；「每天少刷两小时手机」和「每天多出两小时」动力完全不同。",
+    "related": [
+      "loss-aversion",
+      "anchoring",
+      "prospect-theory"
+    ],
+    "source": "Tversky, A., & Kahneman, D. (1981). The framing of decisions and the psychology of choice."
+  },
+  {
+    "slug": "loss-aversion",
+    "name": "损失厌恶",
+    "name_en": "Loss Aversion",
+    "category": "决策与判断",
+    "founder": "卡尼曼与特沃斯基",
+    "year": "1979",
+    "summary": "失去 100 元的痛苦，强度大约等于得到 200 元的快乐。",
+    "detail": "前景理论的核心发现之一：人对损失的敏感度约为同等收益的两倍。这解释了为什么人愿意为避免损失承担更大风险（在收益区反而保守）、为什么「免费试用 30 天」比「打八折」有效、为什么放弃一个已经拥有的东西感觉比从未拥有更难受。它的另一面是保守：宁可守住现状，也不愿承担看起来对称的风险。",
+    "experiment": "抛硬币赌局实验：正面赢 X 元，反面输 100 元。多数被试要求 X 至少达到约 200 元才愿意参与——即使期望值为正也拒绝，因为输 100 的痛需要赢 200 的快乐来对冲。",
+    "example": "股票套牢舍不得割肉，因为「卖了就是真的亏了」；限时免费试用结束后，多数人会续费而不是失去已有功能。",
+    "related": [
+      "framing-effect",
+      "sunk-cost",
+      "endowment-effect"
+    ],
+    "source": "Kahneman, D., & Tversky, A. (1979). Prospect theory: An analysis of decision under risk."
+  },
+  {
+    "slug": "sunk-cost",
+    "name": "沉没成本谬误",
+    "name_en": "Sunk Cost Fallacy",
+    "category": "决策与判断",
+    "founder": "阿克斯与布卢默",
+    "year": "1985",
+    "summary": "因为已经投入了，就继续投入明知不划算的事。",
+    "detail": "理性决策只看「从现在起，继续投入的收益是否大于成本」，已经花掉的钱和时间与这个判断无关。但人会把沉没成本当成「必须收回的投资」，继续加码，最后亏得更多。背后的心理是认知失调：承认「我之前投错了」比继续投钱更痛。这也解释了为什么烂项目总能拖很久——越拖，退出越难。",
+    "experiment": "阿克斯与布卢默让被试设想：已花 100 美元买了滑雪旅行票，后来又发现更喜欢的 50 美元票，且时间冲突。多数人选择去较贵但不喜欢的那次——即使将来收益更低，只因不想「浪费」那 100 美元。",
+    "example": "看了一半觉得难看的电影仍然看完；读了三年的专业不喜欢也不转；项目明显做不成，因为「已经投了两百万」继续追加。",
+    "related": [
+      "loss-aversion",
+      "cognitive-dissonance",
+      "escalation-of-commitment"
+    ],
+    "source": "Arkes, H. R., & Blumer, C. (1985). The psychology of sunk cost."
+  },
+  {
+    "slug": "endowment-effect",
+    "name": "禀赋效应",
+    "name_en": "Endowment Effect",
+    "category": "决策与判断",
+    "founder": "理查德·塞勒",
+    "year": "1980",
+    "summary": "同一件东西，自己拥有时觉得更值钱，卖掉时要求更高的价。",
+    "detail": "一旦某样东西成为「我的」，它对你就升值了。这个心理让买卖双方天然对立：卖家锚定在自己的估值上，买家按市场价衡量，两边都觉得自己公道。二手交易、房屋买卖、项目交接中的一个常见现象——原负责人觉得这摊事很重要、很复杂，接手的人觉得不过如此。",
+    "experiment": "塞勒让一半学生拿到马克杯，问他们愿意以多少价格卖出，另一半学生问愿意出多少买。拿到杯子的人平均要价约 5.75 美元，想买的人平均只愿出约 2.25 美元——同一只杯子，价差一倍多。",
+    "example": "自己的旧手机挂了很久卖不出去，因为总觉得「这配置不值这个价」；自写的一段代码，别人要重构时本能地抗拒。",
+    "related": [
+      "loss-aversion",
+      "ikea-effect",
+      "status-quo-bias"
+    ],
+    "source": "Thaler, R. (1980). Toward a positive theory of consumer choice."
+  },
+  {
+    "slug": "ikea-effect",
+    "name": "宜家效应",
+    "name_en": "IKEA Effect",
+    "category": "决策与判断",
+    "founder": "诺顿、莫孔与阿里利",
+    "year": "2012",
+    "summary": "自己参与做出来的东西，会被高估价值，哪怕做得并不好。",
+    "detail": "投入劳动会提升对成果的喜爱程度，这是个双向的机制：一方面努力让成果和个人身份绑定，另一方面也需要为自己的努力找一个「值得」的解释。它解释了为什么会做饭的人觉得自家菜好吃、为什么自建的知识库在自己眼里特别好用。副作用是：过度高估自己作品，会听不进别人的改进意见。",
+    "experiment": "诺顿等人让被试折纸（青蛙、飞机），完成后问他们愿意以多少钱买回自己的作品。制作者平均估价约 0.78 美元，而非制作者（旁观的另一组）只愿出约 0.27 美元——制作者高估了近三倍。",
+    "example": "自己搭的看板觉得比市面工具好用；家里自己装的柜子，别人说不好看会立刻反驳。",
+    "related": [
+      "endowment-effect",
+      "sunk-cost",
+      "effort-justification"
+    ],
+    "source": "Norton, M. I., Mochon, D., & Ariely, D. (2012). The IKEA effect."
+  },
+  {
+    "slug": "mental-accounting",
+    "name": "心理账户",
+    "name_en": "Mental Accounting",
+    "category": "决策与判断",
+    "founder": "理查德·塞勒",
+    "year": "1985",
+    "summary": "钱在心里被分进不同的账户，同样的金额在不同账户里用途不同。",
+    "detail": "同样是 500 元，工资里的 500 和捡来的 500 花起来完全不同——前者要省，后者可以随意。理性上钱是可替代的，但人会按来源和用途给它贴标签：生活费、奖励金、意外之财、学习基金。商家利用这一点做「满减」「返现」，让你觉得花的是「优惠账户」里的钱。",
+    "experiment": "塞勒描述过一类常见情形：一对夫妇度假时买票看演出，临场发现票丢了，多数人不会重买；但如果票还没买，到现场发现钱包里的钱丢了 100 元，他们仍然会买票。同样是损失 100 元，落在「娱乐账户」和「现金账户」里，决策完全不同。",
+    "example": "年终奖花得比工资爽快；「满 300 减 50」让人多买本不需要的东西；旅行时愿意花 50 元买一杯景区饮料。",
+    "related": [
+      "loss-aversion",
+      "framing-effect",
+      "sunk-cost"
+    ],
+    "source": "Thaler, R. (1985). Mental accounting and consumer choice."
+  },
+  {
+    "slug": "peak-end-rule",
+    "name": "峰终定律",
+    "name_en": "Peak-End Rule",
+    "category": "记忆",
+    "founder": "卡尼曼、弗雷德里克森等",
+    "year": "1993",
+    "summary": "对一段经历的整体评价，主要由最强烈的瞬间和结尾决定。",
+    "detail": "人回忆一段体验时，不是把每一刻的感受平均，而是取「峰值」和「结尾」两个点。这解释了很多反直觉的结果：做肠镜时疼痛持续时间更长的人，如果结尾痛感较轻，事后回忆的痛苦程度反而更低（「持续时间忽视」）。对设计的启示很直接——过程中段平庸没关系，开头和结尾的体验要设计好。",
+    "experiment": "卡尼曼等人的冷水实验：一组把一只手泡在 14℃ 冷水 60 秒后取出；另一组先泡 60 秒，再在水温微升到 15℃ 的水里多泡 30 秒（总时长更长，但结尾没那么难受）。事后问被试愿意重复哪一次，多数人选择更长但结尾更温和的那一次——尽管它承受的痛苦总量更大。",
+    "example": "一次旅行前两天很糟，最后一天很好，回忆起来总觉得「还挺值」；服务体验里，结账时的一句贴心话能盖住前面的等待。",
+    "related": [
+      "recency-effect",
+      "duration-neglect",
+      "experiential-forecast"
+    ],
+    "source": "Kahneman, D., Fredrickson, B. L., Schreiber, C. A., & Redelmeier, D. A. (1993). When more pain is preferred to less."
+  },
+  {
+    "slug": "planning-fallacy",
+    "name": "规划谬误",
+    "name_en": "Planning Fallacy",
+    "category": "决策与判断",
+    "founder": "卡尼曼与特沃斯基",
+    "year": "1979",
+    "summary": "系统性低估任务所需的时间、成本，高估收益。",
+    "detail": "制定计划时，参考的是「这次顺利情况下会怎样」，而不是「同类项目历史上平均怎样」，这个视角叫内部视角。它让工期几乎总是乐观的：装修会超期、论文会拖到最后一天、软件项目几乎总延期。对抗方法是强制切换参考类别（外部视角）：同类任务过去实际花了多久？如果数据是「平均 3 周」，就不要按「这次应该 1 周」来承诺。",
+    "experiment": "卡尼曼等人让学生估计完成学位论文的时间，并把结果分为「50% 把握」「90% 把握」两档。学生平均估计需要 33.9 天，仅约 30% 的人能在自己估计的时间内完成，多数人实际用时接近估计值的两倍。",
+    "example": "「这个需求三天能做完」变成三周；装修预算写 20 万，最后花了 32 万；复习计划排得很满，第一周就崩了。",
+    "related": [
+      "overconfidence",
+      "optimism-bias",
+      "hindsight-bias"
+    ],
+    "source": "Kahneman, D., & Tversky, A. (1979). Intuitive prediction: Biases and corrective procedures."
+  },
+  {
+    "slug": "dunning-kruger",
+    "name": "邓宁—克鲁格效应",
+    "name_en": "Dunning-Kruger Effect",
+    "category": "社会认知",
+    "founder": "邓宁与克鲁格",
+    "year": "1999",
+    "summary": "能力不足的人往往高估自己，因为判断水平本身就依赖能力。",
+    "detail": "要判断自己做得好不好，需要具备与「做好」相同的那套知识。初学者看不出自己错在哪，于是自信偏高；真正的高手反而知道自己不知道的有多少，容易低估自己的相对水平。需要澄清一点：这不是「笨的人自大」，而是新手在刚学一点皮毛时（峰值在所谓「愚昧之巅」）最容易过度自信，随着经验增加，自信反而先下降再回升。",
+    "experiment": "邓宁与克鲁格让被试做逻辑推理和语法测试，然后估计自己的百分位排名。得分最低的那四分之一，平均认为自己排在前 62% 左右——他们不仅做错，而且无法识别自己错在哪里。",
+    "example": "看了几个视频就觉得会做手术评估；刚入门的产品经理觉得「这个功能谁都能做」；开车一年后觉得技术已经很好，恰是最危险的阶段。",
+    "related": [
+      "overconfidence",
+      "false-consensus",
+      "self-serving-bias"
+    ],
+    "source": "Kruger, J., & Dunning, D. (1999). Unskilled and unaware of it."
+  },
+  {
+    "slug": "overconfidence",
+    "name": "过度自信",
+    "name_en": "Overconfidence",
+    "category": "决策与判断",
+    "founder": "阿尔珀特与雷法",
+    "year": "1982",
+    "summary": "对自己判断准确度的信心，系统性地超过实际准确度。",
+    "detail": "过度自信有三种表现：高估自己的表现、高估自己相对他人的优势（优于平均效应）、对不确定区间估得过窄。最危险的是第三种——把「我觉得大概两周到三周」说得像确定事实，结果实际是六周。校准训练是对抗方法：记录每次预测和实际结果的差距，见过自己错得多离谱，区间自然会放宽。",
+    "experiment": "阿尔珀特与雷法让被试为一串数值问题（如密西西比河长度）给出 90% 置信区间。如果区间估计准确，应该只有 10% 的题目落在区间外；实际有 30%–40% 的答案超出——区间普遍设得太窄。",
+    "example": "「这个数据绝对没问题」（结果漏了口径）；「我肯定五点到」（每次都要迟到十分钟）；创业者普遍高估成功概率。",
+    "related": [
+      "planning-fallacy",
+      "dunning-kruger",
+      "hindsight-bias"
+    ],
+    "source": "Alpert, M., & Raiffa, H. (1982). A progress report on the training of probability assessors."
+  },
+  {
+    "slug": "bystander-effect",
+    "name": "旁观者效应",
+    "name_en": "Bystander Effect",
+    "category": "人际与群体",
+    "founder": "达利与拉塔内",
+    "year": "1968",
+    "summary": "在场的人越多，任何一个人出手相助的可能性越低。",
+    "detail": "人越多，责任越被稀释（责任分散），而且每个人都在观察别人反应（多元无知）——大家都看见彼此没动，于是各自判断「大概没那么严重」。这解释了拥挤场合里为什么反而没人扶。破解方法很具体：指定某一个人，「穿蓝衣服的先生，请你帮我打 120」，责任被明确落到一个人头上，行动率立刻上升。",
+    "experiment": "达利与拉塔内让一名被试与若干「其他人」（实为实验助手，或被试以为在场的其他人的声音）在大厅里，随后安排有人突发癫痫。相信只有自己一人听到时，85% 的被试冲出去求助；相信有四人在场时，只有约 31% 采取行动。",
+    "example": "地铁里有人晕倒，周围人先看看左右；群里发出求助后没人回应，私聊某个人立刻就动了。",
+    "related": [
+      "diffusion-of-responsibility",
+      "social-loafing",
+      "pluralistic-ignorance"
+    ],
+    "source": "Darley, J. M., & Latané, B. (1968). Bystander intervention in emergencies."
+  },
+  {
+    "slug": "conformity-asch",
+    "name": "从众效应",
+    "name_en": "Conformity",
+    "category": "人际与群体",
+    "founder": "所罗门·阿希",
+    "year": "1951",
+    "summary": "在群体一致意见面前，人会否认自己的正确判断。",
+    "detail": "阿希的实验里，任务简单到不会出错——比较线段长短。但当几个同谋者异口同声说出明显错误的答案时，约三分之一的被试会跟着答错，75% 的人至少答错过一次。关键点在于：这不是「没看见」，而是看见了却选择跟随。从众有两种动机：想被群体接受（规范影响），以及相信「大家都这么说，也许是我错了」（信息影响）。",
+    "experiment": "阿希线段判断实验：每组 7-9 人，只有 1 人是真被试，其余是同谋。18 次判断中，同谋在前几次正确、后 12 次统一给出错误答案。结果约 37% 的回答随大流出错，而在没有同谋的对照组中错误率不到 1%。",
+    "example": "开会时所有人点头，你也不说自己的疑问；直播间弹幕一边倒就跟着刷；评论区一致批评，你就删掉了原本的反对意见。",
+    "related": [
+      "groupthink",
+      "obedience-milgram",
+      "social-proof"
+    ],
+    "source": "Asch, S. E. (1951). Effects of group pressure upon the modification and distortion of judgments."
+  },
+  {
+    "slug": "obedience-milgram",
+    "name": "米尔格拉姆服从实验",
+    "name_en": "Obedience to Authority",
+    "category": "人际与群体",
+    "founder": "斯坦利·米尔格拉姆",
+    "year": "1963",
+    "summary": "在权威指令下，普通人会对他人施加自己都认为过分的伤害。",
+    "detail": "实验原本想证明「德国人才会那样」，结果在美国做的第一轮就发现：65% 的普通人一路加到最高电压（标着「危险：450V」）。关键不是残忍，而是渐进：每次只加 15V，每一步都比上一步多一点点，人很难说「我为什么偏偏在这一步停下」。加上权威不断强调「责任由我承担」，责任感就被转移出去了。",
+    "experiment": "被试扮演「老师」，对隔壁房间的「学生」施加电击，答错就升一档。学生实际上是演员，会喊痛、求停、最后沉默。65% 的被试施加到最后 450V，尽管多数人全程紧张、出汗、发抖。",
+    "example": "「上级要求这样」让人执行自己也觉得不对的流程；团队里没人质疑明显不合理的方案，因为「老板定了」。",
+    "related": [
+      "conformity-asch",
+      "groupthink",
+      "diffusion-of-responsibility"
+    ],
+    "source": "Milgram, S. (1963). Behavioral study of obedience."
+  },
+  {
+    "slug": "self-fulfilling-prophecy",
+    "name": "自我实现预言",
+    "name_en": "Self-Fulfilling Prophecy",
+    "category": "社会认知",
+    "founder": "罗伯特·默顿",
+    "year": "1948",
+    "summary": "一个原本不成立的预期，因为人们照着它行动，最后真的成立了。",
+    "detail": "默顿用「银行挤兑」解释这个概念：一家本来经营正常的银行，因为谣言说它会倒闭，所有储户都来取钱，于是它真的倒闭了。预期不是对现实的描述，而是参与塑造现实的力量。人际互动里同样常见：你认定对方不友善，于是语气变冷，对方也冷回来，最后你确认「果然如此」。",
+    "experiment": "除了罗森塔尔的皮格马利翁实验，经济学里也有经典案例：2008 年金融危机中，多家基本面尚可的机构因市场对其偿付能力的预期恶化而迅速陷入流动性危机。",
+    "example": "「这个项目肯定做不成」于是没人愿意投入，最后真的做不成；觉得室友不喜欢自己，见面就不打招呼，关系越来越疏远。",
+    "related": [
+      "pygmalion-effect",
+      "confirmation-bias",
+      "stereotype-threat"
+    ],
+    "source": "Merton, R. K. (1948). The self-fulfilling prophecy."
+  },
+  {
+    "slug": "social-loafing",
+    "name": "社会惰化",
+    "name_en": "Social Loafing",
+    "category": "人际与群体",
+    "founder": "林格尔曼",
+    "year": "1913",
+    "summary": "在群体里做事，个体付出的努力会少于单独做事时。",
+    "detail": "林格尔曼最早发现「1+1<2」：一个人拉绳的平均用力，明显大于两个人一起拉时每人的用力。原因是贡献难以被单独识别——当「谁出了多少力」变得模糊，人就会自然降低投入，因为偷懒不会被发现。破解方法很直接：让每个人的贡献可被单独观察（明确分工、公开进度、独立记分），惰化就会大幅减少。",
+    "experiment": "林格尔曼让被试单独或分组拉绳测力，发现 3 人组的平均个人出力只有单人时的约 85%，8 人组降到约 49%。",
+    "example": "小组作业总有一个人不太干活；群里 20 个人，真正回应的只有 3 个；大团队里的会议，多数人只是旁听。",
+    "related": [
+      "bystander-effect",
+      "diffusion-of-responsibility",
+      "free-rider"
+    ],
+    "source": "Ringelmann, M. (1913). Recherches sur les moteurs animés."
+  },
+  {
+    "slug": "groupthink",
+    "name": "群体思维",
+    "name_en": "Groupthink",
+    "category": "人际与群体",
+    "founder": "欧文·贾尼斯",
+    "year": "1972",
+    "summary": "高凝聚力群体追求一致，压掉了本应出现的反对意见。",
+    "detail": "贾尼斯分析多起重大决策失误（如猪湾事件）后发现共同点：团队团结、领导有明确偏好、对外部有敌意想象、缺少反对声音。为了维持和谐，成员会自我审查——「算了，大家都同意，我别扫兴」。结果是决策看起来人人支持，实际上从没被真正检验过。解法是制度性的：指定「反方角色」、领导最后发言、分组独立讨论。",
+    "experiment": "贾尼斯对 1940–1970 年间美国外交决策的案例研究显示，猪湾入侵、珍珠港预警忽视等决策过程都出现「一致同意的错觉」「对外群体刻板化」「自我任命的心理防卫」等特征。",
+    "example": "产品评审会上一片「没问题」，上线后全是坑；领导先表态后，团队里没人再提反对方案。",
+    "related": [
+      "conformity-asch",
+      "obedience-milgram",
+      "group-polarization"
+    ],
+    "source": "Janis, I. L. (1972). Victims of Groupthink."
+  },
+  {
+    "slug": "group-polarization",
+    "name": "群体极化",
+    "name_en": "Group Polarization",
+    "category": "人际与群体",
+    "founder": "莫斯科维奇与扎瓦洛尼",
+    "year": "1969",
+    "summary": "讨论之后，群体的立场往往比讨论前更极端。",
+    "detail": "不是「讨论会让人折中」，恰恰相反：一群本来倾向某个方向的人，讨论后会往那个方向走得更远。原因有两个——听到更多同向论据（信息影响），以及想在群体中显得更符合该群体（比较影响）。社交媒体的推荐算法放大了它：你越点某类内容，看到的同向信息越多，立场漂移得越快。",
+    "experiment": "莫斯科维奇与扎瓦洛尼让法国学生在讨论前后填写对戴高乐政策的态度。讨论后，原本就支持的学生更支持，原本反对的更反对——平均立场向原来的方向移动。",
+    "example": "同一个群里讨论，越聊越气；算法推荐下，两个阵营对同一件事的看法差距逐年扩大。",
+    "related": [
+      "groupthink",
+      "echo-chamber",
+      "social-proof"
+    ],
+    "source": "Moscovici, S., & Zavalloni, M. (1969). The group as a polarizer of attitudes."
+  },
+  {
+    "slug": "social-proof",
+    "name": "社会认同",
+    "name_en": "Social Proof",
+    "category": "人际与群体",
+    "founder": "罗伯特·西奥迪尼",
+    "year": "1984",
+    "summary": "不确定该怎么做时，参照别人的行为当作正确做法。",
+    "detail": "这是西奥迪尼「影响力六原则」之一，作用条件是「不确定」和「相似性」——越不确定、越觉得别人和自己像，从众就越强。商业上被用得极广：销量榜、好评数、排队现象、「已有 10 万人购买」。它的阴暗面是「负面社会认同」：标出「很多人逃票」反而会增加逃票率。",
+    "experiment": "西奥迪尼在酒店做过毛巾重复使用实验：只用「保护环境」这类说服性标语，复用率约 35%；改成「本店 75% 的客人都会重复使用毛巾」，复用率升到约 44%；再加上「住过这个房间的客人多数会复用」这一相似性信息，升到约 49%。",
+    "example": "陌生餐厅先看哪家人多；网课先看销量和评价；「本产品已有 300 万用户」这类文案。",
+    "related": [
+      "conformity-asch",
+      "bystander-effect",
+      "herd-behavior"
+    ],
+    "source": "Cialdini, R. B. (1984). Influence: The Psychology of Persuasion."
+  },
+  {
+    "slug": "reciprocity",
+    "name": "互惠原则",
+    "name_en": "Reciprocity",
+    "category": "人际与群体",
+    "founder": "罗伯特·西奥迪尼",
+    "year": "1984",
+    "summary": "收到别人的好处后，会产生回报的压力，即使那份好处并不想要。",
+    "detail": "互惠是几乎所有人类社会共有的规范，违背它会带来强烈的负罪感和社会压力。关键在于：回报的心理负担与好处的「意外性」和「个性化」有关，而与价值关系不大——一杯主动递来的水可能比一顿饭更有效。营销里的免费试吃、先送小样，都是在制造回报义务。",
+    "experiment": "西奥迪尼的餐厅实验：服务员在结账时送一颗薄荷糖，小费平均提高约 3%；送两颗并做出「特意多给您一颗」的姿态，小费提高约 20%。",
+    "example": "免费试吃后不好意思空手走；同事顺手帮了个小忙，你会记很久并主动还回去；先递名片的人更容易被加微信。",
+    "related": [
+      "commitment-consistency",
+      "foot-in-the-door",
+      "door-in-the-face"
+    ],
+    "source": "Cialdini, R. B. (1984). Influence: The Psychology of Persuasion."
+  },
+  {
+    "slug": "commitment-consistency",
+    "name": "承诺与一致原则",
+    "name_en": "Commitment and Consistency",
+    "category": "人际与群体",
+    "founder": "罗伯特·西奥迪尼",
+    "year": "1984",
+    "summary": "一旦公开表态，就会倾向于让后续行为与它保持一致。",
+    "detail": "人希望自己在别人眼里是言行一致的，这个需求强到会推动人去维护一个已经不合理的立场。关键是「公开」「主动」「留下痕迹」——写下来的承诺比口头说的约束力强得多。这也是各种打卡、协议、公开目标有效的心理机制；反面则是，一旦为某个立场公开辩护过，改口就变得格外困难。",
+    "experiment": "弗里德曼与弗雷泽的经典研究（登门槛效应）显示：先请居民在一个小请愿书上签名，两周后再请他们在院子里立一块很大的「小心驾驶」牌子，同意率从 17% 升到 55%。",
+    "example": "在朋友圈立下「每天跑 5 公里」的目标后更难放弃；签了字的健身合约续卡率更高。",
+    "related": [
+      "foot-in-the-door",
+      "cognitive-dissonance",
+      "reciprocity"
+    ],
+    "source": "Cialdini, R. B. (1984). Influence: The Psychology of Persuasion."
+  },
+  {
+    "slug": "foot-in-the-door",
+    "name": "登门槛效应",
+    "name_en": "Foot-in-the-Door",
+    "category": "人际与群体",
+    "founder": "弗里德曼与弗雷泽",
+    "year": "1966",
+    "summary": "先答应一个小请求，之后更可能答应一个大请求。",
+    "detail": "一旦对某个行为点了头，人就会调整自我认知——「我是愿意配合的人」，为了维持一致，后续更大的请求更容易被接受。它的操作要点是：第一个请求必须足够小（不会拒绝）、足够真实（不是明显套路）、最好有公开性。反过来，「留面子效应」是相反方向：先提大请求被拒，再提小请求。",
+    "experiment": "弗里德曼与弗雷泽假装做交通安全调查，先请居民在「小心驾驶」的小请愿书上签名（几乎人人都签）。两周后请他们在院子里竖一块很大的难看标牌，答应率为 55%；而直接提这个请求的对照组只有 17%。",
+    "example": "先让你填个问卷，再让你留手机号；先试用免费版，再引导升级；先让你帮个小忙，再托付大事。",
+    "related": [
+      "door-in-the-face",
+      "commitment-consistency",
+      "cognitive-dissonance"
+    ],
+    "source": "Freedman, J. L., & Fraser, S. C. (1966). Compliance without pressure."
+  },
+  {
+    "slug": "door-in-the-face",
+    "name": "留面子效应",
+    "name_en": "Door-in-the-Face",
+    "category": "人际与群体",
+    "founder": "西奥迪尼等",
+    "year": "1975",
+    "summary": "先提一个大概率被拒的大请求，再提真正的小请求，更容易被接受。",
+    "detail": "它的机制是互惠 + 让步：你拒绝了我，我退一步，你也该退一步。所以第二个请求必须明显小于第一个，且间隔很短。和登门槛的区别在于方向——一个由小到大，一个由大到小。也要注意副作用：如果第一个请求明显荒谬，会被识别为套路，效果反转。",
+    "experiment": "西奥迪尼等人让大学生陪少年犯去动物园，只有 17% 同意。先请他们「每周花两小时陪少年犯两年」（几乎全部拒绝），再提动物园，同意率升到 50%。",
+    "example": "先报价 8000 被拒，再报 5000 显得合理；先要求「整份材料都要重写」，退到「改这一段就行」。",
+    "related": [
+      "foot-in-the-door",
+      "reciprocity",
+      "anchoring"
+    ],
+    "source": "Cialdini, R. B., et al. (1975). Reciprocal concessions procedure for inducing compliance."
+  },
+  {
+    "slug": "romeo-juliet-effect",
+    "name": "罗密欧与朱丽叶效应",
+    "name_en": "Romeo and Juliet Effect",
+    "category": "人际与群体",
+    "founder": "德里斯科尔等",
+    "year": "1972",
+    "summary": "外部阻力越大，当事人的关系反而越紧密。",
+    "detail": "当自由被限制时，人会感到自主性受威胁，产生心理逆反，于是更强烈地维护自己的选择。这也和认知失调有关：为关系付出的代价越高，越需要相信这段关系值得。需要提醒的是，这个效应在后续研究中的证据并不一致，更稳妥的表述是「外部强压通常会引发逆反，但不必然让关系更牢固」。",
+    "experiment": "德里斯科尔等人 1972 年追踪 140 对情侣，发现父母干涉程度越高的情侣，报告的爱情强度更高，但半年后这些情侣的分手率也更高。",
+    "example": "家长越反对，两人越坚决；越被劝「别做这个」，越想试试。",
+    "related": [
+      "reactance",
+      "cognitive-dissonance"
+    ],
+    "source": "Driscoll, R., Davis, K. E., & Lipetz, M. E. (1972). Parental interference and romantic love."
+  },
+  {
+    "slug": "mere-exposure",
+    "name": "曝光效应",
+    "name_en": "Mere Exposure Effect",
+    "category": "社会认知",
+    "founder": "罗伯特·扎荣茨",
+    "year": "1968",
+    "summary": "仅仅反复看到某个东西，就会增加对它（以及这个人）的好感。",
+    "detail": "不需要正面体验，单纯的重复接触就能提升好感度——因为熟悉降低了加工难度，大脑把「处理流畅」误读成「喜欢」。这就是广告为什么要反复投放、为什么「混个脸熟」真的有用。但有边界：如果最初印象是负面的，重复接触反而会强化厌恶；接触次数过多也会腻。",
+    "experiment": "扎荣茨给被试看一串陌生汉字或人脸照片，出现次数从 1 次到 25 次不等，然后让他们评价「喜欢程度」。出现次数越多的字/脸，被评价得越好——被试甚至不记得自己看过。",
+    "example": "反复听到的广告语会莫名觉得亲切；同一个人天天在楼道遇见，渐渐觉得他顺眼；循环播放的歌一开始无感，后来越听越喜欢。",
+    "related": [
+      "halo-effect",
+      "familiarity-principle",
+      "similarity-attraction"
+    ],
+    "source": "Zajonc, R. B. (1968). Attitudinal effects of mere exposure."
+  },
+  {
+    "slug": "similarity-attraction",
+    "name": "相似吸引效应",
+    "name_en": "Similarity-Attraction Effect",
+    "category": "人际与群体",
+    "founder": "伯恩",
+    "year": "1971",
+    "summary": "态度、背景、价值观相似的人，更容易互相喜欢。",
+    "detail": "「相似」提供的是认同感与可预期性：对方赞同你，等于验证了你的判断，这种被肯定的感觉会被解释成「这个人不错」。研究一再发现，相似性对关系满意度的预测力高于互补性——「性格互补」在实践中常被高估，真正让人相处舒服的是节奏、价值观、生活习惯的接近。",
+    "experiment": "伯恩的「 phantom stranger」范式：让被试填写态度问卷，随后给他看一份（伪造的）他人问卷，内容按比例与被试相同或不同。问卷越相似，被试报告的对该人的好感度越高。",
+    "example": "同乡、同校、同专业的人更容易亲近；新室友如果作息相近，半年后的关系满意度明显更高。",
+    "related": [
+      "mere-exposure",
+      "in-group-bias",
+      "halo-effect"
+    ],
+    "source": "Byrne, D. (1971). The Attraction Paradigm."
+  },
+  {
+    "slug": "in-group-bias",
+    "name": "内群体偏好",
+    "name_en": "In-group Bias",
+    "category": "人际与群体",
+    "founder": "塔杰菲尔",
+    "year": "1971",
+    "summary": "仅仅因为「属于同一组」，就会给自家人更多资源和更高评价。",
+    "detail": "塔杰菲尔的「最小群体范式」证明了这一点的顽固：分组依据可以完全是编造的（比如「你们是喜欢某幅画的那组」），甚至被试彼此不认识，资源分配依然偏向自己组。这意味着偏见不需要历史、利益冲突或人格缺陷就能产生——只需要「我们」和「他们」这个分类本身。",
+    "experiment": "塔杰菲尔让被试看一组点子图，谎称按「高估者/低估者」分组（实际随机），然后让被试给两名匿名成员分配报酬。被试系统性地给自己组更多，即使牺牲总收益也要保证本组领先。",
+    "example": "同一公司里「我们部门」和「他们部门」互相看不上；校友之间天然更信任；球迷对裁判偏向对方的判断。",
+    "related": [
+      "similarity-attraction",
+      "stereotyping",
+      "out-group-homogeneity"
+    ],
+    "source": "Tajfel, H., et al. (1971). Social categorization and intergroup behaviour."
+  },
+  {
+    "slug": "zeigarnik-effect",
+    "name": "蔡格尼克效应",
+    "name_en": "Zeigarnik Effect",
+    "category": "记忆",
+    "founder": "布卢玛·蔡格尼克",
+    "year": "1927",
+    "summary": "未完成的事比已完成的事更容易被记住，也更常冒进脑子里。",
+    "detail": "蔡格尼克在勒温的指导下发现：侍者能清楚记住还没结账的订单，结完账就忘了。未完成的任务会保持一种「认知张力」，持续占用注意力，直到被完成或被明确放弃。这既解释了为什么悬着的事让人焦虑，也解释了为什么「写下来」「列清单」能缓解焦虑——清单把任务从脑子里卸到纸上，张力解除。",
+    "experiment": "蔡格尼克让被试做 18–22 个小任务（拼图、数数、串珠），其中一半在中途被打断。事后要求回忆做过的任务，被中断的任务被回忆出的比例显著高于已完成的任务（约 68% vs 43%）。",
+    "example": "追剧看到一半被叫走，整晚都在想剧情；开了几十个浏览器标签舍不得关；事情没做完时睡不着。",
+    "related": [
+      "goal-gradient",
+      "cognitive-load",
+      "flow"
+    ],
+    "source": "Zeigarnik, B. (1927). Über das Behalten von erledigten und unerledigten Handlungen."
+  },
+  {
+    "slug": "spacing-effect",
+    "name": "间隔效应",
+    "name_en": "Spacing Effect",
+    "category": "学习与教育",
+    "founder": "赫尔曼·艾宾浩斯",
+    "year": "1885",
+    "summary": "把同样的学习时间分散到多天，效果远好于一次学完。",
+    "detail": "艾宾浩斯的遗忘曲线说明记忆随时间快速衰减，而在「即将忘记」时复习一次，衰减速度会显著变慢。集中学习（临时抱佛脚）能应付明天的考试，但一周后几乎全忘；分散学习每次都在重建记忆痕迹，留存更久。这条规律在教育心理学里证据最扎实，也最容易被学生忽略——因为它让当下的感觉变差（每次都要重新回忆），效果却在长期显现。",
+    "experiment": "艾宾浩斯用无意义音节自测，发现分散在多天的重复次数，比集中在一天内完成同样次数，长期保持率高出数倍。后续大量研究（如 Cepeda 等 2006 年的元分析）确认了这一点，并发现最佳间隔约为期望保持时长的 10%–20%。",
+    "example": "考前一周每天复习 30 分钟，优于考前一晚连刷 4 小时；背单词用「隔天—隔三天—隔一周」的回访节奏。",
+    "related": [
+      "testing-effect",
+      "forgetting-curve",
+      "desirable-difficulty"
+    ],
+    "source": "Ebbinghaus, H. (1885). Über das Gedächtnis."
+  },
+  {
+    "slug": "testing-effect",
+    "name": "测试效应",
+    "name_en": "Testing Effect",
+    "category": "学习与教育",
+    "founder": "罗迪格与卡皮克",
+    "year": "2006",
+    "summary": "主动回忆一次，比再读四遍记得更牢。",
+    "detail": "「测试」不只是检验，它本身就是最有效的学习方式之一——提取记忆的过程会强化这条记忆通路，这叫「提取练习」。相反，反复阅读带来的是熟悉感，而熟悉感容易被误认为掌握（这叫「流畅性错觉」）。所以很多人复习时感觉「都看懂了」，一考就崩。正确做法：合上书自己复述、做自测题、给别人讲一遍。",
+    "experiment": "罗迪格与卡皮克让学生读一篇材料，一组连续读四遍，另一组读一遍后连续自测三遍。五分钟后测验，重复阅读组略好；一周后再测，自测组的保持率明显更高（约 56% vs 42%）。",
+    "example": "用闪卡自测而不是反复划重点；看完一章后合上书复述要点；给别人讲一遍比听十遍都管用。",
+    "related": [
+      "spacing-effect",
+      "desirable-difficulty",
+      "illusion-of-competence"
+    ],
+    "source": "Roediger, H. L., & Karpicke, J. D. (2006). Test-enhanced learning."
+  },
+  {
+    "slug": "serial-position",
+    "name": "系列位置效应",
+    "name_en": "Serial Position Effect",
+    "category": "记忆",
+    "founder": "默多克",
+    "year": "1962",
+    "summary": "一串内容里，开头和结尾记得最好，中间最容易忘。",
+    "detail": "回忆率呈 U 形。开头记得好，是因为它们进入了长时记忆（首因效应）；结尾记得好，是因为还在短时记忆里（近因效应）；中间既没来得及巩固，又被后面挤出去了。实际应用很直接：重要的信息放开头或结尾；演讲的中间部分要格外设计，因为那是听众最容易走神的区间。",
+    "experiment": "默多克让被试听 10–40 个单词的列表后自由回忆，绘制出典型的 U 形曲线；在末尾插入 30 秒干扰任务后，末端优势消失，证明近因效应依赖短时记忆。",
+    "example": "会议开两小时，只记得开场和最后十分钟；简历里把最想被看到的内容放开头；列表的第一个和最后一个最容易被执行。",
+    "related": [
+      "first-impression",
+      "recency-effect",
+      "peak-end-rule"
+    ],
+    "source": "Murdock, B. B. (1962). The serial position effect of free recall."
+  },
+  {
+    "slug": "flashbulb-memory",
+    "name": "闪光灯记忆",
+    "name_en": "Flashbulb Memory",
+    "category": "记忆",
+    "founder": "布朗与库利克",
+    "year": "1977",
+    "summary": "对重大事件的记忆格外鲜明生动，但清晰感不等于准确。",
+    "detail": "听到重大消息的那一刻，场景、天气、自己正在做什么，都像被闪光灯照过一样刻下来。但这种「照片感」具有欺骗性：追踪研究发现，多年后人们对同一事件的复述已经改变，而他们自己依然信心十足。这是一个重要提醒——记忆的生动程度和准确程度是两件事，证人证词、个人回忆都受此影响。",
+    "experiment": "布朗与库利克发现，人们对肯尼迪遇刺等事件的回忆细节丰富、信心极高。后续研究（如 Neisser 对挑战者号爆炸事件的追踪）发现，三年后被试的叙述与当初的记录多处不符，但自信程度没有下降。",
+    "example": "清楚记得「911 那天我在做什么」，但和当时的朋友对细节描述不一致；对一次争吵的记忆异常鲜明，事后核对却记错了对方说的话。",
+    "related": [
+      "misinformation-effect",
+      "hindsight-bias",
+      "overconfidence"
+    ],
+    "source": "Brown, R., & Kulik, J. (1977). Flashbulb memories."
+  },
+  {
+    "slug": "tip-of-tongue",
+    "name": "舌尖现象",
+    "name_en": "Tip-of-the-Tongue Phenomenon",
+    "category": "记忆",
+    "founder": "布朗与麦克尼尔",
+    "year": "1966",
+    "summary": "明明知道，就是说不出来——信息在，但取不出来。",
+    "detail": "舌尖现象说明记忆的存储和提取是两回事：目标词确实在长时记忆里，检索路径却暂时堵住了。有意思的是，此时人往往能准确说出首字母、音节数、重音位置——「部分信息」先到，「整体」后到。硬想通常无效，做点别的事反而更容易突然想起来（这叫「孵化效应」）。",
+    "experiment": "布朗与麦克尼尔让被试回忆生僻词的定义，卡住时记录他们能说出的信息。结果显示被试对首字母、音节数的判断准确率显著高于随机水平，证明部分语音信息已被激活。",
+    "example": "见到熟人叫不出名字；考试时明明背过就是想不起；「那个演员，演过什么什么，叫什么来着」。",
+    "related": [
+      "retrieval-failure",
+      "zeigarnik-effect",
+      "encoding-specificity"
+    ],
+    "source": "Brown, R., & McNeill, D. (1966). The 'tip of the tongue' phenomenon."
+  },
+  {
+    "slug": "misinformation-effect",
+    "name": "误导信息效应",
+    "name_en": "Misinformation Effect",
+    "category": "记忆",
+    "founder": "伊丽莎白·洛夫特斯",
+    "year": "1974",
+    "summary": "事后接收到的错误信息，会被整合进记忆，改变你「记得」的内容。",
+    "detail": "记忆不是录像回放，而是每次提取时重新建构。因此事后听到的描述会被吸收进原始记忆，而且本人无法分辨哪些是真正经历的、哪些是后来植入的。这在目击证词里极其关键：提问方式本身就能污染证词（「你看到几辆车撞在一起」vs「碰到一起」）。这也是「植入记忆」实验能成功的原因。",
+    "experiment": "洛夫特斯与帕尔默让被试看车祸影片，然后问「两车相撞时速度大约多少」，把动词从 smashed 换成 contacted，估计速度从约 40.8 英里/小时降到约 31.8 英里/小时；一周后，被用「撞碎」提问的被试更可能声称自己看到了并不存在的碎玻璃。",
+    "example": "和目击者讨论后，自己的记忆被带偏；反复被人追问细节，渐渐「想起」从没发生过的事；群里传的说法覆盖了最初的印象。",
+    "related": [
+      "flashbulb-memory",
+      "false-memory",
+      "confirmation-bias"
+    ],
+    "source": "Loftus, E. F., & Palmer, J. C. (1974). Reconstruction of automobile destruction."
+  },
+  {
+    "slug": "learned-helplessness",
+    "name": "习得性无助",
+    "name_en": "Learned Helplessness",
+    "category": "情绪与动机",
+    "founder": "马丁·塞利格曼",
+    "year": "1967",
+    "summary": "反复经历无法控制的失败后，人会放弃尝试，即使后来有机会改变。",
+    "detail": "关键不在失败本身，而在「努力与结果无关」这个认知。一旦形成「我做什么都没用」的预期，人会在新情境中连试都不试。塞利格曼后来的归因理论补充了重要一层：把失败解释成「永久的、普遍的、我个人的」最致命，解释成「暂时的、特定的、情境的」则不易陷入无助。这也是认知行为疗法的重要着力点。",
+    "experiment": "塞利格曼与迈尔让狗接受无法逃避的电击，随后放入可以跳过隔板逃避电击的环境。先前经历不可控电击的狗，多数趴在原地不动、被动承受；而未经历过的狗迅速跳过隔板。",
+    "example": "长期努力却总被否定后，开始「反正做了也没用」；数学反复受挫的学生彻底放弃这门课。",
+    "related": [
+      "depressive-attribution",
+      "self-efficacy",
+      "reactance"
+    ],
+    "source": "Seligman, M. E. P., & Maier, S. F. (1967). Failure to escape traumatic shock."
+  },
+  {
+    "slug": "yerkes-dodson",
+    "name": "耶克斯—多德森定律",
+    "name_en": "Yerkes-Dodson Law",
+    "category": "情绪与动机",
+    "founder": "耶克斯与多德森",
+    "year": "1908",
+    "summary": "适度唤醒让表现最好，太低没劲、太高会崩。",
+    "detail": "唤醒水平与表现呈倒 U 形曲线：中等唤醒时表现最佳。关键补充是——任务越复杂，最佳唤醒水平越低。所以简单任务（搬箱子）可以在紧张状态下发挥，复杂任务（考试、演讲、手术）则需要「放松而专注」的状态。这解释了为什么「越想考好越考不好」：过度焦虑把唤醒推过了峰值。",
+    "experiment": "耶克斯与多德森研究老鼠学习辨别不同亮度的任务，发现电击强度（唤醒）与学习速度呈倒 U 关系，且难度越高的任务，最优的惩罚强度越低。",
+    "example": "比赛前轻微紧张有助于发挥，过度紧张会导致手抖；上台前深呼吸降唤醒，而不是继续加压。",
+    "related": [
+      "flow",
+      "test-anxiety",
+      "choking-under-pressure"
+    ],
+    "source": "Yerkes, R. M., & Dodson, J. D. (1908). The relation of strength of stimulus to rapidity of habit-formation."
+  },
+  {
+    "slug": "flow",
+    "name": "心流",
+    "name_en": "Flow",
+    "category": "情绪与动机",
+    "founder": "米哈里·契克森米哈伊",
+    "year": "1975",
+    "summary": "挑战与能力恰好匹配时，人会进入忘我的高度投入状态。",
+    "detail": "心流的三个前提：目标清晰、反馈即时、难度与能力匹配。挑战太高会焦虑，太低会无聊，只有在两者之间的窄带里，注意力会完全收拢，时间感变形（几小时像几分钟）。它天然是内在动机的——心流状态下的活动不需要外部奖励。这也是设计工作和学习体验的核心：把大任务切到「稍微努力就能做到」的粒度。",
+    "experiment": "契克森米哈伊用「经验取样法」：给研究者和工人佩戴寻呼器，随机时间提醒他们记录当下在做什么、感受如何。数据显示，人在工作中进入心流的频率高于闲暇时，挑战与技能匹配的活动报告的心流最多。",
+    "example": "写代码写到忘了吃饭；打游戏越打越专注；做稍微有难度的题时最投入。",
+    "related": [
+      "yerkes-dodson",
+      "intrinsic-motivation",
+      "zeigarnik-effect"
+    ],
+    "source": "Csikszentmihalyi, M. (1975). Beyond Boredom and Anxiety."
+  },
+  {
+    "slug": "overjustification",
+    "name": "过度理由效应",
+    "name_en": "Overjustification Effect",
+    "category": "情绪与动机",
+    "founder": "莱珀、格林与尼斯贝特",
+    "year": "1973",
+    "summary": "给本来喜欢做的事加上外部奖励，反而会削弱内在动机。",
+    "detail": "人做一件事时会推断自己的动机：如果没有奖励我也在做，那说明我喜欢它；如果有明显的外部奖励，那说明我是为了奖励。一旦奖励撤走，行为就失去了理由。这解释了一个常见的教育失误：用奖品驱动孩子阅读，结果孩子只在有奖时读。例外情况是——奖励针对「质量」而不是「做不做」，或者奖励出乎意料，就不太会破坏内在动机。",
+    "experiment": "莱珀等人让喜欢画画的幼儿分三组：第一组事先被告知「画画会有奖状」，第二组画完意外得到奖状，第三组没有奖励。几周后自由活动时间观察，第一组自发画画的时长明显下降，另外两组没有变化。",
+    "example": "孩子原本爱读书，家长用零花钱奖励后，不给钱就不读了；把爱好变成工作后渐渐失去热情；用积分换购的会员体系让用户只为积分而消费。",
+    "related": [
+      "cognitive-dissonance",
+      "intrinsic-motivation",
+      "flow"
+    ],
+    "source": "Lepper, M. R., Greene, D., & Nisbett, R. E. (1973). Undermining children's intrinsic interest with extrinsic reward."
+  },
+  {
+    "slug": "hawthorne-effect",
+    "name": "霍桑效应",
+    "name_en": "Hawthorne Effect",
+    "category": "学习与教育",
+    "founder": "埃尔顿·梅奥",
+    "year": "1924",
+    "summary": "被观察这件事本身，就会改变人的行为。",
+    "detail": "霍桑工厂的照明实验发现：把灯光调亮产量上升，调暗产量也上升。原因不在灯光，而在于工人知道自己被关注、被视为研究对象，于是表现变了。这对研究者和管理者都是警告：任何「测量」都会污染被测对象。教育场景里的对应现象很直接——被老师特别关注的学生，无论用什么方法，成绩都容易提升。",
+    "experiment": "1924–1932 年西部电气霍桑工厂的研究中，研究者尝试各种工作条件（照明、休息时长、工资方式），产量几乎在所有条件下都上升，最终被归因为「受到关注」本身的影响。",
+    "example": "有领导旁听时团队效率变高；实验组学生因「被选中参与研究」而表现更好；戴手环记录运动量，行为会改变。",
+    "related": [
+      "pygmalion-effect",
+      "demand-characteristics",
+      "self-monitoring"
+    ],
+    "source": "Mayo, E. (1933). The Human Problems of an Industrial Civilization."
+  },
+  {
+    "slug": "placebo-effect",
+    "name": "安慰剂效应",
+    "name_en": "Placebo Effect",
+    "category": "情绪与动机",
+    "founder": "比彻",
+    "year": "1955",
+    "summary": "在没有有效成分的情况下，仅凭对治疗的预期，症状也能改善。",
+    "detail": "它不是「病人装出来的」，而是可测量的生理变化：疼痛、焦虑、睡眠等症状对预期特别敏感。效应强度与多个因素有关——给药方式（注射比口服强）、价格与包装（贵的、花哨的更强）、医者的态度。这也是为什么新药必须做双盲对照：只有排除预期效应，才能确认药物本身是否有效。",
+    "experiment": "比彻 1955 年综述了十余项研究，发现约 30% 左右的疼痛、焦虑患者在只服用安慰剂时也报告症状缓解。后续研究还发现，即使明确告知患者「这是安慰剂」，在部分症状上仍有一定效果。",
+    "example": "吃了「维生素片」后觉得精神变好；相信某个学习方法有效，学起来更专注，效果真的提升（这部分是预期带来的真实行为变化）。",
+    "related": [
+      "expectancy-effect",
+      "nocebo-effect",
+      "pygmalion-effect"
+    ],
+    "source": "Beecher, H. K. (1955). The powerful placebo."
+  },
+  {
+    "slug": "gamblers-fallacy",
+    "name": "赌徒谬误",
+    "name_en": "Gambler's Fallacy",
+    "category": "决策与判断",
+    "founder": "拉普拉斯",
+    "year": "1814",
+    "summary": "认为独立事件之间有关联，连续输久了「该赢了」。",
+    "detail": "抛硬币连出七次正面，很多人觉得「下一次该是反面」，但实际上每次仍是 50%。这是把「大数定律的长期平均」错误地套到短期上，仿佛骰子有记忆。彩票、股票、游戏抽卡都受此影响：把独立事件当成自我修正的序列，于是越亏越押。",
+    "experiment": "实验中让被试判断「连出 5 个正面后，下一个是反面」的概率，多数人给出显著高于 50% 的估计；实际投掷中该概率恒为 50%。",
+    "example": "「这只票跌了这么久，该涨了」；「抽了 90 次没出，下一次必出」；连输几把后加大下注。",
+    "related": [
+      "hot-hand",
+      "representativeness",
+      "illusion-of-control"
+    ],
+    "source": "Laplace, P. S. (1814). Essai philosophique sur les probabilités."
+  },
+  {
+    "slug": "hot-hand",
+    "name": "热手效应",
+    "name_en": "Hot Hand",
+    "category": "决策与判断",
+    "founder": "吉尔莫维奇、瓦隆与特沃斯基",
+    "year": "1985",
+    "summary": "相信手气好的人会继续命中，实际往往不成立。",
+    "detail": "篮球迷普遍相信「手热」，认为连续投中后下一次命中的概率更高。吉尔莫维奇等人分析 76 人队的投篮数据后发现，命中率与上一次是否命中并无显著关系，但球员和球迷都坚信有。有趣的是，后续研究发现某些受控情境下确实存在微弱的热手效应——所以更准确的表述是：人的直觉判断通常远超真实的效应量。",
+    "experiment": "对凯尔特人队 1980–81 赛季的罚球与投篮数据做序列分析，发现「连中之后命中率更高」的说法在统计上不成立，但球员估计自己手热时的命中率约为 75%（实际约 50%）。",
+    "example": "打游戏连赢后觉得自己「状态在线」；面试通过几家就觉得自己怎么投都能过。",
+    "related": [
+      "gamblers-fallacy",
+      "illusion-of-control",
+      "overconfidence"
+    ],
+    "source": "Gilovich, T., Vallone, R., & Tversky, A. (1985). The hot hand in basketball."
+  },
+  {
+    "slug": "negativity-bias",
+    "name": "负面偏差",
+    "name_en": "Negativity Bias",
+    "category": "情绪与动机",
+    "founder": "罗津与罗伊兹曼",
+    "year": "2001",
+    "summary": "坏事的心理冲击大于同等强度的好事。",
+    "detail": "这是进化的遗留：错过一顿饭可以补，漏掉一只猛兽就没了，所以大脑对威胁的加权更高。后果是：一次批评能盖过十次表扬；一条差评比十条好评更被在意；关系里的一次伤害需要多次修复才能平衡。知道这个不对称有用——管理上不是「多表扬就行」，而是要意识到负面事件需要的修复量远大于直觉。",
+    "experiment": "罗津与罗伊兹曼综述大量研究，发现负面信息在注意、记忆、决策各环节都占优势：人对负面面孔的识别更快，对负面词汇的记忆更强，学习中对惩罚的反应比对奖励更快。",
+    "example": "十条好评里夹一条差评，整晚都在想那条差评；领导表扬了九句，只记住那句「这里还不行」。",
+    "related": [
+      "loss-aversion",
+      "availability-heuristic",
+      "pollyanna-principle"
+    ],
+    "source": "Rozin, P., & Royzman, E. B. (2001). Negativity bias, negativity dominance, and contagion."
+  },
+  {
+    "slug": "pollyanna-principle",
+    "name": "波丽安娜效应",
+    "name_en": "Pollyanna Principle",
+    "category": "情绪与动机",
+    "founder": "马特林与斯塔恩",
+    "year": "1978",
+    "summary": "人倾向于注意、记忆和谈论积极的信息。",
+    "detail": "与负面偏差看似矛盾，其实是分工不同：威胁优先吸引注意（负面偏差），但在无威胁的日常加工里，人更愿意用积极的方式理解和回忆（波丽安娜效应）。比如回忆一次旅行，会自动淡化排队和日晒，留下好看的照片和好玩的部分。这有适应价值——它让人有动力继续往前，也是「记忆美化」的来源。",
+    "experiment": "马特林与斯塔恩的词汇实验中，被试对积极词的回忆率高于消极词；在自由联想任务里，人们联想到的词汇也偏正面。",
+    "example": "回忆童年时自动过滤掉难堪的部分；评价一个课程时，整体印象好就会忽略几个小缺陷。",
+    "related": [
+      "negativity-bias",
+      "peak-end-rule",
+      "optimism-bias"
+    ],
+    "source": "Matlin, M. W., & Stang, D. J. (1978). The Pollyanna Principle."
+  },
+  {
+    "slug": "cocktail-party-effect",
+    "name": "鸡尾酒会效应",
+    "name_en": "Cocktail Party Effect",
+    "category": "记忆",
+    "founder": "科林·切里",
+    "year": "1953",
+    "summary": "嘈杂环境里能专注听一个人说话，同时仍会捕捉到自己的名字。",
+    "detail": "它证明了注意的「选择性」与「不完全过滤」：未被注意的通道虽然被压制，但仍做了浅层加工，所以关键信息（自己的名字、熟人的声音）能穿透。这也说明注意不是开关，而是一个带阈值的过滤器。在信息设计上的启示是：重要的提醒要足够独特（名字、号码），才能穿透用户的注意力过滤。",
+    "experiment": "切里的「双耳分听」实验：让被试同时听两段不同的话，要求复述其中一只耳朵的内容。被试几乎无法报告另一只耳朵的具体内容，但若另一通道出现自己的名字，被注意到的概率显著上升。",
+    "example": "在吵闹的餐厅里能听清同伴说话；人群中突然听到有人叫自己的名字立刻回头。",
+    "related": [
+      "selective-attention",
+      "filter-model",
+      "multitasking-cost"
+    ],
+    "source": "Cherry, E. C. (1953). Some experiments on the recognition of speech."
+  },
+  {
+    "slug": "stroop-effect",
+    "name": "斯特鲁普效应",
+    "name_en": "Stroop Effect",
+    "category": "记忆",
+    "founder": "约翰·斯特鲁普",
+    "year": "1935",
+    "summary": "读字义是自动的，所以当颜色和字义冲突时，反应会明显变慢。",
+    "detail": "看到「红」这个字用绿色写成，让你说出颜色，你会卡住——因为阅读已经自动化到无法关闭，字义会自动激活并干扰颜色命名。它是认知控制研究最经典的范式，也常被用作评估抑制控制与执行功能的指标。深层含义是：熟练技能一旦自动化，就很难被主动屏蔽，这正是很多干扰的来源。",
+    "experiment": "斯特鲁普让被试命名墨水颜色，字义与颜色一致时反应快，冲突时反应显著变慢（通常多出 100–200 毫秒），错误率也上升。",
+    "example": "习惯性看标题就下结论，正文反而没读进去；熟练司机一边开车一边想事情，遇到突发状况反应变慢。",
+    "related": [
+      "automaticity",
+      "selective-attention",
+      "cognitive-load"
+    ],
+    "source": "Stroop, J. R. (1935). Studies of interference in serial verbal reactions."
+  },
+  {
+    "slug": "mcgurk-effect",
+    "name": "麦格克效应",
+    "name_en": "McGurk Effect",
+    "category": "记忆",
+    "founder": "麦格克与麦克唐纳",
+    "year": "1976",
+    "summary": "看到的嘴型会改变你听到的声音——听觉不完全是耳朵的事。",
+    "detail": "当播放的语音是「ba」而嘴型是「ga」时，多数人听到的是第三种音「da」。这证明言语知觉是多感官融合的结果，视觉信息在极早期就介入了听觉加工。有意思的是，即使你知道了这个原理，也很难「关掉」它——知觉的整合是自动的、不可抗的。",
+    "experiment": "麦格克与麦克唐纳用录像呈现发音口型并配音，播放 /ba/ 音频配 /ga/ 口型时，被试报告听到 /da/ 或 /ga/，且无法通过「努力听清楚」恢复成原本的 /ba/。",
+    "example": "看配音不同步的视频觉得别扭；戴口罩后听人说话变吃力，因为丢失了口型线索。",
+    "related": [
+      "multisensory-integration",
+      "cocktail-party-effect"
+    ],
+    "source": "McGurk, H., & MacDonald, J. (1976). Hearing lips and seeing voices."
+  },
+  {
+    "slug": "goal-gradient",
+    "name": "目标梯度效应",
+    "name_en": "Goal Gradient Effect",
+    "category": "情绪与动机",
+    "founder": "赫尔",
+    "year": "1932",
+    "summary": "越接近目标，动力越强，行动速度越快。",
+    "detail": "老鼠跑迷宫时，越接近终点跑得越快。人也一样：进度条走到 80% 时最有干劲。这带来一个实用的设计技巧——「启动效应」：给用户一个已经完成一部分的进度（比如集章卡先盖两个章），他会更有动力完成剩下的。反面是：距离目标太远时，动力会显著下降，所以大目标要切成看得见的小段。",
+    "experiment": "咖啡店集章卡实验：一组给空白卡（需集 10 个章），另一组给已盖 2 个章、需集 12 个章的卡。两组实际都需再集 10 个，但第二组完成率显著更高——因为「已经开始了」改变了感知距离。",
+    "example": "跑马拉松最后 5 公里反而加速；读书进度到 80% 时最想读完；健身 App 的连续打卡天数。",
+    "related": [
+      "zeigarnik-effect",
+      "flow",
+      "endowed-progress"
+    ],
+    "source": "Hull, C. L. (1932). The goal gradient hypothesis and maze learning."
+  },
+  {
+    "slug": "base-rate-neglect",
+    "name": "基础比率忽视",
+    "name_en": "Base Rate Neglect",
+    "category": "决策与判断",
+    "founder": "卡尼曼与特沃斯基",
+    "year": "1973",
+    "summary": "只盯着个案特征，忘了先问「这类情况本来占多大比例」。",
+    "detail": "判断概率时，正确的做法是先看基础比率（这类事件总体有多常见），再看个案证据调整。人往往跳过后半步，直接被生动的个案特征带走。医学诊断里这一点生死攸关：一种罕见病（患病率 1/10000）即使检测准确率 99%，阳性结果真正患病的概率也可能只有 1% 左右——因为假阳性数量远超真阳性。",
+    "experiment": "卡尼曼与特沃斯基的「出租车问题」：城市里 85% 是绿车、15% 是蓝车，目击者辨认准确率 80%，他说是蓝车。多数人认为蓝车概率约 80%，正确答案约 41%——因为必须先按 85:15 的基础比率加权。",
+    "example": "「这个症状很像某种罕见病」就慌了；看到一个成功案例就推断自己也能成；筛检阳性后直接认定自己有病。",
+    "related": [
+      "representativeness",
+      "availability-heuristic",
+      "bayesian-reasoning"
+    ],
+    "source": "Kahneman, D., & Tversky, A. (1973). On the psychology of prediction."
+  },
+  {
+    "slug": "decoy-effect",
+    "name": "诱饵效应",
+    "name_en": "Decoy Effect",
+    "category": "决策与判断",
+    "founder": "休伯、佩恩与普托",
+    "year": "1982",
+    "summary": "加入一个明显不划算的选项，会让另一个选项显得更值。",
+    "detail": "人对绝对价值的判断很弱，靠比较来定位。所以商家会放一个「陪衬选项」——它存在的唯一目的就是让目标选项显得合理。经典例子是杂志订阅：只有电子版 59、只有纸质版 125、电子+纸质 125，第三个选项一出现，多数人立刻选它（其实纸质版那个选项本身毫无意义）。",
+    "experiment": "休伯等人让被试在「5 美元的小爆米花」和「6.5 美元的大爆米花」之间选择。加入第三个选项「3 美元的超小爆米花」后，选大份的比例显著上升——诱饵把「大份」衬托得更划算。",
+    "example": "套餐里那个「只比套餐便宜 2 元」的单品；房价中介先带你看一套又贵又差的房子；软件的三档定价。",
+    "related": [
+      "anchoring",
+      "framing-effect",
+      "choice-overload"
+    ],
+    "source": "Huber, J., Payne, J. W., & Puto, C. (1982). Adding asymmetrically dominated alternatives."
+  },
+  {
+    "slug": "choice-overload",
+    "name": "选择过载",
+    "name_en": "Choice Overload",
+    "category": "决策与判断",
+    "founder": "艾扬格与莱珀",
+    "year": "2000",
+    "summary": "选项太多时，人反而更难做决定，也更不满意自己的选择。",
+    "detail": "直觉上选择越多越好，实际上超过某个点后，认知负担和「怕选错」的焦虑会压过收益。典型表现是拖延决策、干脆不选、或者选了之后反复怀疑。这也解释了为什么精简菜单、推荐系统、默认选项有效——它们不是限制自由，而是帮人降低决策成本。需要注意的是，这个效应在后续研究中有争议，在「用户本来就有明确偏好」的情境下并不成立。",
+    "experiment": "艾扬格与莱珀在超市设置果酱试吃摊：24 种口味时吸引了更多停留（约 60% vs 40%），但实际购买率只有约 3%；6 种口味时停留的人少，购买率却达到约 30%。",
+    "example": "面对 50 门选修课迟迟不选；视频平台刷了半小时没看一部；简历投了几十家却没回复。",
+    "related": [
+      "decoy-effect",
+      "decision-fatigue",
+      "paradox-of-choice"
+    ],
+    "source": "Iyengar, S. S., & Lepper, M. R. (2000). When choice is demotivating."
+  },
+  {
+    "slug": "illusion-of-control",
+    "name": "控制错觉",
+    "name_en": "Illusion of Control",
+    "category": "决策与判断",
+    "founder": "埃伦·兰格",
+    "year": "1975",
+    "summary": "高估自己对随机结果的影响力，以为「做点什么」就能改变运气。",
+    "detail": "兰格的彩票实验发现：允许被试自己选号码的彩票，转售价格显著高于随机分配的彩票——人们愿意为「自己选的」多付钱，仿佛选择能提高中奖率。赌场里摇骰子的力度、看球时的「助力姿势」都是同类现象。它让人产生掌控感（有情绪上的好处），但也让人在纯随机的情境里承担过多风险。",
+    "experiment": "兰格让被试参与抽奖，一半人自己挑号码，一半人被分配号码。随后询问愿意以多少钱卖出这张彩票：自选组的平均要价约为被分配组的两倍多。",
+    "example": "买彩票坚持自己选号；玩游戏觉得按某个节奏点击更容易中；股票操作越频繁越有掌控感。",
+    "related": [
+      "gamblers-fallacy",
+      "hot-hand",
+      "overconfidence"
+    ],
+    "source": "Langer, E. J. (1975). The illusion of control."
+  },
+  {
+    "slug": "just-world",
+    "name": "公正世界信念",
+    "name_en": "Belief in a Just World",
+    "category": "社会认知",
+    "founder": "梅尔文·勒纳",
+    "year": "1980",
+    "summary": "相信「人所得即应得」，因此容易把受害者的遭遇归咎于其自身。",
+    "detail": "这个信念让人相信世界是可预测、可控制的：只要我做好人，就不会遇到坏事。它在心理上有保护作用，但代价是对受害者的苛责——「她被骚扰肯定穿得太少」「他生病是不注意身体」。这是典型的防御性归因：承认「坏事会随机落在好人身上」太可怕，于是反过来找受害者的错。",
+    "experiment": "勒纳与西蒙斯的经典实验：让被试观看一名女性接受（假的）电击学习任务，被试即使知道她是随机抽中的，仍会贬低她的人格，认为「她活该/她不够聪明」——以此维护世界公正的信念。",
+    "example": "「被诈骗的人肯定贪心」；「穷人是因为不努力」；看到意外事故先找受害者的过错。",
+    "related": [
+      "fundamental-attribution-error",
+      "victim-blaming",
+      "self-serving-bias"
+    ],
+    "source": "Lerner, M. J. (1980). The Belief in a Just World."
+  },
+  {
+    "slug": "diffusion-of-responsibility",
+    "name": "责任分散",
+    "name_en": "Diffusion of Responsibility",
+    "category": "人际与群体",
+    "founder": "达利与拉塔内",
+    "year": "1968",
+    "summary": "现场人越多，每个人感到的责任越少，出手的概率越低。",
+    "detail": "责任像被人数除了一遍：只有我一个人在场，出事就是我的事；有十个人在，那大概是别人该管。它解释旁观者效应的核心机制，也解释了为什么团队里「大家都以为有人在跟」的事情最容易掉地上。破解方式是把责任落到具体的人头上——点名、分工、写明「这件事由 A 在周五前交付」。",
+    "experiment": "达利与拉塔内的「癫痫发作」实验中，被试以为只有自己听到求助时约 85% 立即行动；以为还有另外四人在场时降到约 31%，且反应时间明显延长。",
+    "example": "大群里发求助没人应，私聊某人立刻有人帮；三个部门都以为对方在推进的接口对接，最后没人做。",
+    "related": [
+      "bystander-effect",
+      "social-loafing"
+    ],
+    "source": "Darley, J. M., & Latané, B. (1968). Bystander intervention in emergencies."
+  },
+  {
+    "slug": "test-anxiety",
+    "name": "考试焦虑",
+    "name_en": "Test Anxiety",
+    "category": "情绪与动机",
+    "founder": "利伯特与莫里斯",
+    "year": "1967",
+    "summary": "对考试结果的担忧占用工作记忆，反而导致发挥失常。",
+    "detail": "焦虑分两部分：情绪性（心跳加快、手心出汗）和认知性（反复想「考砸了怎么办」）。真正拖垮表现的是后者——它占用本应用来解题的工作记忆资源。所以缓解的关键不是「让自己别紧张」（做不到），而是把注意力拉回题目本身：写下担忧、做几次慢呼吸、把任务拆成下一步动作（如「先读题干」），都比压制情绪有效。",
+    "experiment": "利伯特与莫里斯编制考试焦虑量表发现，高焦虑学生在复杂任务上的表现明显低于其能力水平，而在简单任务上差异不大——符合「占用工作记忆」的解释。",
+    "example": "平时会做的题，考场上脑子一片空白；越临近交卷越算错；面试前反复想「说错了怎么办」。",
+    "related": [
+      "yerkes-dodson",
+      "stereotype-threat",
+      "cognitive-load"
+    ],
+    "source": "Liebert, R. M., & Morris, L. W. (1967). Cognitive and emotional components of test anxiety."
+  },
+  {
+    "slug": "social-anxiety",
+    "name": "社交焦虑",
+    "name_en": "Social Anxiety",
+    "category": "情绪与动机",
+    "founder": "克拉克与韦尔斯",
+    "year": "1995",
+    "summary": "害怕被负面评价，于是把注意力转向监控自己，反而表现得更僵。",
+    "detail": "社交焦虑的维持机制很有讽刺意味：担心被看出紧张，于是把注意力从「和对方交流」转到「监控自己的表现」，结果真的显得不自然；事后又反复回放（反刍），把模糊的社交反馈解读成负面评价。认知模型认为，打破循环的关键是「注意力外移」——关注对方在说什么，而不是自己看起来怎样。",
+    "experiment": "克拉克与韦尔斯的认知模型及后续实验显示：让社交焦虑者把注意力转向外部（观察对方、关注任务）后，其自我报告焦虑水平和被评判的「紧张程度」都下降。",
+    "example": "开会发言前反复演练，一开口还是声音发抖；聚会上一直想「我刚才那句话是不是很蠢」。",
+    "related": [
+      "spotlight-effect",
+      "illusion-of-transparency",
+      "test-anxiety"
+    ],
+    "source": "Clark, D. M., & Wells, A. (1995). A cognitive model of social phobia."
+  },
+  {
+    "slug": "effort-justification",
+    "name": "努力合理化",
+    "name_en": "Effort Justification",
+    "category": "社会认知",
+    "founder": "阿伦森与米尔斯",
+    "year": "1959",
+    "summary": "为一个目标付出的努力越多，就越觉得它有价值。",
+    "detail": "这是认知失调的一种表现形式：如果付出很大代价才得到某样东西，而它其实一般，那就得面对「我白费了」的痛苦。为了回避这种痛苦，人会抬高它的价值。这解释了为什么严格的入会仪式会增强归属感、为什么「好不容易抢到的名额」更被珍惜。坏事是它也会让人守着明显不值得的东西不放。",
+    "experiment": "阿伦森与米尔斯的「入门仪式」实验：让女生通过不同程度的筛选才能加入讨论小组（一组需要经历尴尬的筛选，一组很容易）。经历尴尬仪式的女生，事后更认为这个小组「有趣、有价值」。",
+    "example": "排队三小时买的网红店觉得格外好吃；艰难考进的社团，评价总比实际高；费劲做出的方案，自己越看越顺眼。",
+    "related": [
+      "cognitive-dissonance",
+      "ikea-effect",
+      "sunk-cost"
+    ],
+    "source": "Aronson, E., & Mills, J. (1959). The effect of severity of initiation on liking for a group."
+  },
+  {
+    "slug": "optimism-bias",
+    "name": "乐观偏差",
+    "name_en": "Optimism Bias",
+    "category": "决策与判断",
+    "founder": "温斯坦",
+    "year": "1980",
+    "summary": "相信坏事更可能落在别人身上，好事更可能落在自己身上。",
+    "detail": "温斯坦发现，大学生普遍认为自己离婚、患癌、出车祸的概率低于同班同学。这种偏差有适应性——它让人愿意尝试、承担风险、保持行动力；但在需要防范的场景里是致命的：低估风险就不做预案。缓解办法是「参考同类事件的实际数据」而不是靠感觉，以及做预先演练（pre-mortem）：假设项目已经失败，倒推原因。",
+    "experiment": "温斯坦让大学生比较自己与同班同学经历各类事件的可能性，结果对正面事件（如找到好工作）的自我估计显著高于他人，对负面事件（如酗酒问题）显著低于他人。",
+    "example": "「我不会得那种病」；「这个项目不会延期」；「我开车比一般人安全」。",
+    "related": [
+      "planning-fallacy",
+      "overconfidence",
+      "negativity-bias"
+    ],
+    "source": "Weinstein, N. D. (1980). Unrealistic optimism about future life events."
+  },
+  {
+    "slug": "reactance",
+    "name": "心理逆反",
+    "name_en": "Psychological Reactance",
+    "category": "情绪与动机",
+    "founder": "杰克·布雷姆",
+    "year": "1966",
+    "summary": "自由被限制时，人会反向加强对被禁事物的兴趣。",
+    "detail": "当「你不能做某件事」出现时，那件事的吸引力会上升——不是因为事情本身变好，而是因为选择权被剥夺了。这解释了很多「说教适得其反」的现象：越强调「必须」「不许」，对方越抵触，即使他原本没打算那么做。有效沟通要保住对方的自主感，比如把「你必须」换成「你可以考虑这两种做法」。",
+    "experiment": "布雷姆的经典实验中，当被试被告知某张唱片「不能再选了」时，对它的评价显著上升，尤其当他们原本对它兴趣一般时。",
+    "example": "家长越禁止，孩子越想玩；「限时抢购，过时不候」的文案；被领导强制要求加班后，反而更不想干活。",
+    "related": [
+      "romeo-juliet-effect",
+      "overjustification",
+      "learned-helplessness"
+    ],
+    "source": "Brehm, J. W. (1966). A Theory of Psychological Reactance."
+  },
+  {
+    "slug": "cognitive-load",
+    "name": "认知负荷",
+    "name_en": "Cognitive Load",
+    "category": "学习与教育",
+    "founder": "约翰·斯威勒",
+    "year": "1988",
+    "summary": "工作记忆容量有限，信息给得太多，学习效率反而下降。",
+    "detail": "斯威勒区分了三种负荷：内在负荷（内容本身的难度）、外在负荷（呈现方式造成的额外负担）、相关负荷（用于构建图式的有效投入）。教学设计的目标是降低外在负荷（去掉无关装饰、避免图文分离），把有限的容量留给真正的内容。这也解释了为什么花哨的 PPT 常常不如一页白板——装饰占用了本该用于理解的资源。",
+    "experiment": "斯威勒的「分散注意效应」实验：把几何题的图和解题条件分开呈现时，学习效果显著低于把条件直接标注在图上——因为后者省掉了在两者之间来回搜索的负荷。",
+    "example": "边听讲解边看满屏文字的 PPT，两边都没抓住；开车时听播客，复杂内容记不住；说明书步骤跳跃，边看边猜。",
+    "related": [
+      "multitasking-cost",
+      "desirable-difficulty",
+      "yerkes-dodson"
+    ],
+    "source": "Sweller, J. (1988). Cognitive load during problem solving."
+  },
+  {
+    "slug": "desirable-difficulty",
+    "name": "合意困难",
+    "name_en": "Desirable Difficulty",
+    "category": "学习与教育",
+    "founder": "罗伯特·比约克与伊丽莎白·比约克",
+    "year": "1994",
+    "summary": "让学习当下更费劲的设计，长期记忆效果反而更好。",
+    "detail": "间隔、自测、交错练习都会让学习过程感觉更吃力、正确率更低，但长期保持显著更好。问题在于人的主观感受与实际效果常常相反：重复阅读很流畅，于是被误认为学得好；自测经常答错，于是被误认为没学会。这是「学习错觉」的核心——判断学习效果不能看当下的顺滑程度，要看延迟后的提取表现。",
+    "experiment": "比约克夫妇的系列研究显示：交错练习（把不同题型混着练）在练习阶段的正确率低于分块练习，但在延迟一周后的测验中成绩明显更高。",
+    "example": "背单词时合上书自测（很痛苦）优于反复看；把不同科目交错复习比一次只学一科更有效；做题时先想再看答案。",
+    "related": [
+      "testing-effect",
+      "spacing-effect",
+      "cognitive-load"
+    ],
+    "source": "Bjork, R. A., & Bjork, E. L. (2011). Making things hard on yourself, but in a good way."
+  },
+  {
+    "slug": "intrinsic-motivation",
+    "name": "内在动机",
+    "name_en": "Intrinsic Motivation",
+    "category": "情绪与动机",
+    "founder": "德西与瑞安",
+    "year": "1985",
+    "summary": "因为事情本身有趣而做，比为了外部奖励而做更持久。",
+    "detail": "自我决定理论指出，内在动机依赖三个心理需求：自主（我自己选的）、胜任（我做得到）、联结（和别人有联系）。三者被满足时，人会自发投入；被破坏时（被强制、被过度监控、被外部奖励主导），动机会外化，一旦奖励撤走行为就停。这解释了为什么「用钱激励创意工作」常常失败。",
+    "experiment": "德西的经典实验中，本来喜欢拼图的大学生，在获得金钱奖励后被安排自由活动时间，其自发玩拼图的时长明显下降——外部奖励削弱了内在兴趣。",
+    "example": "自己喜欢写代码的人，一旦被 KPI 绑死就开始拖延；孩子自发阅读，被要求写读后感后就不想读了。",
+    "related": [
+      "overjustification",
+      "flow",
+      "self-efficacy"
+    ],
+    "source": "Deci, E. L., & Ryan, R. M. (1985). Intrinsic Motivation and Self-Determination in Human Behavior."
+  },
+  {
+    "slug": "selective-attention",
+    "name": "选择性注意",
+    "name_en": "Selective Attention",
+    "category": "记忆",
+    "founder": "布罗德本特",
+    "year": "1958",
+    "summary": "注意力像过滤器，只放一部分信息进入深度加工。",
+    "detail": "布罗德本特的过滤器模型认为，信息在进入高级加工前先按物理特征（声音位置、颜色）被筛一遍。这也意味着被过滤掉的信息几乎不会被记住——即使它就在你眼前。著名的「看不见的大猩猩」实验证明：当注意力集中在数传球次数上时，一个人穿着猩猩服走过画面中央，约一半的人完全没看见。",
+    "experiment": "西蒙斯与沙布里斯的「看不见的大猩猩」实验：让被试数白衣队的传球次数，期间一名穿猩猩服的人走过场地中央停留数秒。约 50% 的被试完全没有注意到。",
+    "example": "专心改代码时听不见别人叫你；找东西时明明在眼前也看不见；开车打电话时看不到突然出现的行人。",
+    "related": [
+      "cocktail-party-effect",
+      "cognitive-load",
+      "multitasking-cost"
+    ],
+    "source": "Broadbent, D. E. (1958). Perception and Communication."
+  }
+]
