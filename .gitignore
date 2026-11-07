@@ -41,3 +41,6 @@ config.ini.bak-*
 # ---- 扫描与临时产物 ----
 corpus_scan.json
 .cov_clean
+
+# 临时构建目录（构建验证用，不进仓库）
+frontend/dist_check/
