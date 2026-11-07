@@ -31,8 +31,18 @@ export const auth = {
 /** 把后端错误体掏成一句能显示给人看的话。 */
 export function errorMessage(error: unknown): string {
   const axiosError = error as AxiosError<ApiErrorBody>
-  if (axiosError?.response?.data?.message) {
-    return axiosError.response.data.message
+  const body = axiosError?.response?.data
+  if (body?.message) {
+    // 参数校验失败时 message 只有一句笼统的「请求参数不合法」，
+    // 真正有用的原因在 details 里（例如「密码长度需为 8~64 位」）。
+    // 只显示 message 等于把唯一的诊断信息扔掉，用户只能猜。
+    const reasons = (body.details ?? [])
+      .map((d) => d.reason)
+      // Pydantic 的 msg 形如 "Value error, 密码需同时包含字母与数字"，前面是噪声
+      .map((r) => r.replace(/^Value error,\s*/, ''))
+      .filter((r) => r && r !== 'Field required')
+    if (reasons.length) return reasons.join('；')
+    return body.message
   }
   if (axiosError?.code === 'ECONNABORTED') {
     return '请求超时，请稍后重试'

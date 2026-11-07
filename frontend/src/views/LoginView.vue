@@ -55,9 +55,26 @@ async function submit() {
     errorText.value = '验证码还没加载出来，点图片刷新一下'
     return
   }
-  if (mode.value === 'register' && form.password !== form.password_confirm) {
-    errorText.value = '两次输入的密码不一致'
-    return
+  // 注册规则与后端 app/schemas/auth.py 保持一致，在本地先拦一道。
+  // 不拦的话用户填完验证码打过去，只会收到一句「请求参数不合法」，
+  // 他根本不知道是密码短了还是账号名不合规——而且验证码已经被消费掉了。
+  if (mode.value === 'register') {
+    if (!/^[A-Za-z][A-Za-z0-9_]{3,31}$/.test(form.username.trim())) {
+      errorText.value = '账号需 4~32 位，以字母开头，只能含字母、数字、下划线'
+      return
+    }
+    if (form.password.length < 8 || form.password.length > 64) {
+      errorText.value = '密码长度需为 8~64 位'
+      return
+    }
+    if (!/[A-Za-z]/.test(form.password) || !/\d/.test(form.password)) {
+      errorText.value = '密码需同时包含字母与数字'
+      return
+    }
+    if (form.password !== form.password_confirm) {
+      errorText.value = '两次输入的密码不一致'
+      return
+    }
   }
 
   loading.value = true
@@ -170,6 +187,9 @@ async function submit() {
         </div>
 
         <p v-if="errorText" class="error">{{ errorText }}</p>
+        <p v-else-if="mode === 'register'" class="hint">
+          账号 4~32 位、字母开头；密码 8~64 位，需同时含字母和数字
+        </p>
 
         <el-button type="primary" size="large" class="submit" :loading="loading" @click="submit">
           {{ mode === 'login' ? '登录' : '注册' }}
@@ -302,6 +322,15 @@ async function submit() {
   color: var(--el-color-danger);
   background: var(--el-color-danger-light-9);
   border: 1px solid var(--el-color-danger-light-7);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.hint {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--el-text-color-secondary);
+  background: var(--el-fill-color-light);
   border-radius: 8px;
   padding: 8px 10px;
 }
